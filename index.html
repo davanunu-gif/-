@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>לוח בית כנסת - שביל התפילה</title>
+  <title>לוח בית כנסת דינמי</title>
 
   <!-- גופנים תורניים ומודרניים -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,7 +22,6 @@
       --gold-primary: #e0a96d;
       --parchment: #fefae0;
       --scroll-duration: 20s;
-      --clock-size: 15rem; /* גודל ברירת מחדל */
     }
 
     * {
@@ -42,7 +41,9 @@
       user-select: none;
     }
 
-    /* החלק העליון: 60% מהמסך */
+    /* ==========================================
+       1. החלק העליון: 60% מהמסך (60vh)
+       ========================================== */
     .top-section {
       height: 60vh;
       background-color: var(--top-bg);
@@ -57,26 +58,24 @@
     }
 
     .synagogue-title {
-      font-size: 2.2rem;
+      font-size: 2rem;
       background: var(--gold-primary);
       color: #000;
-      padding: 6px 35px;
+      padding: 4px 30px;
       border-radius: 0 0 12px 12px;
       font-weight: 900;
       box-shadow: 0 4px 0px rgba(0, 0, 0, 0.2);
-      text-align: center;
     }
 
     .clock-display {
       font-family: 'Rubik', sans-serif;
-      font-size: var(--clock-size);
+      font-size: 20rem;
       font-weight: 900;
       color: var(--clock-color);
       line-height: 0.85;
       letter-spacing: 4px;
       text-shadow: 6px 6px 0px rgba(0, 0, 0, 0.6);
       margin: auto 0;
-      transition: font-size 0.3s ease;
     }
 
     .date-bar {
@@ -103,7 +102,9 @@
       color: var(--gold-primary);
     }
 
-    /* החלק התחתון: 40% מהמסך */
+    /* ==========================================
+       2. החלק התחתון: 40% מהמסך (40vh)
+       ========================================== */
     .bottom-section {
       height: 40vh;
       padding: 15px 30px;
@@ -136,6 +137,7 @@
       z-index: 2;
     }
 
+    /* אזור הגלילה האנכית מלמטה למעלה */
     .announcement-container {
       flex-grow: 1;
       overflow: hidden;
@@ -155,11 +157,22 @@
       animation: scrollUp var(--scroll-duration) linear infinite;
     }
 
-    @keyframes scrollUp {
-      0% { transform: translateY(100%); }
-      100% { transform: translateY(-100%); }
+    .announcement-container:hover .announcement-text {
+      animation-play-state: paused;
     }
 
+    @keyframes scrollUp {
+      0% {
+        transform: translateY(100%);
+      }
+      100% {
+        transform: translateY(-100%);
+      }
+    }
+
+    /* ==========================================
+       3. כפתור עריכה וחלון הגדרות
+       ========================================== */
     .edit-btn {
       position: fixed;
       bottom: 15px;
@@ -207,23 +220,63 @@
       flex-direction: column;
       gap: 15px;
       direction: rtl;
+      box-shadow: 8px 8px 0px #000;
     }
 
-    .control-group { display: flex; flex-direction: column; gap: 5px; flex: 1; }
-    .control-group label { font-weight: bold; }
-    .control-group input, .control-group select, .control-group textarea {
-      padding: 8px; border: 2px solid #ccc; border-radius: 6px; font-size: 1rem;
+    .control-row {
+      display: flex;
+      gap: 15px;
     }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+    }
+
+    .control-group label {
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .control-group input, .control-group select, .control-group textarea {
+      padding: 8px;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    .control-group input[type="color"] {
+      height: 40px;
+      padding: 2px;
+      cursor: pointer;
+    }
+
+    .control-group textarea {
+      height: 120px;
+      resize: vertical;
+    }
+
     .btn-save {
-      background: var(--gold-primary); color: #000; padding: 12px;
-      border: none; border-radius: 6px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+      background: var(--gold-primary);
+      color: #000;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 3px 3px 0px #000;
     }
   </style>
 </head>
 <body>
 
+  <!-- חלק עליון - שעון ותאריכים (60% מסך) -->
   <div class="top-section" id="top-section">
-    <div class="synagogue-title" id="synagogue-name">בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל ונונו</div>
+    <div class="synagogue-title" id="synagogue-name">בית כנסת שביל התפילה  | לעילוי נשמת שמואל בן רחל ( ונונו)</div>
 
     <div class="clock-display" id="clock">00:00:00</div>
 
@@ -236,47 +289,141 @@
     </div>
   </div>
 
+  <!-- חלק תחתון - לוח מודעות (40% מסך) -->
   <div class="bottom-section" id="bottom-section">
     <div class="board-container">
       <div class="board-header">📜 הודעות וזמני תפילות</div>
       <div class="announcement-container">
         <div class="announcement-text" id="announcement-text">
-          טוען הודעות מ-Google Sheets...
+          טוען הודעות...
         </div>
       </div>
     </div>
   </div>
 
+  <!-- כפתור עריכה -->
   <button class="edit-btn" onclick="openModal()">✏️ הגדרות עיצוב ותוכן</button>
 
+  <!-- חלון עריכה -->
   <div class="modal-overlay" id="editModal">
     <div class="modal-box">
-      <h2>הגדרות תצוגה</h2>
+      <h2>הגדרות תצוגה, צבעים ותוכן</h2>
+
       <div class="control-group">
         <label>שם בית הכנסת / הקדשה:</label>
-        <input type="text" id="input-header" value="בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל ונונו">
+        <input type="text" id="input-header" value="בית כנסת | לעילוי נשמת">
       </div>
+
+      <!-- שדה עדכון מרחוק Google Sheets -->
       <div class="control-group">
-        <label>גודל גופן השעון:</label>
-        <select id="input-clock-size">
-          <option value="12rem">גודל רגיל (12)</option>
-          <option value="14rem">גודל 14</option>
-          <option value="15rem" selected>גודל 15 (גדול מומלץ)</option>
-          <option value="18rem">גודל ענק (18)</option>
-        </select>
+        <label>קישור Google Sheets CSV (לעדכון הודעות מרחוק):</label>
+        <input type="text" id="input-csv">
       </div>
+
+      <!-- הגדרות גודל הגופנים -->
+      <div class="control-row">
+        <div class="control-group">
+          <label>גודל השעון:</label>
+          <select id="select-clock-size">
+            <option value="12rem">בינוני (12rem)</option>
+            <option value="14rem">גדול (14rem)</option>
+            <option value="20rem" selected>ענקי (20rem)</option>
+            <option value="24rem">ענקי מאוד (24rem)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>גודל גופן חלק עליון (כותרת ותאריכים):</label>
+          <select id="select-top-size">
+            <option value="2rem" selected>2rem</option>
+            <option value="4rem">4rem</option>
+            <option value="6rem">6rem</option>
+            <option value="8rem">8rem</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>גודל טקסט המודעות:</label>
+          <select id="select-size">
+            <option value="2.2rem">קטן (2.2rem)</option>
+            <option value="2.8rem" selected>בינוני (2.8rem)</option>
+            <option value="3.5rem">גדול (3.5rem)</option>
+            <option value="4.2rem">ענקי (4.2rem)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- בחירת גופנים ומהירות גלילה -->
+      <div class="control-row">
+        <div class="control-group">
+          <label>גופן השעון:</label>
+          <select id="select-clock-font">
+            <option value="'Rubik', sans-serif" selected>רוביק (מודרני)</option>
+            <option value="'Frank Ruhl Hofshi', serif">פרנק-ריהל (תורני)</option>
+            <option value="'Courier New', monospace">דיגיטלי (Courier)</option>
+            <option value="'Segoe UI', sans-serif">סגואי (נקי)</option>
+            <option value="'Impact', sans-serif">אימפקט (עבה)</option>
+            <option value="'Arial', sans-serif">אריאל</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>גופן המודעות:</label>
+          <select id="select-font">
+            <option value="'Frank Ruhl Hofshi', serif">פרנק-ריהל (תורני)</option>
+            <option value="'Rubik', sans-serif">רוביק (מודרני)</option>
+            <option value="'David', serif">דוד (קלאסי)</option>
+            <option value="'Arial', sans-serif">אריאל</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>מהירות גלילת מודעות:</label>
+          <select id="select-speed">
+            <option value="30s">איטי מאוד (30 שניות)</option>
+            <option value="20s" selected>איטי (20 שניות)</option>
+            <option value="12s">בינוני (12 שניות)</option>
+            <option value="7s">מהיר (7 שניות)</option>
+          </select>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">בחירת צבעים:</h3>
+      <div class="control-row">
+        <div class="control-group">
+          <label>רקע עליון (שעון):</label>
+          <input type="color" id="color-top-bg" value="#1b263b">
+        </div>
+
+        <div class="control-group">
+          <label>רקע תחתון (מודעות):</label>
+          <input type="color" id="color-bottom-bg" value="#0d1b2a">
+        </div>
+
+        <div class="control-group">
+          <label>צבע השעון והתאריכים:</label>
+          <input type="color" id="color-clock" value="#f4e3be">
+        </div>
+
+        <div class="control-group">
+          <label>צבע טקסט המודעות:</label>
+          <input type="color" id="color-text" value="#2b1e1a">
+        </div>
+      </div>
+
       <div class="control-group">
-        <label>תוכן ההודעות המקומי (גיבוי אופליין):</label>
-        <textarea id="input-text" rows="5"></textarea>
+        <label>תוכן ההודעות המקומי (יוצג אם אין חיבור לרשת):</label>
+        <textarea id="input-text"></textarea>
       </div>
+
       <button class="btn-save" onclick="saveSettings()">שמור וסגור</button>
     </div>
   </div>
 
   <script>
-    const DEFAULT_HEADER = "בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל ונונו";
-    const SHEET_ID = '1WTe0dL7J81bxPuUQAJU1O-q1QEzswA9F4JadbE5I_KE';
+    const DEFAULT_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ5RhBz4OO7dqkF-qCxJ0-DjFS8BFHOXt_ejDdrkFDgQ7z_V2aZbMhWSI20Aoog6VO7hbUKwLmRDJt6/pub?gid=0&single=true&output=csv";
 
+    // פונקציית המרה למספרים בגימטריא (1-30)
     function numToGematria(num) {
       const letters = [
         "", "א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ז'", "ח'", "ט'", "י'",
@@ -286,6 +433,7 @@
       return letters[num] || String(num);
     }
 
+    // מילון שמות החודשים העבריים המלאים בעברית
     const hebrewMonthsMap = {
       "Tishrei": "תשרי", "Cheshvan": "חשוון", "Kislev": "כסלו", "Tevet": "טבת",
       "Shevat": "שבט", "Adar": "אדר", "Adar I": "אדר א'", "Adar II": "אדר ב'",
@@ -293,21 +441,27 @@
       "Av": "אב", "Elul": "אלול"
     };
 
+    // 1. עדכון שעון ותאריכים
     function updateClockAndDates() {
       const now = new Date();
+
+      // שעון
       const h = String(now.getHours()).padStart(2, '0');
       const m = String(now.getMinutes()).padStart(2, '0');
       const s = String(now.getSeconds()).padStart(2, '0');
       document.getElementById('clock').textContent = `${h}:${m}:${s}`;
 
+      // יום בשבוע
       const days = ['יום ראשון', 'יום שני', 'יום שלישי', 'יום רביעי', 'יום חמישי', 'יום שישי', 'שבת קודש'];
       document.getElementById('day-name').textContent = days[now.getDay()];
 
+      // תאריך לועזי
       const day = String(now.getDate()).padStart(2, '0');
       const month = String(now.getMonth() + 1).padStart(2, '0');
       const year = now.getFullYear();
       document.getElementById('gregorian-date').textContent = `${day}/${month}/${year}`;
 
+      // תאריך עברי מלא בעברית בלבד (ללא שנה)
       let hebrewDateStr = "";
       try {
         if (window.hebcal && window.hebcal.HDate) {
@@ -316,78 +470,150 @@
           const rawMonth = hdate.getMonthName();
           const monthHebrew = hebrewMonthsMap[rawMonth] || hdate.getMonthName('he');
           hebrewDateStr = `${dayGematria} ב${monthHebrew}`;
+        } else {
+          // גיבוי Intl
+          const dayNum = parseInt(new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { day: 'numeric' }).format(now));
+          const monthName = new Intl.DateTimeFormat('he-IL-u-ca-hebrew', { month: 'long' }).format(now);
+          const dayGematria = numToGematria(dayNum);
+          hebrewDateStr = `${dayGematria} ב${monthName}`;
         }
       } catch (e) {
         hebrewDateStr = "טוען תאריך עברי...";
       }
+
       document.getElementById('hebrew-date').textContent = hebrewDateStr;
     }
 
     updateClockAndDates();
     setInterval(updateClockAndDates, 1000);
 
-    // משיכת נתונים מ-Google Sheets (JSONP)
-    function fetchRemoteNotices() {
-      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=responseHandler:handleSheetData&nocache=${Date.now()}`;
-      const oldScript = document.getElementById('gdrive-script');
-      if (oldScript) oldScript.remove();
+    // 2. ניהול הגדרות ושמירה ב-localStorage
+    const defaultNotice = `• שחרית: 06:30\n• מנחה וערבית: 10 דקות לפני השקיעה\n• שיעור בדף היומי: מיד לאחר ערבית\n• ברוכים הבאים לבית הכנסת!`;
 
-      const script = document.createElement('script');
-      script.id = 'gdrive-script';
-      script.src = url;
-      document.body.appendChild(script);
+    function loadSettings() {
+      const text = localStorage.getItem('syn_text') || defaultNotice;
+      const header = localStorage.getItem('syn_header') || 'בית כנסת | לעילוי נשמת';
+      const csvUrl = localStorage.getItem('syn_csv') || DEFAULT_CSV_URL;
+      const font = localStorage.getItem('syn_font') || "'Frank Ruhl Hofshi', serif";
+      const clockFont = localStorage.getItem('syn_clock_font') || "'Rubik', sans-serif";
+      const size = localStorage.getItem('syn_size') || "2.8rem";
+      const clockSize = localStorage.getItem('syn_clock_size') || "20rem";
+      const topSize = localStorage.getItem('syn_top_size') || "2rem";
+      const speed = localStorage.getItem('syn_speed') || "20s";
+      
+      const topBg = localStorage.getItem('syn_top_bg') || "#1b263b";
+      const bottomBg = localStorage.getItem('syn_bottom_bg') || "#0d1b2a";
+      const clockColor = localStorage.getItem('syn_clock_color') || "#f4e3be";
+      const textColor = localStorage.getItem('syn_text_color') || "#2b1e1a";
+
+      // הגדרות חלק עליון
+      document.getElementById('synagogue-name').style.fontSize = topSize;
+      document.getElementById('date-bar').style.fontSize = topSize;
+
+      // הגדרות שעון
+      const clockEl = document.getElementById('clock');
+      clockEl.style.fontSize = clockSize;
+      clockEl.style.fontFamily = clockFont;
+
+      // הגדרות מודעות ומהירות גלילה
+      const textEl = document.getElementById('announcement-text');
+      textEl.innerText = text;
+      textEl.style.fontFamily = font;
+      textEl.style.fontSize = size;
+      textEl.style.color = textColor;
+      document.documentElement.style.setProperty('--scroll-duration', speed);
+
+      // איפוס האנימציה בעת טעינה מחדש
+      textEl.style.animation = 'none';
+      textEl.offsetHeight; /* הטענת Layout */
+      textEl.style.animation = `scrollUp ${speed} linear infinite`;
+
+      document.getElementById('synagogue-name').innerText = header;
+
+      // הגדרות צבעים
+      document.getElementById('top-section').style.backgroundColor = topBg;
+      document.getElementById('bottom-section').style.backgroundColor = bottomBg;
+      document.documentElement.style.setProperty('--bottom-bg', bottomBg);
+      document.documentElement.style.setProperty('--top-bg', topBg);
+      document.documentElement.style.setProperty('--clock-color', clockColor);
+
+      // עדכון ערכים בחלון ההגדרות
+      document.getElementById('input-text').value = text;
+      document.getElementById('input-header').value = header;
+      document.getElementById('input-csv').value = csvUrl;
+      document.getElementById('select-font').value = font;
+      document.getElementById('select-clock-font').value = clockFont;
+      document.getElementById('select-size').value = size;
+      document.getElementById('select-clock-size').value = clockSize;
+      document.getElementById('select-top-size').value = topSize;
+      document.getElementById('select-speed').value = speed;
+
+      document.getElementById('color-top-bg').value = topBg;
+      document.getElementById('color-bottom-bg').value = bottomBg;
+      document.getElementById('color-clock').value = clockColor;
+      document.getElementById('color-text').value = textColor;
     }
 
-    function handleSheetData(data) {
-      try {
-        const rows = data.table.rows;
-        const lines = [];
+    // 3. מנגנון סנכרון מרחוק מ-Google Sheets CSV (כולל עקיפת חסימת CORS)
+    async function fetchRemoteNotices() {
+      const csvUrl = localStorage.getItem('syn_csv') || DEFAULT_CSV_URL;
+      if (!csvUrl) return;
 
-        rows.forEach(row => {
-          if (row.c && row.c[0] && row.c[0].v !== null && row.c[0].v !== undefined) {
-            lines.push(row.c[0].v);
-          }
-        });
+      try {
+        // שימוש ב-Proxy לעקיפת חסימת בדפדפן
+        const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(csvUrl) + '&nocache=' + Date.now();
+        const response = await fetch(proxyUrl);
+        if (!response.ok) return;
+
+        const rawText = await response.text();
+        const lines = rawText.split('\n')
+          .map(line => line.replace(/^"|"$/g, '').trim())
+          .filter(line => line.length > 0);
 
         if (lines.length > 0) {
           const newNotice = lines.join('\n');
           localStorage.setItem('syn_text', newNotice);
-          document.getElementById('announcement-text').innerText = newNotice;
+          
+          const textEl = document.getElementById('announcement-text');
+          textEl.innerText = newNotice;
           document.getElementById('input-text').value = newNotice;
         }
       } catch (e) {
-        console.log("Error parsing sheet data:", e);
+        console.log("Offline mode or fetch error:", e);
       }
     }
 
-    function loadSettings() {
-      const header = localStorage.getItem('syn_header') || DEFAULT_HEADER;
-      const text = localStorage.getItem('syn_text') || 'טוען מודעות...';
-      const clockSize = localStorage.getItem('syn_clock_size') || '15rem';
-
-      document.getElementById('synagogue-name').innerText = header;
-      document.getElementById('announcement-text').innerText = text;
-      document.getElementById('input-header').value = header;
-      document.getElementById('input-text').value = text;
-      document.getElementById('input-clock-size').value = clockSize;
-
-      document.documentElement.style.setProperty('--clock-size', clockSize);
+    function openModal() {
+      document.getElementById('editModal').style.display = 'flex';
     }
 
-    function openModal() { document.getElementById('editModal').style.display = 'flex'; }
     function saveSettings() {
-      const selectedClockSize = document.getElementById('input-clock-size').value;
-      localStorage.setItem('syn_header', document.getElementById('input-header').value);
       localStorage.setItem('syn_text', document.getElementById('input-text').value);
-      localStorage.setItem('syn_clock_size', selectedClockSize);
-      
+      localStorage.setItem('syn_header', document.getElementById('input-header').value);
+      localStorage.setItem('syn_csv', document.getElementById('input-csv').value.trim());
+      localStorage.setItem('syn_font', document.getElementById('select-font').value);
+      localStorage.setItem('syn_clock_font', document.getElementById('select-clock-font').value);
+      localStorage.setItem('syn_size', document.getElementById('select-size').value);
+      localStorage.setItem('syn_clock_size', document.getElementById('select-clock-size').value);
+      localStorage.setItem('syn_top_size', document.getElementById('select-top-size').value);
+      localStorage.setItem('syn_speed', document.getElementById('select-speed').value);
+
+      localStorage.setItem('syn_top_bg', document.getElementById('color-top-bg').value);
+      localStorage.setItem('syn_bottom_bg', document.getElementById('color-bottom-bg').value);
+      localStorage.setItem('syn_clock_color', document.getElementById('color-clock').value);
+      localStorage.setItem('syn_text_color', document.getElementById('color-text').value);
+
       loadSettings();
+      fetchRemoteNotices();
       document.getElementById('editModal').style.display = 'none';
     }
 
+    // טעינה ראשונית וסנכרון
     loadSettings();
     fetchRemoteNotices();
-    setInterval(fetchRemoteNotices, 2 * 60 * 1000); // בדיקה כל 2 דקות
+
+    // בדיקת עדכונים ברקע כל 2 דקות
+    setInterval(fetchRemoteNotices, 2 * 60 * 1000);
   </script>
 </body>
 </html>
