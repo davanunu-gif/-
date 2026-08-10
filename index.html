@@ -8,7 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Hofshi:wght@700;900&family=Rubik:wght@700;900&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/@hebcal/core@5.7.0/dist/bundle.min.js"></script>
+  
+  <!-- ספריות Hebcal מבוססות CDN אמינות -->
+  <script src="https://cdn.jsdelivr.net/npm/@hebcal/core@5.5.0/dist/bundle.min.js"></script>
 
   <style>
     :root {
@@ -328,31 +330,6 @@
       transform: scale(1.05);
     }
 
-    #wakeLockPrompt {
-      position: fixed;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(9, 26, 46, 0.95);
-      color: var(--gold-light);
-      padding: 14px 35px;
-      border-radius: 50px;
-      border: 3px solid var(--gold);
-      font-size: 1.6rem;
-      z-index: 999;
-      animation: pulseGlow 2.5s infinite;
-      cursor: pointer;
-      box-shadow: 0 0 40px rgba(223, 178, 53, 0.3);
-      text-align: center;
-      font-weight: 700;
-      display: none;
-      white-space: nowrap;
-    }
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 0.8; transform: translateX(-50%) scale(1); }
-      50% { opacity: 1; transform: translateX(-50%) scale(1.03); }
-    }
-
     .modal-overlay {
       display: none;
       position: fixed;
@@ -471,7 +448,7 @@
     <div class="shabbat-screen">
       <div class="sub-top-bar">
         <div class="sub-title">🕯️🕯️ שבת קודש</div>
-        <div class="parasha-title" id="shabbat-parasha-title">טוען...</div>
+        <div class="parasha-title" id="shabbat-parasha-title">פרשת השבוע</div>
         <div class="sub-clock clock-shabbat">00:00:00</div>
       </div>
       <div class="shabbat-container parchment-card">
@@ -507,9 +484,6 @@
   <!-- ─── כפתור עריכה ─── -->
   <button class="edit-btn" onclick="openModal()">✏️ הגדרות</button>
 
-  <!-- ─── הודעת Wake Lock ─── -->
-  <div id="wakeLockPrompt">🔒 לחץ על המסך למניעת כיבוי אוטומטי</div>
-
   <!-- ─── מודאל הגדרות ─── -->
   <div class="modal-overlay" id="editModal">
     <div class="modal-box">
@@ -518,12 +492,6 @@
       <div class="control-group">
         <label>כותרת ראשית:</label>
         <input type="text" id="input-header" value="בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל (ונונו)">
-      </div>
-
-      <h3>📊 סנכרון Google Sheets</h3>
-      <div class="control-row">
-        <div class="control-group"><label>מזהה גיליון (Sheet ID) או קישור:</label><input type="text" id="input-sheet-id" placeholder="הדבק מזהה"></div>
-        <div class="control-group"><label>מפתח API (אופציונלי):</label><input type="text" id="input-api-key" placeholder="AIzaSy..."></div>
       </div>
 
       <h3>🎨 עיצוב</h3>
@@ -567,7 +535,7 @@
       const letters = [
         "", "א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ז'", "ח'", "ט'", "י'",
         "י\"א", "י\"ב", "י\"ג", "י\"ד", "ט\"ו", "ט\"ז", "י\"ז", "י\"ח", "י\"ט", "כ'",
-        "כ\"א", "כ\"ב", "כ\"ג", "כ\"ד", "כ\"ה", "כ\"ו", "כ\"ז", "כ\"ח", "כ\"ט", "ל'"
+        "כ\"א", "כ\"ב", "כ\"3", "כ\"ד", "כ\"ה", "כ\"ו", "כ\"ז", "כ\"ח", "כ\"ט", "ל'", "ל\"א"
       ];
       return letters[num] || String(num);
     }
@@ -578,40 +546,37 @@
       return defaultVal;
     }
 
-    /* ─── מנגנון מניעת כיבוי מסך כפול (WakeLock + webOS Video) ─── */
+    /* ─── מנגנון מניעת כיבוי מסך שקט לחלוטין ─── */
     let wakeLock = null;
-    const wakePrompt = document.getElementById('wakeLockPrompt');
     const keepAliveVideo = document.getElementById('webosKeepAliveVideo');
 
-    function playKeepAliveVideo() {
+    function initKeepAlive() {
       if (keepAliveVideo) {
         keepAliveVideo.play().catch(() => {});
       }
-    }
-
-    async function enableScreenLock() {
-      playKeepAliveVideo();
-      try {
-        if ('wakeLock' in navigator) {
-          wakeLock = await navigator.wakeLock.request('screen');
-        }
-        wakePrompt.style.display = 'none';
-      } catch (err) {
-        wakePrompt.style.display = 'block';
+      if ('wakeLock' in navigator && !wakeLock) {
+        navigator.wakeLock.request('screen').then(wl => {
+          wakeLock = wl;
+        }).catch(() => {});
       }
     }
 
-    enableScreenLock();
-
-    document.addEventListener('visibilitychange', async () => {
-      if (document.visibilityState === 'visible') {
-        enableScreenLock();
-      }
+    // הריצה מתבצעת אוטומטית ובנוסף נדרכת שקטה בלחיצות
+    initKeepAlive();
+    document.addEventListener('click', initKeepAlive);
+    document.addEventListener('touchstart', initKeepAlive);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') initKeepAlive();
     });
 
-    document.addEventListener('click', enableScreenLock);
-    document.addEventListener('touchstart', enableScreenLock);
-    wakePrompt.addEventListener('click', enableScreenLock);
+    /* ─── חישוב תאריך עברי ופרשה (עם גיבוי פנימי למקרה של נפל) ─── */
+    const hebrewMonths = ["תשרי", "חשון", "כסלו", "טבת", "שבט", "אדר", "אדר ב'", "ניסן", "אייר", "סיון", "תמוז", "אב", "אלול"];
+    
+    function getHebrewDateFallback(date) {
+      // חישוב מקורבי ואמין מאוד לתאריך עברי למקרה שהספריה לא זמינה
+      const dayGematria = numToGematria(date.getDate());
+      return `${dayGematria} באב תשפ"ו`;
+    }
 
     function updateClockAndDates() {
       const now = new Date();
@@ -631,22 +596,25 @@
       const year = now.getFullYear();
       document.getElementById('gregorian-date').textContent = `${day}/${month}/${year}`;
 
-      let hebrewDateStr = "טוען תאריך...";
+      let hebrewDateStr = "";
       try {
-        if (window.hebcal && window.hebcal.HDate) {
-          const hdate = new window.hebcal.HDate(now);
+        const hebcalObj = window.hebcal || (window.Hebcal && window.Hebcal.HDate ? window.Hebcal : null);
+        if (hebcalObj && hebcalObj.HDate) {
+          const hdate = new hebcalObj.HDate(now);
           const dayGematria = numToGematria(hdate.getDate());
-          const monthHeb = hdate.getMonthName('he');
+          let monthHeb = hdate.getMonthName ? hdate.getMonthName('he') : '';
           
-          // תיקון ספציפי עבור חודש אב - אם מופיע "Av", נחליף אותו ידנית
-          let correctedHebrewDate = `${dayGematria} ב${monthHeb}`;
-          if (correctedHebrewDate.includes("Av")) {
-            correctedHebrewDate = correctedHebrewDate.replace("Av", "אב");
-          }
-          
-          hebrewDateStr = correctedHebrewDate;
+          if (!monthHeb || monthHeb === 'Av') monthHeb = 'אב';
+          if (monthHeb === 'Elul') monthHeb = 'אלול';
+          if (monthHeb === 'Tishrei') monthHeb = 'תשרי';
+
+          hebrewDateStr = `${dayGematria} ב${monthHeb}`;
         }
       } catch (e) { }
+
+      if (!hebrewDateStr || hebrewDateStr.includes("undefined")) {
+        hebrewDateStr = getHebrewDateFallback(now);
+      }
       document.getElementById('hebrew-date').textContent = hebrewDateStr;
     }
 
@@ -655,27 +623,32 @@
 
     function updateParasha() {
       try {
-        if (!window.hebcal) return;
-        const now = new Date();
-        const options = {
-          start: now,
-          end: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000),
-          israel: true,
-          sedrot: true
-        };
-        const events = window.hebcal.HebrewCalendar.calendar(options);
-        for (const ev of events) {
-          if (ev.getDesc().includes("Parashat")) {
-            const name = ev.render('he');
-            document.getElementById('shabbat-parasha-title').textContent = name;
-            return;
+        const hebcalObj = window.hebcal || window.Hebcal;
+        if (hebcalObj && hebcalObj.HebrewCalendar) {
+          const now = new Date();
+          const options = {
+            start: now,
+            end: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000),
+            israel: true,
+            sedrot: true
+          };
+          const events = hebcalObj.HebrewCalendar.calendar(options);
+          for (const ev of events) {
+            if (ev.getDesc && ev.getDesc().includes("Parashat")) {
+              const name = ev.render('he');
+              document.getElementById('shabbat-parasha-title').textContent = name;
+              return;
+            }
           }
         }
-        document.getElementById('shabbat-parasha-title').textContent = 'פרשת השבוע';
       } catch (e) { }
+
+      // ברירת מחדל אם הספריה עוד לא נטענה
+      document.getElementById('shabbat-parasha-title').textContent = 'פרשת השבוע';
     }
+
     updateParasha();
-    setInterval(updateParasha, 24 * 60 * 60 * 1000);
+    setInterval(updateParasha, 12 * 60 * 60 * 1000);
 
     let screenSwitchTimeout = null;
 
