@@ -281,20 +281,28 @@
     .memorial-content {
       flex-grow: 1;
       margin: 20px 0;
-      padding: 30px;
+      padding: 30px 40px;
+      position: relative;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      overflow-y: auto;
     }
 
     .memorial-list {
+      position: absolute;
+      width: calc(100% - 80px);
       font-size: var(--content-font-size);
       font-weight: 700;
+      color: var(--text-color);
       line-height: 2;
       text-align: center;
       white-space: pre-wrap;
+      animation: scrollUpMemorial var(--scroll-duration) linear infinite;
+    }
+
+    @keyframes scrollUpMemorial {
+      0% { transform: translateY(20%); }
+      100% { transform: translateY(-100%); }
     }
 
     /* ==========================================
@@ -473,11 +481,11 @@
       <h3 style="margin-top: 5px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">📊 סנכרון מרחוק מרשת (Google Sheets):</h3>
       <div class="control-row">
         <div class="control-group">
-          <label>מזהה גיליון (Sheet ID):</label>
-          <input type="text" id="input-sheet-id" placeholder="למשל: 1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms">
+          <label>מזהה גיליון (Sheet ID) או קישור מלא:</label>
+          <input type="text" id="input-sheet-id" placeholder="הדבק כאן את מזהה הגיליון או הקישור">
         </div>
         <div class="control-group">
-          <label>מפתח API Key:</label>
+          <label>מפתח API Key (אופציונלי):</label>
           <input type="text" id="input-api-key" placeholder="AIzaSy...">
         </div>
       </div>
@@ -640,7 +648,6 @@
         for (const ev of events) {
           if (ev.getDesc().startsWith("Parashat")) {
             let parashaHebrew = ev.render('he');
-            // מציג ישירות את תוצר הרינדור ללא תוספת "פרשת" ידנית
             document.getElementById('shabbat-parasha-title').textContent = parashaHebrew;
             break;
           }
@@ -685,7 +692,7 @@
       const activeScreen = document.getElementById(screenId);
       activeScreen.classList.add('active');
 
-      const animatedEls = activeScreen.querySelectorAll('.announcement-text, .shabbat-scroll-text');
+      const animatedEls = activeScreen.querySelectorAll('.announcement-text, .shabbat-scroll-text, .memorial-list');
       animatedEls.forEach(el => {
         const currentAnimation = el.style.animation;
         el.style.animation = 'none';
@@ -694,9 +701,17 @@
       });
     }
 
+    // פונקציה למתיחת ID מתוך URL במידה והוזן קישור מלא
+    function extractSheetId(input) {
+      if (!input) return "";
+      const match = input.match(/\/d\/([a-zA-Z0-9-_]+)/);
+      return match ? match[1] : input.trim();
+    }
+
     // מנגנון סנכרון מרחוק
     async function fetchFromGoogleSheets() {
-      const sheetId = localStorage.getItem('syn_sheet_id');
+      let rawSheetId = localStorage.getItem('syn_sheet_id');
+      const sheetId = extractSheetId(rawSheetId);
       const apiKey = localStorage.getItem('syn_api_key');
 
       if (!sheetId) return;
@@ -754,11 +769,11 @@
       }
     }
 
-    const defaultPrayers = `• שחרית: 06:30\n• מנחה וערבית: 10 דקות לפני השקיעה`;
-    const defaultNotices = `• שיעור בדף היומי: מיד לאחר ערבית\n• נא לשמור על הניקיון והשקט`;
-    const defaultShabbat = `• כניסת השבת: 18:45\n• מנחה ערב שבת: 18:25\n• שחרית שבת: 08:00\n• יציאת השבת: 19:50`;
+    const defaultPrayers = `ברוכים הבאים לבית הכנסת שביל התפילה\n• מנחה : 25 דקות לפני השקיעה\n• ערבית: 15דקות אחרי השקיעה\n• שחרית יום שישי בלבד - 7:30`;
+    const defaultNotices = `שיעורי תורה בין מנחה לערבית (בימי חול )\n• ימים א-ג' : שיעור בהלכה עם הרב דוד\n• יום ד' : שיעור באור החיים עם הרב יחיא\n• יום ה' : שיעור בגמרא עם הרב משה אמסלם`;
+    const defaultShabbat = `18:55 מנחה וקבלת שבת\n7:45 שחרית\n13:15 מנחה-א\n16:30 תהילים לילדים\n17:50 מנחה-ב\n18:20 סעודה שלישית ושיעור\n19:00 שיעור עם הרב אלרואי\n19:50 ערבית מוצ"ש שיעור בזוהר הקדוש`;
     const defaultHalacha = `אמר רבי אלעזר אמר רבי חנינא: תלמידי חכמים מרבים שלום בעולם, שנאמר: "וכל בניך לימודי ה' ורב שלום בניך".\nהלכה: יש לנהוג כבוד וזהירות בקדושת בית הכנסת.`;
-    const defaultMemorial = `🕯️ שמואל בן רחל ונונו ז"ל\n🕯️ אברהם בן שרה ז"ל`;
+    const defaultMemorial = `🕯️ שמואל בן רחל ונונו ז"ל\n🕯️ אברהם בן איידה ז"ל\n🕯️`;
 
     function applyDataToUI() {
       const prayers = localStorage.getItem('syn_prayers') || defaultPrayers;
@@ -853,13 +868,13 @@
       localStorage.setItem('syn_memorial_time', document.getElementById('input-memorial-time').value);
       localStorage.setItem('syn_halacha_time', document.getElementById('input-halacha-time').value);
 
-      loadSettings();
+      applyDataToUI();
       document.getElementById('editModal').style.display = 'none';
+      startScreenRotation();
+      fetchFromGoogleSheets();
     }
 
-    setInterval(fetchFromGoogleSheets, 3 * 60 * 1000);
-
-    loadSettings();
+    window.onload = loadSettings;
   </script>
 </body>
 </html>
