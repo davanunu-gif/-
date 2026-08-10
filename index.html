@@ -1,34 +1,28 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>לוח בית כנסת דינמי</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>לוח בית כנסת - עיצוב מרוקאי מפואר</title>
 
-  <!-- גופנים תורניים ומודרניים -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Hofshi:wght@700;900&family=Rubik:wght@700;900&display=swap" rel="stylesheet">
-
-  <!-- ספריית Hebcal לחישוב תאריך עברי ופרשת השבוע אופליין -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Hofshi:wght@700;900&family=Rubik:wght@700;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@hebcal/core@5.7.0/dist/bundle.min.js"></script>
 
   <style>
     :root {
-      --gold-primary: #d4af37;
-      --gold-light: #f3e5ab;
-      --gold-dark: #aa7c11;
-      --top-bg: #0d1b2a;
-      --bottom-bg: #1b263b;
-      --clock-color: #fefae0;
-      --text-color: #1a0f00;
-      --parchment: #fdfbf7;
+      --gold: #dfb235;
+      --gold-light: #fff2a8;
+      --gold-dark: #8c6008;
+      --moroccan-blue: #091a2e;
+      --moroccan-teal: #123d4f;
+      --clock-color: #ffffff;
+      --parchment: #faf3e0;
       --scroll-duration: 20s;
-
-      /* גדלי גופנים משתנים */
-      --clock-font-size: 14rem;
-      --title-font-size: 2rem;
-      --content-font-size: 2.8rem;
+      --clock-size: 12.5rem;
+      --title-size: 2.2rem;
+      --content-size: 2.8rem;
     }
 
     * {
@@ -42,7 +36,14 @@
       height: 100vh;
       display: flex;
       flex-direction: column;
-      background-color: var(--top-bg);
+      background-color: var(--moroccan-blue);
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(223, 178, 53, 0.3) 3px, transparent 3px),
+        radial-gradient(circle at 0% 0%, rgba(223, 178, 53, 0.2) 6px, transparent 6px),
+        radial-gradient(circle at 100% 100%, rgba(223, 178, 53, 0.2) 6px, transparent 6px),
+        linear-gradient(45deg, rgba(18, 61, 79, 0.6) 25%, transparent 25%, transparent 75%, rgba(18, 61, 79, 0.6) 75%),
+        linear-gradient(-45deg, rgba(18, 61, 79, 0.6) 25%, transparent 25%, transparent 75%, rgba(18, 61, 79, 0.6) 75%);
+      background-size: 50px 50px, 100px 100px, 100px 100px, 80px 80px, 80px 80px;
       color: #ffffff;
       overflow: hidden;
       user-select: none;
@@ -54,143 +55,127 @@
       width: 100vw;
       flex-direction: column;
     }
-
     .screen.active {
       display: flex;
     }
 
-    /* ==========================================
-       עיצוב פרגמנט ומסגרות זהב
-       ========================================== */
     .parchment-card {
       background: var(--parchment);
-      background-image: radial-gradient(#e2d5b5 1px, transparent 0);
-      background-size: 24px 24px;
-      border: 6px double var(--gold-primary);
-      border-radius: 16px;
-      box-shadow: inset 0 0 30px rgba(170, 124, 17, 0.2), 0 10px 25px rgba(0, 0, 0, 0.6);
-      color: var(--text-color);
+      background-image: 
+        radial-gradient(rgba(140, 96, 8, 0.12) 2px, transparent 2px),
+        linear-gradient(0deg, rgba(223, 178, 53, 0.05) 1px, transparent 1px);
+      background-size: 24px 24px, 100% 4px;
+      border: 8px solid var(--gold);
+      border-radius: 60px 60px 25px 25px;
+      box-shadow:
+        inset 0 0 40px rgba(140, 96, 8, 0.25),
+        0 20px 50px rgba(0, 0, 0, 0.8),
+        0 0 0 6px var(--moroccan-blue);
+      color: #1a0f00;
       position: relative;
+      padding: 24px;
     }
 
-    .parchment-card::before, .parchment-card::after {
-      content: "⚜";
+    .parchment-card::before,
+    .parchment-card::after {
+      content: "۞";
       position: absolute;
-      font-size: 2rem;
+      font-size: 3.8rem;
       color: var(--gold-dark);
-      z-index: 2;
+      z-index: 5;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
-    .parchment-card::before { top: 10px; right: 15px; }
-    .parchment-card::after { top: 10px; left: 15px; }
-
-    /* ==========================================
-       סרגל עליון משותף למסכים משניים
-       ========================================== */
-    .sub-top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 3px double var(--gold-primary);
-      padding-bottom: 10px;
+    .parchment-card::before {
+      top: 5px;
+      right: 25px;
+    }
+    .parchment-card::after {
+      top: 5px;
+      left: 25px;
     }
 
-    .sub-title {
-      font-size: 3.2rem;
-      color: var(--gold-light);
-      font-weight: 900;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-    }
-
-    .sub-clock {
-      font-family: 'Rubik', sans-serif;
-      font-size: 5.5rem;
-      font-weight: bold;
-      color: var(--gold-light);
-      background: rgba(0, 0, 0, 0.4);
-      padding: 5px 25px;
-      border-radius: 12px;
-      border: 2px solid var(--gold-primary);
-      line-height: 1;
-    }
-
-    /* ==========================================
-       מסך 1: ראשי
-       ========================================== */
     .top-section {
-      height: 48vh;
-      background: linear-gradient(180deg, #09121d 0%, var(--top-bg) 100%);
+      height: 46vh;
+      background: linear-gradient(180deg, rgba(9, 26, 46, 0.98) 0%, rgba(18, 61, 79, 0.95) 100%);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 30px;
-      border-bottom: 5px solid var(--gold-primary);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      padding: 10px 30px 14px;
+      border-bottom: 8px solid var(--gold);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8);
+      position: relative;
     }
 
     .synagogue-title {
-      font-size: var(--title-font-size);
-      background: linear-gradient(135deg, var(--gold-light), var(--gold-primary));
-      color: #0d1b2a;
-      padding: 6px 35px;
-      border-radius: 0 0 16px 16px;
+      font-size: var(--title-size);
+      background: linear-gradient(135deg, #091a2e, #123d4f);
+      color: var(--gold-light);
+      padding: 14px 60px 12px;
+      border-radius: 0 0 50px 50px;
       font-weight: 900;
-      border: 2px solid var(--gold-dark);
+      border: 4px solid var(--gold);
       border-top: none;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
       text-align: center;
+      letter-spacing: 1px;
+      margin-top: 15px;
+      position: relative;
     }
 
     .clock-display {
       font-family: 'Rubik', sans-serif;
-      font-size: var(--clock-font-size);
+      font-size: var(--clock-size);
       font-weight: 900;
       color: var(--clock-color);
       line-height: 0.85;
-      text-shadow: 4px 4px 12px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.3);
+      text-shadow: 0 0 30px rgba(223, 178, 53, 0.5), 5px 5px 20px rgba(0, 0, 0, 0.9);
       margin: auto 0;
     }
 
     .date-bar {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
       align-items: center;
-      width: 95%;
-      background: rgba(0, 0, 0, 0.4);
-      border: 2px solid var(--gold-primary);
-      border-radius: 10px;
-      padding: 8px 25px;
-      font-size: 2rem;
+      width: 92%;
+      background: rgba(9, 26, 46, 0.85);
+      border: 3px solid var(--gold);
+      border-radius: 60px;
+      padding: 8px 35px;
+      font-size: 2.3rem;
       color: var(--gold-light);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.6), 0 5px 15px rgba(0,0,0,0.4);
+    }
+    .divider {
+      color: var(--gold);
+      font-size: 2rem;
+      text-shadow: 0 0 8px var(--gold);
     }
 
-    .divider { color: var(--gold-primary); }
-
     .bottom-section {
-      height: 52vh;
-      padding: 15px 30px;
+      height: 54vh;
+      padding: 18px 30px 22px;
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: var(--bottom-bg);
     }
 
     .board-container {
       width: 100%;
       height: 100%;
-      padding: 15px 30px;
+      padding: 25px 40px 20px;
       display: flex;
       flex-direction: column;
     }
 
     .board-header {
       text-align: center;
-      font-size: 2.2rem;
+      font-size: 2.8rem;
       font-weight: 900;
       color: var(--gold-dark);
-      border-bottom: 2px solid var(--gold-primary);
-      padding-bottom: 5px;
-      margin-bottom: 10px;
+      border-bottom: 4px double var(--gold);
+      padding-bottom: 10px;
+      margin-bottom: 16px;
       z-index: 2;
     }
 
@@ -204,174 +189,175 @@
     .announcement-text {
       position: absolute;
       width: 100%;
-      font-size: var(--content-font-size);
+      font-size: var(--content-size);
       font-weight: 700;
-      color: var(--text-color);
+      color: #1a0f00;
       white-space: pre-wrap;
-      line-height: 1.5;
+      line-height: 1.6;
       text-align: center;
       animation: scrollUp var(--scroll-duration) linear infinite;
+      padding: 6px 4px;
     }
 
     @keyframes scrollUp {
-      0% { transform: translateY(20%); }
-      100% { transform: translateY(-100%); }
+      0% { transform: translateY(20%); opacity: 0.6; }
+      4% { opacity: 1; }
+      96% { opacity: 1; }
+      100% { transform: translateY(-100%); opacity: 0.3; }
     }
 
-    /* ==========================================
-       מסך 2: זמני שבת
-       ========================================== */
-    .shabbat-screen {
-      padding: 25px 40px;
+    .sub-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 5px double var(--gold);
+      padding: 12px 25px;
+      margin-bottom: 10px;
+      background: rgba(9, 26, 46, 0.9);
+      border-radius: 20px;
+      border: 3px solid var(--gold);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    }
+
+    .sub-title {
+      font-size: 3.4rem;
+      color: var(--gold-light);
+      font-weight: 900;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+    }
+
+    .sub-clock {
+      font-family: 'Rubik', sans-serif;
+      font-size: 5rem;
+      font-weight: bold;
+      color: var(--gold-light);
+      background: rgba(0, 0, 0, 0.6);
+      padding: 4px 26px;
+      border-radius: 20px;
+      border: 3px solid var(--gold);
+      line-height: 1;
+    }
+
+    .shabbat-screen, .memorial-screen, .halacha-screen {
+      padding: 25px 40px 30px;
       height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      background: linear-gradient(135deg, #09121d 0%, #1b263b 100%);
     }
 
     .parasha-title {
-      font-size: 3.5rem;
+      font-size: 3.6rem;
       color: var(--gold-light);
       font-weight: 900;
       text-align: center;
       flex-grow: 1;
-      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+      text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9);
     }
 
-    .shabbat-container {
+    .shabbat-container, .memorial-content, .halacha-content {
       flex-grow: 1;
-      margin: 20px 0;
-      padding: 20px 40px;
+      margin: 18px 0 6px;
+      padding: 28px 45px 20px;
       position: relative;
       overflow: hidden;
       display: flex;
       flex-direction: column;
     }
 
-    .shabbat-scroll-text {
+    .shabbat-scroll-text, .memorial-list {
       position: absolute;
-      width: calc(100% - 80px);
-      font-size: var(--content-font-size);
+      width: calc(100% - 90px);
+      font-size: var(--content-size);
       font-weight: 700;
-      color: var(--text-color);
+      color: #1a0f00;
       white-space: pre-wrap;
-      line-height: 1.8;
+      line-height: 1.9;
       text-align: center;
       animation: scrollUpShabbat var(--scroll-duration) linear infinite;
-    }
-
-    @keyframes scrollUpShabbat {
-      0% { transform: translateY(20%); }
-      100% { transform: translateY(-100%); }
-    }
-
-    /* ==========================================
-       מסך 3: לעילוי נשמת
-       ========================================== */
-    .memorial-screen {
-      padding: 25px 40px;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: linear-gradient(180deg, #050b14 0%, #101b2b 100%);
-    }
-
-    .memorial-content {
-      flex-grow: 1;
-      margin: 20px 0;
-      padding: 30px 40px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .memorial-list {
-      position: absolute;
-      width: calc(100% - 80px);
-      font-size: var(--content-font-size);
-      font-weight: 700;
-      color: var(--text-color);
-      line-height: 2;
-      text-align: center;
-      white-space: pre-wrap;
-      animation: scrollUpMemorial var(--scroll-duration) linear infinite;
-    }
-
-    @keyframes scrollUpMemorial {
-      0% { transform: translateY(20%); }
-      100% { transform: translateY(-100%); }
-    }
-
-    /* ==========================================
-       מסך 4: הלכה יומית
-       ========================================== */
-    .halacha-screen {
-      padding: 25px 40px;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+      padding: 8px 0;
     }
 
     .halacha-content {
-      flex-grow: 1;
-      margin: 20px 0;
-      padding: 35px;
-      font-size: var(--content-font-size);
-      line-height: 1.7;
-      display: flex;
-      flex-direction: column;
+      font-size: var(--content-size);
+      line-height: 1.8;
       justify-content: center;
       align-items: center;
       white-space: pre-wrap;
       text-align: center;
+      font-weight: 700;
     }
 
-    /* ==========================================
-       חלון הגדרות
-       ========================================== */
+    @keyframes scrollUpShabbat {
+      0% { transform: translateY(20%); opacity: 0.6; }
+      4% { opacity: 1; }
+      96% { opacity: 1; }
+      100% { transform: translateY(-100%); opacity: 0.3; }
+    }
+
     .edit-btn {
       position: fixed;
-      bottom: 15px;
-      left: 15px;
-      background: var(--gold-primary);
+      bottom: 20px;
+      left: 20px;
+      background: var(--gold);
       color: #000;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
+      border: 3px solid var(--gold-dark);
+      padding: 10px 24px;
+      border-radius: 40px;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: bold;
-      box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+      box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.6);
       opacity: 0.6;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, transform 0.2s;
       z-index: 1000;
     }
+    .edit-btn:hover {
+      opacity: 1;
+      transform: scale(1.05);
+    }
 
-    .edit-btn:hover { opacity: 1; }
+    #wakeLockPrompt {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(9, 26, 46, 0.95);
+      color: var(--gold-light);
+      padding: 14px 35px;
+      border-radius: 50px;
+      border: 3px solid var(--gold);
+      font-size: 1.6rem;
+      z-index: 999;
+      animation: pulseGlow 2.5s infinite;
+      cursor: pointer;
+      box-shadow: 0 0 40px rgba(223, 178, 53, 0.3);
+      text-align: center;
+      font-weight: 700;
+      display: none;
+      white-space: nowrap;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.8; transform: translateX(-50%) scale(1); }
+      50% { opacity: 1; transform: translateX(-50%) scale(1.03); }
+    }
 
     .modal-overlay {
       display: none;
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.85);
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
       z-index: 2000;
       justify-content: center;
       align-items: center;
+      backdrop-filter: blur(6px);
     }
-
     .modal-box {
       background: #ffffff;
       color: #000;
-      border: 4px solid var(--gold-primary);
-      border-radius: 12px;
+      border: 6px double var(--gold);
+      border-radius: 20px;
       padding: 25px;
-      width: 85%;
+      width: 90%;
       max-width: 950px;
       max-height: 90vh;
       overflow-y: auto;
@@ -380,38 +366,82 @@
       gap: 15px;
       direction: rtl;
     }
-
-    .control-row { display: flex; gap: 15px; }
-    .control-group { display: flex; flex-direction: column; gap: 5px; flex: 1; }
-    .control-group label { font-weight: bold; font-size: 0.95rem; }
-    .control-group input, .control-group select, .control-group textarea {
-      padding: 8px; border: 2px solid #ccc; border-radius: 6px; font-size: 1rem; font-family: inherit;
+    .modal-box h2 {
+      color: var(--gold-dark);
+      font-size: 2.2rem;
+      border-bottom: 3px solid var(--gold);
+      padding-bottom: 8px;
+      text-align: center;
     }
-    .control-group input[type="color"] { height: 40px; padding: 2px; cursor: pointer; }
-    .control-group textarea { height: 80px; resize: vertical; }
+    .modal-box h3 {
+      color: var(--moroccan-blue);
+      font-size: 1.4rem;
+      border-bottom: 2px solid var(--gold-light);
+      padding-bottom: 4px;
+      margin-top: 6px;
+    }
+    .control-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      min-width: 150px;
+    }
+    .control-group label {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .control-group input, .control-group select, .control-group textarea {
+      padding: 8px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+    .control-group input[type="color"] {
+      height: 40px;
+      padding: 2px;
+      cursor: pointer;
+    }
+    .control-group textarea {
+      height: 75px;
+      resize: vertical;
+    }
     .btn-save {
-      background: var(--gold-primary); color: #000; padding: 12px;
-      border: none; border-radius: 6px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+      background: var(--gold);
+      color: #000;
+      padding: 12px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.3rem;
+      font-weight: 900;
+      cursor: pointer;
+      margin-top: 10px;
+      font-family: 'Frank Ruhl Hofshi', serif;
     }
   </style>
 </head>
 <body>
 
-  <!-- מסך 1: ראשי -->
+  <!-- ─── מסך ראשי ─── -->
   <div id="screen-main" class="screen active">
-    <div class="top-section" id="top-section">
-      <div class="synagogue-title" id="synagogue-name">בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל ( ונונו)</div>
+    <div class="top-section">
+      <div class="synagogue-title" id="synagogue-name">בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל (ונונו)</div>
       <div class="clock-display" id="clock">00:00:00</div>
-      <div class="date-bar" id="date-bar">
+      <div class="date-bar">
         <div class="date-item" id="day-name">יום ראשון</div>
-        <div class="divider">♦</div>
-        <div class="date-item" id="hebrew-date">טוען תאריך עברי...</div>
-        <div class="divider">♦</div>
+        <div class="divider">۞</div>
+        <div class="date-item" id="hebrew-date">טוען תאריך...</div>
+        <div class="divider">۞</div>
         <div class="date-item" id="gregorian-date">00/00/0000</div>
       </div>
     </div>
-
-    <div class="bottom-section" id="bottom-section">
+    <div class="bottom-section">
       <div class="board-container parchment-card">
         <div class="board-header">📜 הודעות וזמני תפילות</div>
         <div class="announcement-container">
@@ -421,7 +451,7 @@
     </div>
   </div>
 
-  <!-- מסך 2: זמני שבת -->
+  <!-- ─── מסך שבת ─── -->
   <div id="screen-shabbat" class="screen">
     <div class="shabbat-screen">
       <div class="sub-top-bar">
@@ -430,14 +460,12 @@
         <div class="sub-clock clock-shabbat">00:00:00</div>
       </div>
       <div class="shabbat-container parchment-card">
-        <div class="shabbat-scroll-text" id="shabbat-times-content">
-          טוען זמני שבת...
-        </div>
+        <div class="shabbat-scroll-text" id="shabbat-times-content">טוען זמני שבת...</div>
       </div>
     </div>
   </div>
 
-  <!-- מסך 3: לעילוי נשמת -->
+  <!-- ─── מסך נפטרים ─── -->
   <div id="screen-memorial" class="screen">
     <div class="memorial-screen">
       <div class="sub-top-bar">
@@ -445,142 +473,78 @@
         <div class="sub-clock clock-memorial">00:00:00</div>
       </div>
       <div class="memorial-content parchment-card">
-        <div class="memorial-list" id="memorial-list">
-          נר נשמה קודש לזכר הנפטרים
-        </div>
+        <div class="memorial-list" id="memorial-list">טוען...</div>
       </div>
     </div>
   </div>
 
-  <!-- מסך 4: הלכה יומית -->
+  <!-- ─── מסך הלכה ─── -->
   <div id="screen-halacha" class="screen">
     <div class="halacha-screen">
       <div class="sub-top-bar">
         <div class="sub-title">📖 הלכה יומית</div>
         <div class="sub-clock clock-halacha">00:00:00</div>
       </div>
-      <div class="halacha-content parchment-card" id="halacha-content">
-        טוען הלכה יומית...
-      </div>
+      <div class="halacha-content parchment-card" id="halacha-content">טוען הלכה...</div>
     </div>
   </div>
 
-  <!-- כפתור הגדרות -->
-  <button class="edit-btn" onclick="openModal()">✏️ הגדרות עיצוב ותוכן</button>
+  <button class="edit-btn" onclick="openModal()">✏️ הגדרות</button>
+  <div id="wakeLockPrompt">🔒 לחץ על המסך למניעת כיבוי אוטומטי</div>
 
-  <!-- חלון עריכה -->
+  <!-- מודאל הגדרות -->
   <div class="modal-overlay" id="editModal">
     <div class="modal-box">
-      <h2>הגדרות לוח בית כנסת</h2>
-
+      <h2>⚜️ הגדרות לוח בית כנסת</h2>
       <div class="control-group">
-        <label>שם בית הכנסת / הקדשה ראשית:</label>
-        <input type="text" id="input-header" value="בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל ( ונונו)">
+        <label>כותרת ראשית:</label>
+        <input type="text" id="input-header" value="בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל (ונונו)">
       </div>
 
-      <h3 style="margin-top: 5px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">📊 סנכרון מרחוק מרשת (Google Sheets):</h3>
+      <h3>📊 סנכרון Google Sheets</h3>
       <div class="control-row">
-        <div class="control-group">
-          <label>מזהה גיליון (Sheet ID) או קישור מלא:</label>
-          <input type="text" id="input-sheet-id" placeholder="הדבק כאן את מזהה הגיליון או הקישור">
-        </div>
-        <div class="control-group">
-          <label>מפתח API Key (אופציונלי):</label>
-          <input type="text" id="input-api-key" placeholder="AIzaSy...">
-        </div>
+        <div class="control-group"><label>מזהה גיליון (Sheet ID) או קישור:</label><input type="text" id="input-sheet-id" placeholder="הדבק מזהה"></div>
+        <div class="control-group"><label>מפתח API (אופציונלי):</label><input type="text" id="input-api-key" placeholder="AIzaSy..."></div>
       </div>
 
-      <h3 style="margin-top: 5px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">🎨 הגדרות עיצוב וגופנים:</h3>
+      <h3>🎨 עיצוב</h3>
       <div class="control-row">
-        <div class="control-group">
-          <label>צבע זהב / עיטורים:</label>
-          <input type="color" id="input-gold-color" value="#d4af37">
-        </div>
-        <div class="control-group">
-          <label>צבע רקע שפוף/עליון:</label>
-          <input type="color" id="input-bg-color" value="#0d1b2a">
-        </div>
-        <div class="control-group">
-          <label>צבע גופן השעון הראשי:</label>
-          <input type="color" id="input-clock-color" value="#fefae0">
-        </div>
+        <div class="control-group"><label>צבע זהב:</label><input type="color" id="input-gold-color" value="#dfb235"></div>
+        <div class="control-group"><label>צבע רקע עליון:</label><input type="color" id="input-bg-color" value="#091a2e"></div>
+        <div class="control-group"><label>צבע שעון:</label><input type="color" id="input-clock-color" value="#ffffff"></div>
       </div>
-
       <div class="control-row">
-        <div class="control-group">
-          <label>גודל גופן שעון ראשי (rem):</label>
-          <input type="number" id="input-clock-size" value="14" min="6" max="25" step="0.5">
-        </div>
-        <div class="control-group">
-          <label>גודל גופן כותרת (rem):</label>
-          <input type="number" id="input-title-size" value="2" min="1" max="5" step="0.2">
-        </div>
-        <div class="control-group">
-          <label>גודל גופן תוכן והודעות (rem):</label>
-          <input type="number" id="input-content-size" value="2.8" min="1.5" max="6" step="0.1">
-        </div>
+        <div class="control-group"><label>גודל שעון (rem):</label><input type="number" id="input-clock-size" value="12.5" min="6" max="30" step="0.5"></div>
+        <div class="control-group"><label>גודל כותרת (rem):</label><input type="number" id="input-title-size" value="2.2" min="1" max="6" step="0.2"></div>
+        <div class="control-group"><label>גודל תוכן (rem):</label><input type="number" id="input-content-size" value="2.8" min="1.5" max="7" step="0.1"></div>
       </div>
-
       <div class="control-row">
-        <div class="control-group">
-          <label>מהירות גלילת הודעות (בשניות):</label>
-          <input type="number" id="input-scroll-duration" value="20" min="5" max="120" step="1">
-        </div>
+        <div class="control-group"><label>מהירות גלילה (שניות):</label><input type="number" id="input-scroll-duration" value="20" min="5" max="120" step="1"></div>
       </div>
 
-      <h3 style="margin-top: 5px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">📜 תוכן הלוח והודעות (מקומי/גיבוי):</h3>
+      <h3>📜 תוכן מקומי</h3>
       <div class="control-row">
-        <div class="control-group">
-          <label>1. זמני תפילות:</label>
-          <textarea id="input-prayers" placeholder="• שחרית: 06:30&#10;• מנחה: 18:45"></textarea>
-        </div>
-        <div class="control-group">
-          <label>2. מודעות והודעות כלליות:</label>
-          <textarea id="input-notices" placeholder="• שיעור בדף היומי לאחר ערבית..."></textarea>
-        </div>
+        <div class="control-group"><label>זמני תפילות:</label><textarea id="input-prayers"></textarea></div>
+        <div class="control-group"><label>הודעות כלליות:</label><textarea id="input-notices"></textarea></div>
       </div>
+      <div class="control-group"><label>זמני שבת:</label><textarea id="input-shabbat-times"></textarea></div>
+      <div class="control-group"><label>הלכה יומית:</label><textarea id="input-halacha"></textarea></div>
+      <div class="control-group"><label>שמות הנפטרים:</label><textarea id="input-memorial-text"></textarea></div>
 
-      <h3 style="margin-top: 5px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">🖼️ תוכן מסכים נוספים:</h3>
-      <div class="control-group">
-        <label>זמני שבת (יופיעו במסך שבת קודש):</label>
-        <textarea id="input-shabbat-times" placeholder="• כניסת השבת: 18:50&#10;• מנחה ערב שבת: 18:30&#10;• יציאת השבת: 19:55"></textarea>
-      </div>
-
-      <div class="control-group">
-        <label>הלכה יומית / מסר תורני:</label>
-        <textarea id="input-halacha" placeholder="הכנס כאן את ההלכה היומית..."></textarea>
-      </div>
-
-      <div class="control-group">
-        <label>שמות הנפטרים (לעילוי נשמת):</label>
-        <textarea id="input-memorial-text" placeholder="שמואל בן רחל ונונו ז&quot;ל"></textarea>
-      </div>
-
-      <h3 style="margin-top: 5px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">⏱️ הגדרות תחלופת מסכים (בשניות):</h3>
+      <h3>⏱️ זמני מסכים (שניות)</h3>
       <div class="control-row">
-        <div class="control-group">
-          <label>זמן מסך ראשי:</label>
-          <input type="number" id="input-main-time" value="20" min="5">
-        </div>
-        <div class="control-group">
-          <label>זמן מסך שבת:</label>
-          <input type="number" id="input-shabbat-time" value="12" min="5">
-        </div>
-        <div class="control-group">
-          <label>זמן מסך נפטרים:</label>
-          <input type="number" id="input-memorial-time" value="10" min="5">
-        </div>
-        <div class="control-group">
-          <label>זמן מסך הלכה:</label>
-          <input type="number" id="input-halacha-time" value="15" min="5">
-        </div>
+        <div class="control-group"><label>ראשי:</label><input type="number" id="input-main-time" value="20" min="5"></div>
+        <div class="control-group"><label>שבת:</label><input type="number" id="input-shabbat-time" value="12" min="5"></div>
+        <div class="control-group"><label>נפטרים:</label><input type="number" id="input-memorial-time" value="10" min="5"></div>
+        <div class="control-group"><label>הלכה:</label><input type="number" id="input-halacha-time" value="15" min="5"></div>
       </div>
 
-      <button class="btn-save" onclick="saveSettings()">שמור וסגור</button>
+      <button class="btn-save" onclick="saveSettings()">💾 שמור וסגור</button>
     </div>
   </div>
 
   <script>
+    // ─── פונקציות עזר ───
     function numToGematria(num) {
       const letters = [
         "", "א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ז'", "ח'", "ט'", "י'",
@@ -590,13 +554,49 @@
       return letters[num] || String(num);
     }
 
-    const hebrewMonthsMap = {
-      "Tishrei": "תשרי", "Cheshvan": "חשוון", "Kislev": "כסלו", "Tevet": "טבת",
-      "Shevat": "שבט", "Adar": "אדר", "Adar I": "אדר א'", "Adar II": "אדר ב'",
-      "Nisan": "ניסן", "Iyyar": "אייר", "Sivan": "סיון", "Tamuz": "תמוז",
-      "Av": "אב", "Elul": "אלול"
-    };
+    // ─── פונקציה להמרת שם חודש עברי (מטפלת בבאג של "AV") ───
+    function fixHebrewMonthName(monthName) {
+      // אם השם הוא "AV" או "Av" או "av" – נמיר ל"אב"
+      if (monthName && monthName.toUpperCase() === "AV") {
+        return "אב";
+      }
+      // ניתן להוסיף תיקונים נוספים אם יתגלו בעיות דומות
+      return monthName;
+    }
 
+    function getFromStorage(key, defaultVal) {
+      const val = localStorage.getItem(key);
+      if (val && val !== 'null' && val !== 'undefined') return val;
+      return defaultVal;
+    }
+
+    // ─── Wake Lock ───
+    let wakeLock = null;
+    const wakePrompt = document.getElementById('wakeLockPrompt');
+
+    async function requestWakeLock() {
+      try {
+        wakeLock = await navigator.wakeLock.request('screen');
+        wakePrompt.style.display = 'none';
+        document.addEventListener('visibilitychange', async () => {
+          if (document.visibilityState === 'visible' && wakeLock === null) {
+            wakeLock = await navigator.wakeLock.request('screen');
+            wakePrompt.style.display = 'none';
+          }
+        });
+      } catch (err) {
+        wakePrompt.style.display = 'block';
+      }
+    }
+
+    setTimeout(requestWakeLock, 1500);
+    document.addEventListener('click', () => {
+      if (wakeLock === null) requestWakeLock();
+      else wakePrompt.style.display = 'none';
+    });
+    wakePrompt.addEventListener('click', requestWakeLock);
+
+    // ─── עדכון שעון ותאריכים ───
     function updateClockAndDates() {
       const now = new Date();
       const h = String(now.getHours()).padStart(2, '0');
@@ -605,10 +605,7 @@
       const timeStr = `${h}:${m}:${s}`;
 
       document.getElementById('clock').textContent = timeStr;
-
-      document.querySelectorAll('.sub-clock').forEach(el => {
-        el.textContent = timeStr;
-      });
+      document.querySelectorAll('.sub-clock').forEach(el => el.textContent = timeStr);
 
       const days = ['יום ראשון', 'יום שני', 'יום שלישי', 'יום רביעי', 'יום חמישי', 'יום שישי', 'שבת קודש'];
       document.getElementById('day-name').textContent = days[now.getDay()];
@@ -618,226 +615,150 @@
       const year = now.getFullYear();
       document.getElementById('gregorian-date').textContent = `${day}/${month}/${year}`;
 
-      let hebrewDateStr = "";
+      let hebrewDateStr = "טוען...";
       try {
         if (window.hebcal && window.hebcal.HDate) {
           const hdate = new window.hebcal.HDate(now);
           const dayGematria = numToGematria(hdate.getDate());
-          const rawMonth = hdate.getMonthName();
-          const monthHebrew = hebrewMonthsMap[rawMonth] || (typeof hdate.getMonthName === 'function' ? hdate.getMonthName('he') : rawMonth);
-          hebrewDateStr = `${dayGematria} ב${monthHebrew}`;
+          // קבלת שם החודש בעברית מהספרייה
+          let monthHeb = hdate.getMonthName('he');
+          // תיקון ידני למקרה של "AV"
+          monthHeb = fixHebrewMonthName(monthHeb);
+          hebrewDateStr = `${dayGematria} ב${monthHeb}`;
         }
       } catch (e) {
-        hebrewDateStr = "טוען תאריך עברי...";
+        // במקרה של שגיאה, נשאר "טוען..."
       }
-
       document.getElementById('hebrew-date').textContent = hebrewDateStr;
     }
 
     updateClockAndDates();
     setInterval(updateClockAndDates, 1000);
 
-    // חישוב פרשת השבוע אופליין ללא כפילויות
-    function getParasha() {
+    // ─── עדכון פרשת שבוע ───
+    function updateParasha() {
       try {
-        if (!window.hebcal) return;
+        if (!window.hebcal || !window.hebcal.HebrewCalendar) return;
         const now = new Date();
-        const options = { start: now, end: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000), israel: true, sedrot: true };
+        const options = {
+          start: now,
+          end: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000),
+          israel: true,
+          sedrot: true
+        };
         const events = window.hebcal.HebrewCalendar.calendar(options);
-
         for (const ev of events) {
-          if (ev.getDesc().startsWith("Parashat")) {
-            let parashaHebrew = ev.render('he');
-            document.getElementById('shabbat-parasha-title').textContent = parashaHebrew;
-            break;
+          const desc = ev.desc || '';
+          if (desc.includes('Parashat')) {
+            let parashaName = ev.render ? ev.render('he') : desc;
+            document.getElementById('shabbat-parasha-title').textContent = parashaName;
+            return;
           }
         }
+        document.getElementById('shabbat-parasha-title').textContent = 'פרשת השבוע';
       } catch (e) {
-        console.log("Error calculating Parasha:", e);
+        document.getElementById('shabbat-parasha-title').textContent = 'פרשת השבוע';
       }
     }
+    updateParasha();
+    setInterval(updateParasha, 24 * 60 * 60 * 1000);
 
-    // ניהול תחלופת מסכים
+    // ─── מעבר אוטומטי ───
     let screenSwitchTimeout = null;
-    function startScreenRotation() {
-      if (screenSwitchTimeout) clearTimeout(screenSwitchTimeout);
-
-      const mainTime = parseInt(localStorage.getItem('syn_main_time') || "20") * 1000;
-      const shabbatTime = parseInt(localStorage.getItem('syn_shabbat_time') || "12") * 1000;
-      const memorialTime = parseInt(localStorage.getItem('syn_memorial_time') || "10") * 1000;
-      const halachaTime = parseInt(localStorage.getItem('syn_halacha_time') || "15") * 1000;
-
-      function step1() {
-        showScreen('screen-main');
-        screenSwitchTimeout = setTimeout(step2, mainTime);
-      }
-      function step2() {
-        showScreen('screen-shabbat');
-        screenSwitchTimeout = setTimeout(step3, shabbatTime);
-      }
-      function step3() {
-        showScreen('screen-memorial');
-        screenSwitchTimeout = setTimeout(step4, memorialTime);
-      }
-      function step4() {
-        showScreen('screen-halacha');
-        screenSwitchTimeout = setTimeout(step1, halachaTime);
-      }
-
-      step1();
-    }
 
     function showScreen(screenId) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      const activeScreen = document.getElementById(screenId);
-      activeScreen.classList.add('active');
-
-      const animatedEls = activeScreen.querySelectorAll('.announcement-text, .shabbat-scroll-text, .memorial-list');
-      animatedEls.forEach(el => {
-        const currentAnimation = el.style.animation;
+      const target = document.getElementById(screenId);
+      if (target) target.classList.add('active');
+      document.querySelectorAll('.announcement-text, .shabbat-scroll-text, .memorial-list').forEach(el => {
+        const cur = el.style.animation;
         el.style.animation = 'none';
-        el.offsetHeight;
-        el.style.animation = currentAnimation || '';
+        void el.offsetHeight;
+        el.style.animation = cur || '';
       });
     }
 
-    // פונקציה למתיחת ID מתוך URL במידה והוזן קישור מלא
-    function extractSheetId(input) {
-      if (!input) return "";
-      const match = input.match(/\/d\/([a-zA-Z0-9-_]+)/);
-      return match ? match[1] : input.trim();
-    }
+    function startScreenRotation() {
+      if (screenSwitchTimeout) clearTimeout(screenSwitchTimeout);
+      const times = {
+        main: parseInt(getFromStorage('syn_main_time', '20')) * 1000,
+        shabbat: parseInt(getFromStorage('syn_shabbat_time', '12')) * 1000,
+        memorial: parseInt(getFromStorage('syn_memorial_time', '10')) * 1000,
+        halacha: parseInt(getFromStorage('syn_halacha_time', '15')) * 1000,
+      };
 
-    // מנגנון סנכרון מרחוק
-    async function fetchFromGoogleSheets() {
-      let rawSheetId = localStorage.getItem('syn_sheet_id');
-      const sheetId = extractSheetId(rawSheetId);
-      const apiKey = localStorage.getItem('syn_api_key');
+      let step = 0;
+      const steps = [
+        { id: 'screen-main', delay: times.main },
+        { id: 'screen-shabbat', delay: times.shabbat },
+        { id: 'screen-memorial', delay: times.memorial },
+        { id: 'screen-halacha', delay: times.halacha }
+      ];
 
-      if (!sheetId) return;
-
-      let prayers = "", notices = "", shabbat = "", halacha = "", memorial = "";
-
-      try {
-        if (apiKey) {
-          const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:B10?key=${apiKey}`;
-          const response = await fetch(url);
-          if (response.ok) {
-            const data = await response.json();
-            if (data.values) {
-              data.values.forEach(row => {
-                const key = row[0] ? row[0].trim() : "";
-                const val = row[1] ? row[1].trim() : "";
-                if (key.includes("תפילות")) prayers = val;
-                if (key.includes("הודעות")) notices = val;
-                if (key.includes("שבת")) shabbat = val;
-                if (key.includes("הלכה")) halacha = val;
-                if (key.includes("נפטרים") || key.includes("נשמת")) memorial = val;
-              });
-            }
-          }
-        } else {
-          const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
-          const response = await fetch(csvUrl);
-          if (response.ok) {
-            const csvText = await response.text();
-            const lines = csvText.split('\n');
-            lines.forEach(line => {
-              const parts = line.split(',');
-              if (parts.length >= 2) {
-                const key = parts[0].replace(/^"|"$/g, '').trim();
-                const val = parts.slice(1).join(',').replace(/^"|"$/g, '').trim();
-                if (key.includes("תפילות")) prayers = val;
-                if (key.includes("הודעות")) notices = val;
-                if (key.includes("שבת")) shabbat = val;
-                if (key.includes("הלכה")) halacha = val;
-                if (key.includes("נפטרים") || key.includes("נשמת")) memorial = val;
-              }
-            });
-          }
-        }
-
-        if (prayers) localStorage.setItem('syn_prayers', prayers);
-        if (notices) localStorage.setItem('syn_notices', notices);
-        if (shabbat) localStorage.setItem('syn_shabbat_times', shabbat);
-        if (halacha) localStorage.setItem('syn_halacha_text', halacha);
-        if (memorial) localStorage.setItem('syn_memorial_text', memorial);
-
-        applyDataToUI();
-      } catch (err) {
-        console.log("סנכרון אופליין - משתמש בנתונים נשמורים בלבד:", err);
+      function nextStep() {
+        const current = steps[step];
+        showScreen(current.id);
+        step = (step + 1) % steps.length;
+        screenSwitchTimeout = setTimeout(nextStep, current.delay);
       }
+      nextStep();
     }
 
-    const defaultPrayers = `ברוכים הבאים לבית הכנסת שביל התפילה\n• מנחה : 25 דקות לפני השקיעה\n• ערבית: 15דקות אחרי השקיעה\n• שחרית יום שישי בלבד - 7:30`;
-    const defaultNotices = `שיעורי תורה בין מנחה לערבית (בימי חול )\n• ימים א-ג' : שיעור בהלכה עם הרב דוד\n• יום ד' : שיעור באור החיים עם הרב יחיא\n• יום ה' : שיעור בגמרא עם הרב משה אמסלם`;
+    // ─── נתוני ברירת מחדל ───
+    const defaultPrayers = `ברוכים הבאים לבית הכנסת שביל התפילה\n• מנחה : 25 דקות לפני השקיעה\n• ערבית: 15 דקות אחרי השקיעה\n• שחרית יום שישי בלבד - 7:30`;
+    const defaultNotices = `שיעורי תורה בין מנחה לערבית (בימי חול)\n• ימים א-ג' : שיעור בהלכה עם הרב דוד\n• יום ד' : שיעור באור החיים עם הרב יחיא\n• יום ה' : שיעור בגמרא עם הרב משה אמסלם`;
     const defaultShabbat = `18:55 מנחה וקבלת שבת\n7:45 שחרית\n13:15 מנחה-א\n16:30 תהילים לילדים\n17:50 מנחה-ב\n18:20 סעודה שלישית ושיעור\n19:00 שיעור עם הרב אלרואי\n19:50 ערבית מוצ"ש שיעור בזוהר הקדוש`;
-    const defaultHalacha = `אמר רבי אלעזר אמר רבי חנינא: תלמידי חכמים מרבים שלום בעולם, שנאמר: "וכל בניך לימודי ה' ורב שלום בניך".\nהלכה: יש לנהוג כבוד וזהירות בקדושת בית הכנסת.`;
-    const defaultMemorial = `🕯️ שמואל בן רחל ונונו ז"ל\n🕯️ אברהם בן איידה ז"ל\n🕯️`;
+    const defaultHalacha = `אמר רבי אלעזר אמר רבי חנינא: תלמידי חכמים מרבים שלום בעולם.\nהלכה: יש לנהוג כבוד וזהירות בקדושת בית הכנסת.`;
+    const defaultMemorial = `🕯️ שמואל בן רחל ונונו ז"ל\n🕯️ אברהם בן איידה ז"ל`;
 
     function applyDataToUI() {
-      const prayers = localStorage.getItem('syn_prayers') || defaultPrayers;
-      const notices = localStorage.getItem('syn_notices') || defaultNotices;
-      const shabbatTimes = localStorage.getItem('syn_shabbat_times') || defaultShabbat;
-      const halachaText = localStorage.getItem('syn_halacha_text') || defaultHalacha;
-      const memorialText = localStorage.getItem('syn_memorial_text') || defaultMemorial;
-      const header = localStorage.getItem('syn_header') || 'בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל ( ונונו)';
+      const prayers = getFromStorage('syn_prayers', defaultPrayers);
+      const notices = getFromStorage('syn_notices', defaultNotices);
+      const shabbat = getFromStorage('syn_shabbat_times', defaultShabbat);
+      const halacha = getFromStorage('syn_halacha_text', defaultHalacha);
+      const memorial = getFromStorage('syn_memorial_text', defaultMemorial);
+      const header = getFromStorage('syn_header', 'בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל (ונונו)');
 
-      document.getElementById('synagogue-name').innerText = header;
-      document.getElementById('announcement-text').innerText = prayers + "\n\n" + notices;
-      document.getElementById('shabbat-times-content').innerText = shabbatTimes;
-      document.getElementById('halacha-content').innerText = halachaText;
-      document.getElementById('memorial-list').innerText = memorialText;
+      document.getElementById('synagogue-name').textContent = header;
+      document.getElementById('announcement-text').textContent = prayers + "\n\n" + notices;
+      document.getElementById('shabbat-times-content').textContent = shabbat;
+      document.getElementById('halacha-content').textContent = halacha;
+      document.getElementById('memorial-list').textContent = memorial;
 
-      const scrollDuration = localStorage.getItem('syn_scroll_duration') || '20';
-      document.documentElement.style.setProperty('--scroll-duration', `${scrollDuration}s`);
+      const dur = getFromStorage('syn_scroll_duration', '20');
+      document.documentElement.style.setProperty('--scroll-duration', `${dur}s`);
     }
 
     function loadSettings() {
-      const goldColor = localStorage.getItem('syn_gold_color') || '#d4af37';
-      const bgColor = localStorage.getItem('syn_bg_color') || '#0d1b2a';
-      const clockColor = localStorage.getItem('syn_clock_color') || '#fefae0';
-      const clockSize = localStorage.getItem('syn_clock_size') || '14';
-      const titleSize = localStorage.getItem('syn_title_size') || '2';
-      const contentSize = localStorage.getItem('syn_content_size') || '2.8';
-      const scrollDuration = localStorage.getItem('syn_scroll_duration') || '20';
+      const gold = getFromStorage('syn_gold_color', '#dfb235');
+      const bg = getFromStorage('syn_bg_color', '#091a2e');
+      const clockColor = getFromStorage('syn_clock_color', '#ffffff');
+      const clockSize = getFromStorage('syn_clock_size', '12.5');
+      const titleSize = getFromStorage('syn_title_size', '2.2');
+      const contentSize = getFromStorage('syn_content_size', '2.8');
+      const scrollDur = getFromStorage('syn_scroll_duration', '20');
 
-      document.documentElement.style.setProperty('--gold-primary', goldColor);
-      document.documentElement.style.setProperty('--top-bg', bgColor);
+      document.documentElement.style.setProperty('--gold', gold);
+      document.documentElement.style.setProperty('--moroccan-blue', bg);
       document.documentElement.style.setProperty('--clock-color', clockColor);
-      document.documentElement.style.setProperty('--clock-font-size', `${clockSize}rem`);
-      document.documentElement.style.setProperty('--title-font-size', `${titleSize}rem`);
-      document.documentElement.style.setProperty('--content-font-size', `${contentSize}rem`);
-      document.documentElement.style.setProperty('--scroll-duration', `${scrollDuration}s`);
+      document.documentElement.style.setProperty('--clock-size', `${clockSize}rem`);
+      document.documentElement.style.setProperty('--title-size', `${titleSize}rem`);
+      document.documentElement.style.setProperty('--content-size', `${contentSize}rem`);
+      document.documentElement.style.setProperty('--scroll-duration', `${scrollDur}s`);
 
       applyDataToUI();
 
-      document.getElementById('input-prayers').value = localStorage.getItem('syn_prayers') || defaultPrayers;
-      document.getElementById('input-notices').value = localStorage.getItem('syn_notices') || defaultNotices;
-      document.getElementById('input-shabbat-times').value = localStorage.getItem('syn_shabbat_times') || defaultShabbat;
-      document.getElementById('input-halacha').value = localStorage.getItem('syn_halacha_text') || defaultHalacha;
-      document.getElementById('input-memorial-text').value = localStorage.getItem('syn_memorial_text') || defaultMemorial;
-      document.getElementById('input-header').value = localStorage.getItem('syn_header') || 'בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל ( ונונו)';
+      document.getElementById('input-header').value = getFromStorage('syn_header', 'בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל (ונונו)');
+      document.getElementById('input-prayers').value = getFromStorage('syn_prayers', defaultPrayers);
+      document.getElementById('input-notices').value = getFromStorage('syn_notices', defaultNotices);
+      document.getElementById('input-shabbat-times').value = getFromStorage('syn_shabbat_times', defaultShabbat);
+      document.getElementById('input-halacha').value = getFromStorage('syn_halacha_text', defaultHalacha);
+      document.getElementById('input-memorial-text').value = getFromStorage('syn_memorial_text', defaultMemorial);
 
-      document.getElementById('input-sheet-id').value = localStorage.getItem('syn_sheet_id') || '';
-      document.getElementById('input-api-key').value = localStorage.getItem('syn_api_key') || '';
-
-      document.getElementById('input-gold-color').value = goldColor;
-      document.getElementById('input-bg-color').value = bgColor;
-      document.getElementById('input-clock-color').value = clockColor;
-      document.getElementById('input-clock-size').value = clockSize;
-      document.getElementById('input-title-size').value = titleSize;
-      document.getElementById('input-content-size').value = contentSize;
-      document.getElementById('input-scroll-duration').value = scrollDuration;
-
-      document.getElementById('input-main-time').value = localStorage.getItem('syn_main_time') || '20';
-      document.getElementById('input-shabbat-time').value = localStorage.getItem('syn_shabbat_time') || '12';
-      document.getElementById('input-memorial-time').value = localStorage.getItem('syn_memorial_time') || '10';
-      document.getElementById('input-halacha-time').value = localStorage.getItem('syn_halacha_time') || '15';
-
-      getParasha();
-      startScreenRotation();
-      fetchFromGoogleSheets();
+      document.getElementById('input-main-time').value = getFromStorage('syn_main_time', '20');
+      document.getElementById('input-shabbat-time').value = getFromStorage('syn_shabbat_time', '12');
+      document.getElementById('input-memorial-time').value = getFromStorage('syn_memorial_time', '10');
+      document.getElementById('input-halacha-time').value = getFromStorage('syn_halacha_time', '15');
     }
 
     function openModal() {
@@ -845,16 +766,7 @@
     }
 
     function saveSettings() {
-      localStorage.setItem('syn_prayers', document.getElementById('input-prayers').value);
-      localStorage.setItem('syn_notices', document.getElementById('input-notices').value);
-      localStorage.setItem('syn_shabbat_times', document.getElementById('input-shabbat-times').value);
-      localStorage.setItem('syn_halacha_text', document.getElementById('input-halacha').value);
-      localStorage.setItem('syn_memorial_text', document.getElementById('input-memorial-text').value);
       localStorage.setItem('syn_header', document.getElementById('input-header').value);
-
-      localStorage.setItem('syn_sheet_id', document.getElementById('input-sheet-id').value.trim());
-      localStorage.setItem('syn_api_key', document.getElementById('input-api-key').value.trim());
-
       localStorage.setItem('syn_gold_color', document.getElementById('input-gold-color').value);
       localStorage.setItem('syn_bg_color', document.getElementById('input-bg-color').value);
       localStorage.setItem('syn_clock_color', document.getElementById('input-clock-color').value);
@@ -863,18 +775,25 @@
       localStorage.setItem('syn_content_size', document.getElementById('input-content-size').value);
       localStorage.setItem('syn_scroll_duration', document.getElementById('input-scroll-duration').value);
 
+      localStorage.setItem('syn_prayers', document.getElementById('input-prayers').value);
+      localStorage.setItem('syn_notices', document.getElementById('input-notices').value);
+      localStorage.setItem('syn_shabbat_times', document.getElementById('input-shabbat-times').value);
+      localStorage.setItem('syn_halacha_text', document.getElementById('input-halacha').value);
+      localStorage.setItem('syn_memorial_text', document.getElementById('input-memorial-text').value);
+
       localStorage.setItem('syn_main_time', document.getElementById('input-main-time').value);
       localStorage.setItem('syn_shabbat_time', document.getElementById('input-shabbat-time').value);
       localStorage.setItem('syn_memorial_time', document.getElementById('input-memorial-time').value);
       localStorage.setItem('syn_halacha_time', document.getElementById('input-halacha-time').value);
 
-      applyDataToUI();
       document.getElementById('editModal').style.display = 'none';
+      loadSettings();
       startScreenRotation();
-      fetchFromGoogleSheets();
     }
 
-    window.onload = loadSettings;
+    // ─── אתחול ───
+    loadSettings();
+    startScreenRotation();
   </script>
 </body>
 </html>
