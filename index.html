@@ -49,6 +49,18 @@
       user-select: none;
     }
 
+    /* וידאו בלתי נראה להערמת מנגנון שומר המסך של LG webOS */
+    #webosKeepAliveVideo {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0.01;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      z-index: -10;
+    }
+
     .screen {
       display: none;
       height: 100vh;
@@ -428,6 +440,9 @@
 </head>
 <body>
 
+  <!-- אלמנט וידאו נסתר למניעת שומר מסך ב-LG webOS -->
+  <video id="webosKeepAliveVideo" autoplay loop muted playsinline src="data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAAA2bWRhdAEEAwAYAAAAHgEAAAAtAAAAACAAAABAAAAAAAMAAAABAAAAAA=="></video>
+
   <!-- ─── מסך ראשי ─── -->
   <div id="screen-main" class="screen active">
     <div class="top-section">
@@ -489,13 +504,17 @@
     </div>
   </div>
 
+  <!-- ─── כפתור עריכה ─── -->
   <button class="edit-btn" onclick="openModal()">✏️ הגדרות</button>
+
+  <!-- ─── הודעת Wake Lock ─── -->
   <div id="wakeLockPrompt">🔒 לחץ על המסך למניעת כיבוי אוטומטי</div>
 
-  <!-- מודאל הגדרות -->
+  <!-- ─── מודאל הגדרות ─── -->
   <div class="modal-overlay" id="editModal">
     <div class="modal-box">
       <h2>⚜️ הגדרות לוח בית כנסת</h2>
+
       <div class="control-group">
         <label>כותרת ראשית:</label>
         <input type="text" id="input-header" value="בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל (ונונו)">
@@ -528,7 +547,7 @@
         <div class="control-group"><label>הודעות כלליות:</label><textarea id="input-notices"></textarea></div>
       </div>
       <div class="control-group"><label>זמני שבת:</label><textarea id="input-shabbat-times"></textarea></div>
-      <div class="control-group"><label>הלכה יומית:</label><textarea id="input-halacha"></textarea></div>
+      <div class="control-group"><label>הלכה יומית:</label><textarea id="input-halacha-text"></textarea></div>
       <div class="control-group"><label>שמות הנפטרים:</label><textarea id="input-memorial-text"></textarea></div>
 
       <h3>⏱️ זמני מסכים (שניות)</h3>
@@ -544,7 +563,6 @@
   </div>
 
   <script>
-    // ─── פונקציות עזר ───
     function numToGematria(num) {
       const letters = [
         "", "א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ז'", "ח'", "ט'", "י'",
@@ -554,49 +572,47 @@
       return letters[num] || String(num);
     }
 
-    // ─── פונקציה להמרת שם חודש עברי (מטפלת בבאג של "AV") ───
-    function fixHebrewMonthName(monthName) {
-      // אם השם הוא "AV" או "Av" או "av" – נמיר ל"אב"
-      if (monthName && monthName.toUpperCase() === "AV") {
-        return "אב";
-      }
-      // ניתן להוסיף תיקונים נוספים אם יתגלו בעיות דומות
-      return monthName;
-    }
-
     function getFromStorage(key, defaultVal) {
       const val = localStorage.getItem(key);
       if (val && val !== 'null' && val !== 'undefined') return val;
       return defaultVal;
     }
 
-    // ─── Wake Lock ───
+    /* ─── מנגנון מניעת כיבוי מסך כפול (WakeLock + webOS Video) ─── */
     let wakeLock = null;
     const wakePrompt = document.getElementById('wakeLockPrompt');
+    const keepAliveVideo = document.getElementById('webosKeepAliveVideo');
 
-    async function requestWakeLock() {
+    function playKeepAliveVideo() {
+      if (keepAliveVideo) {
+        keepAliveVideo.play().catch(() => {});
+      }
+    }
+
+    async function enableScreenLock() {
+      playKeepAliveVideo();
       try {
-        wakeLock = await navigator.wakeLock.request('screen');
+        if ('wakeLock' in navigator) {
+          wakeLock = await navigator.wakeLock.request('screen');
+        }
         wakePrompt.style.display = 'none';
-        document.addEventListener('visibilitychange', async () => {
-          if (document.visibilityState === 'visible' && wakeLock === null) {
-            wakeLock = await navigator.wakeLock.request('screen');
-            wakePrompt.style.display = 'none';
-          }
-        });
       } catch (err) {
         wakePrompt.style.display = 'block';
       }
     }
 
-    setTimeout(requestWakeLock, 1500);
-    document.addEventListener('click', () => {
-      if (wakeLock === null) requestWakeLock();
-      else wakePrompt.style.display = 'none';
-    });
-    wakePrompt.addEventListener('click', requestWakeLock);
+    enableScreenLock();
 
-    // ─── עדכון שעון ותאריכים ───
+    document.addEventListener('visibilitychange', async () => {
+      if (document.visibilityState === 'visible') {
+        enableScreenLock();
+      }
+    });
+
+    document.addEventListener('click', enableScreenLock);
+    document.addEventListener('touchstart', enableScreenLock);
+    wakePrompt.addEventListener('click', enableScreenLock);
+
     function updateClockAndDates() {
       const now = new Date();
       const h = String(now.getHours()).padStart(2, '0');
@@ -615,30 +631,31 @@
       const year = now.getFullYear();
       document.getElementById('gregorian-date').textContent = `${day}/${month}/${year}`;
 
-      let hebrewDateStr = "טוען...";
+      let hebrewDateStr = "טוען תאריך...";
       try {
         if (window.hebcal && window.hebcal.HDate) {
           const hdate = new window.hebcal.HDate(now);
           const dayGematria = numToGematria(hdate.getDate());
-          // קבלת שם החודש בעברית מהספרייה
-          let monthHeb = hdate.getMonthName('he');
-          // תיקון ידני למקרה של "AV"
-          monthHeb = fixHebrewMonthName(monthHeb);
-          hebrewDateStr = `${dayGematria} ב${monthHeb}`;
+          const monthHeb = hdate.getMonthName('he');
+          
+          // תיקון ספציפי עבור חודש אב - אם מופיע "Av", נחליף אותו ידנית
+          let correctedHebrewDate = `${dayGematria} ב${monthHeb}`;
+          if (correctedHebrewDate.includes("Av")) {
+            correctedHebrewDate = correctedHebrewDate.replace("Av", "אב");
+          }
+          
+          hebrewDateStr = correctedHebrewDate;
         }
-      } catch (e) {
-        // במקרה של שגיאה, נשאר "טוען..."
-      }
+      } catch (e) { }
       document.getElementById('hebrew-date').textContent = hebrewDateStr;
     }
 
     updateClockAndDates();
     setInterval(updateClockAndDates, 1000);
 
-    // ─── עדכון פרשת שבוע ───
     function updateParasha() {
       try {
-        if (!window.hebcal || !window.hebcal.HebrewCalendar) return;
+        if (!window.hebcal) return;
         const now = new Date();
         const options = {
           start: now,
@@ -648,28 +665,25 @@
         };
         const events = window.hebcal.HebrewCalendar.calendar(options);
         for (const ev of events) {
-          const desc = ev.desc || '';
-          if (desc.includes('Parashat')) {
-            let parashaName = ev.render ? ev.render('he') : desc;
-            document.getElementById('shabbat-parasha-title').textContent = parashaName;
+          if (ev.getDesc().includes("Parashat")) {
+            const name = ev.render('he');
+            document.getElementById('shabbat-parasha-title').textContent = name;
             return;
           }
         }
         document.getElementById('shabbat-parasha-title').textContent = 'פרשת השבוע';
-      } catch (e) {
-        document.getElementById('shabbat-parasha-title').textContent = 'פרשת השבוע';
-      }
+      } catch (e) { }
     }
     updateParasha();
     setInterval(updateParasha, 24 * 60 * 60 * 1000);
 
-    // ─── מעבר אוטומטי ───
     let screenSwitchTimeout = null;
 
     function showScreen(screenId) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       const target = document.getElementById(screenId);
       if (target) target.classList.add('active');
+
       document.querySelectorAll('.announcement-text, .shabbat-scroll-text, .memorial-list').forEach(el => {
         const cur = el.style.animation;
         el.style.animation = 'none';
@@ -704,7 +718,6 @@
       nextStep();
     }
 
-    // ─── נתוני ברירת מחדל ───
     const defaultPrayers = `ברוכים הבאים לבית הכנסת שביל התפילה\n• מנחה : 25 דקות לפני השקיעה\n• ערבית: 15 דקות אחרי השקיעה\n• שחרית יום שישי בלבד - 7:30`;
     const defaultNotices = `שיעורי תורה בין מנחה לערבית (בימי חול)\n• ימים א-ג' : שיעור בהלכה עם הרב דוד\n• יום ד' : שיעור באור החיים עם הרב יחיא\n• יום ה' : שיעור בגמרא עם הרב משה אמסלם`;
     const defaultShabbat = `18:55 מנחה וקבלת שבת\n7:45 שחרית\n13:15 מנחה-א\n16:30 תהילים לילדים\n17:50 מנחה-ב\n18:20 סעודה שלישית ושיעור\n19:00 שיעור עם הרב אלרואי\n19:50 ערבית מוצ"ש שיעור בזוהר הקדוש`;
@@ -752,13 +765,8 @@
       document.getElementById('input-prayers').value = getFromStorage('syn_prayers', defaultPrayers);
       document.getElementById('input-notices').value = getFromStorage('syn_notices', defaultNotices);
       document.getElementById('input-shabbat-times').value = getFromStorage('syn_shabbat_times', defaultShabbat);
-      document.getElementById('input-halacha').value = getFromStorage('syn_halacha_text', defaultHalacha);
+      document.getElementById('input-halacha-text').value = getFromStorage('syn_halacha_text', defaultHalacha);
       document.getElementById('input-memorial-text').value = getFromStorage('syn_memorial_text', defaultMemorial);
-
-      document.getElementById('input-main-time').value = getFromStorage('syn_main_time', '20');
-      document.getElementById('input-shabbat-time').value = getFromStorage('syn_shabbat_time', '12');
-      document.getElementById('input-memorial-time').value = getFromStorage('syn_memorial_time', '10');
-      document.getElementById('input-halacha-time').value = getFromStorage('syn_halacha_time', '15');
     }
 
     function openModal() {
@@ -778,7 +786,7 @@
       localStorage.setItem('syn_prayers', document.getElementById('input-prayers').value);
       localStorage.setItem('syn_notices', document.getElementById('input-notices').value);
       localStorage.setItem('syn_shabbat_times', document.getElementById('input-shabbat-times').value);
-      localStorage.setItem('syn_halacha_text', document.getElementById('input-halacha').value);
+      localStorage.setItem('syn_halacha_text', document.getElementById('input-halacha-text').value);
       localStorage.setItem('syn_memorial_text', document.getElementById('input-memorial-text').value);
 
       localStorage.setItem('syn_main_time', document.getElementById('input-main-time').value);
@@ -791,7 +799,6 @@
       startScreenRotation();
     }
 
-    // ─── אתחול ───
     loadSettings();
     startScreenRotation();
   </script>
