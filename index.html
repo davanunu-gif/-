@@ -9,8 +9,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Hofshi:wght@700;900&family=Rubik:wght@700;900&display=swap" rel="stylesheet" />
   
-  <!-- ספריות Hebcal מבוססות CDN אמינות -->
   <script src="https://cdn.jsdelivr.net/npm/@hebcal/core@5.5.0/dist/bundle.min.js"></script>
+
+  <script>
+    // 🔗 קישור ה-CSV המוגדר כברירת מחדל קבועה בקוד
+    const DEFAULT_SHEETS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ5RhBz4OO7dqkF-qCxJ0-DjFS8BFHOXt_ejDdrkFDgQ7z_V2aZbMhWSI20Aoog6VO7hbUKwLmRDJt6/pub?output=csv';
+  </script>
 
   <style>
     :root {
@@ -51,8 +55,7 @@
       user-select: none;
     }
 
-    /* וידאו בלתי נראה להערמת מנגנון שומר המסך של LG webOS */
-    #webosKeepAliveVideo {
+    #keepAliveMedia {
       position: absolute;
       width: 1px;
       height: 1px;
@@ -99,14 +102,8 @@
       z-index: 5;
       text-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
-    .parchment-card::before {
-      top: 5px;
-      right: 25px;
-    }
-    .parchment-card::after {
-      top: 5px;
-      left: 25px;
-    }
+    .parchment-card::before { top: 5px; right: 25px; }
+    .parchment-card::after { top: 5px; left: 25px; }
 
     .top-section {
       height: 46vh;
@@ -252,7 +249,7 @@
       line-height: 1;
     }
 
-    .shabbat-screen, .memorial-screen, .halacha-screen {
+    .shabbat-screen, .memorial-screen, .halacha-screen, .parnas-screen {
       padding: 25px 40px 30px;
       height: 100vh;
       display: flex;
@@ -268,7 +265,7 @@
       text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.9);
     }
 
-    .shabbat-container, .memorial-content, .halacha-content {
+    .shabbat-container, .memorial-content, .halacha-content, .parnas-content {
       flex-grow: 1;
       margin: 18px 0 6px;
       padding: 28px 45px 20px;
@@ -278,7 +275,7 @@
       flex-direction: column;
     }
 
-    .shabbat-scroll-text, .memorial-list {
+    .shabbat-scroll-text, .memorial-list, .parnas-text {
       position: absolute;
       width: calc(100% - 90px);
       font-size: var(--content-size);
@@ -417,8 +414,10 @@
 </head>
 <body>
 
-  <!-- אלמנט וידאו נסתר למניעת שומר מסך ב-LG webOS -->
-  <video id="webosKeepAliveVideo" autoplay loop muted playsinline src="data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAAA2bWRhdAEEAwAYAAAAHgEAAAAtAAAAACAAAABAAAAAAAMAAAABAAAAAA=="></video>
+  <div id="keepAliveMedia">
+    <video id="webosKeepAliveVideo" autoplay loop muted playsinline src="data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAAA2bWRhdAEEAwAYAAAAHgEAAAAtAAAAACAAAABAAAAAAAMAAAABAAAAAA=="></video>
+    <audio id="webosKeepAliveAudio" autoplay loop src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA="></audio>
+  </div>
 
   <!-- ─── מסך ראשי ─── -->
   <div id="screen-main" class="screen active">
@@ -457,6 +456,19 @@
     </div>
   </div>
 
+  <!-- ─── מסך פרנס השבוע ─── -->
+  <div id="screen-parnas" class="screen">
+    <div class="parnas-screen">
+      <div class="sub-top-bar">
+        <div class="sub-title">👑 פרנס השבוע</div>
+        <div class="sub-clock clock-parnas">00:00:00</div>
+      </div>
+      <div class="parnas-content parchment-card">
+        <div class="parnas-text" id="parnas-text-content">טוען פרנס השבוע...</div>
+      </div>
+    </div>
+  </div>
+
   <!-- ─── מסך נפטרים ─── -->
   <div id="screen-memorial" class="screen">
     <div class="memorial-screen">
@@ -481,7 +493,6 @@
     </div>
   </div>
 
-  <!-- ─── כפתור עריכה ─── -->
   <button class="edit-btn" onclick="openModal()">✏️ הגדרות</button>
 
   <!-- ─── מודאל הגדרות ─── -->
@@ -489,12 +500,28 @@
     <div class="modal-box">
       <h2>⚜️ הגדרות לוח בית כנסת</h2>
 
+      <h3>📊 סנכרון Google Sheets</h3>
+      <div class="control-group">
+        <label>קישור Google Sheets (פורמט CSV שפורסם באינטרנט):</label>
+        <input type="text" id="input-sheets-url" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv">
+      </div>
+
+      <h3>📜 כותרת ותוכן מקומי</h3>
       <div class="control-group">
         <label>כותרת ראשית:</label>
         <input type="text" id="input-header" value="בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל (ונונו)">
       </div>
 
-      <h3>🎨 עיצוב</h3>
+      <div class="control-row">
+        <div class="control-group"><label>זמני תפילות:</label><textarea id="input-prayers"></textarea></div>
+        <div class="control-group"><label>הודעות כלליות:</label><textarea id="input-notices"></textarea></div>
+      </div>
+      <div class="control-group"><label>זמני שבת:</label><textarea id="input-shabbat-times"></textarea></div>
+      <div class="control-group"><label>פרנס השבוע / תורמים:</label><textarea id="input-parnas-text"></textarea></div>
+      <div class="control-group"><label>הלכה יומית:</label><textarea id="input-halacha-text"></textarea></div>
+      <div class="control-group"><label>שמות הנפטרים:</label><textarea id="input-memorial-text"></textarea></div>
+
+      <h3>🎨 עיצוב וזמנים</h3>
       <div class="control-row">
         <div class="control-group"><label>צבע זהב:</label><input type="color" id="input-gold-color" value="#dfb235"></div>
         <div class="control-group"><label>צבע רקע עליון:</label><input type="color" id="input-bg-color" value="#091a2e"></div>
@@ -509,19 +536,11 @@
         <div class="control-group"><label>מהירות גלילה (שניות):</label><input type="number" id="input-scroll-duration" value="20" min="5" max="120" step="1"></div>
       </div>
 
-      <h3>📜 תוכן מקומי</h3>
-      <div class="control-row">
-        <div class="control-group"><label>זמני תפילות:</label><textarea id="input-prayers"></textarea></div>
-        <div class="control-group"><label>הודעות כלליות:</label><textarea id="input-notices"></textarea></div>
-      </div>
-      <div class="control-group"><label>זמני שבת:</label><textarea id="input-shabbat-times"></textarea></div>
-      <div class="control-group"><label>הלכה יומית:</label><textarea id="input-halacha-text"></textarea></div>
-      <div class="control-group"><label>שמות הנפטרים:</label><textarea id="input-memorial-text"></textarea></div>
-
       <h3>⏱️ זמני מסכים (שניות)</h3>
       <div class="control-row">
         <div class="control-group"><label>ראשי:</label><input type="number" id="input-main-time" value="20" min="5"></div>
         <div class="control-group"><label>שבת:</label><input type="number" id="input-shabbat-time" value="12" min="5"></div>
+        <div class="control-group"><label>פרנס השבוע:</label><input type="number" id="input-parnas-time" value="10" min="5"></div>
         <div class="control-group"><label>נפטרים:</label><input type="number" id="input-memorial-time" value="10" min="5"></div>
         <div class="control-group"><label>הלכה:</label><input type="number" id="input-halacha-time" value="15" min="5"></div>
       </div>
@@ -535,7 +554,7 @@
       const letters = [
         "", "א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ז'", "ח'", "ט'", "י'",
         "י\"א", "י\"ב", "י\"ג", "י\"ד", "ט\"ו", "ט\"ז", "י\"ז", "י\"ח", "י\"ט", "כ'",
-        "כ\"א", "כ\"ב", "כ\"3", "כ\"ד", "כ\"ה", "כ\"ו", "כ\"ז", "כ\"ח", "כ\"ט", "ל'", "ל\"א"
+        "כ\"א", "כ\"ב", "כ\"ג", "כ\"ד", "כ\"ה", "כ\"ו", "כ\"ז", "כ\"ח", "כ\"ט", "ל'", "ל\"א"
       ];
       return letters[num] || String(num);
     }
@@ -546,38 +565,23 @@
       return defaultVal;
     }
 
-    /* ─── מנגנון מניעת כיבוי מסך שקט לחלוטין ─── */
+    /* ─── מנגנון למניעת שומר מסך ─── */
     let wakeLock = null;
-    const keepAliveVideo = document.getElementById('webosKeepAliveVideo');
+    const keepVideo = document.getElementById('webosKeepAliveVideo');
+    const keepAudio = document.getElementById('webosKeepAliveAudio');
 
     function initKeepAlive() {
-      if (keepAliveVideo) {
-        keepAliveVideo.play().catch(() => {});
-      }
+      if (keepVideo) keepVideo.play().catch(() => {});
+      if (keepAudio) keepAudio.play().catch(() => {});
       if ('wakeLock' in navigator && !wakeLock) {
-        navigator.wakeLock.request('screen').then(wl => {
-          wakeLock = wl;
-        }).catch(() => {});
+        navigator.wakeLock.request('screen').then(wl => { wakeLock = wl; }).catch(() => {});
       }
     }
-
-    // הריצה מתבצעת אוטומטית ובנוסף נדרכת שקטה בלחיצות
     initKeepAlive();
     document.addEventListener('click', initKeepAlive);
     document.addEventListener('touchstart', initKeepAlive);
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') initKeepAlive();
-    });
 
-    /* ─── חישוב תאריך עברי ופרשה (עם גיבוי פנימי למקרה של נפל) ─── */
-    const hebrewMonths = ["תשרי", "חשון", "כסלו", "טבת", "שבט", "אדר", "אדר ב'", "ניסן", "אייר", "סיון", "תמוז", "אב", "אלול"];
-    
-    function getHebrewDateFallback(date) {
-      // חישוב מקורבי ואמין מאוד לתאריך עברי למקרה שהספריה לא זמינה
-      const dayGematria = numToGematria(date.getDate());
-      return `${dayGematria} באב תשפ"ו`;
-    }
-
+    /* ─── שעון ותאריכים ─── */
     function updateClockAndDates() {
       const now = new Date();
       const h = String(now.getHours()).padStart(2, '0');
@@ -603,21 +607,18 @@
           const hdate = new hebcalObj.HDate(now);
           const dayGematria = numToGematria(hdate.getDate());
           let monthHeb = hdate.getMonthName ? hdate.getMonthName('he') : '';
-          
           if (!monthHeb || monthHeb === 'Av') monthHeb = 'אב';
           if (monthHeb === 'Elul') monthHeb = 'אלול';
           if (monthHeb === 'Tishrei') monthHeb = 'תשרי';
-
           hebrewDateStr = `${dayGematria} ב${monthHeb}`;
         }
       } catch (e) { }
 
       if (!hebrewDateStr || hebrewDateStr.includes("undefined")) {
-        hebrewDateStr = getHebrewDateFallback(now);
+        hebrewDateStr = `${numToGematria(now.getDate())} באב תשפ"ו`;
       }
       document.getElementById('hebrew-date').textContent = hebrewDateStr;
     }
-
     updateClockAndDates();
     setInterval(updateClockAndDates, 1000);
 
@@ -626,30 +627,56 @@
         const hebcalObj = window.hebcal || window.Hebcal;
         if (hebcalObj && hebcalObj.HebrewCalendar) {
           const now = new Date();
-          const options = {
+          const events = hebcalObj.HebrewCalendar.calendar({
             start: now,
             end: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000),
             israel: true,
             sedrot: true
-          };
-          const events = hebcalObj.HebrewCalendar.calendar(options);
+          });
           for (const ev of events) {
             if (ev.getDesc && ev.getDesc().includes("Parashat")) {
-              const name = ev.render('he');
-              document.getElementById('shabbat-parasha-title').textContent = name;
+              document.getElementById('shabbat-parasha-title').textContent = ev.render('he');
               return;
             }
           }
         }
       } catch (e) { }
-
-      // ברירת מחדל אם הספריה עוד לא נטענה
       document.getElementById('shabbat-parasha-title').textContent = 'פרשת השבוע';
     }
-
     updateParasha();
-    setInterval(updateParasha, 12 * 60 * 60 * 1000);
 
+    /* ─── סנכרון מול GOOGLE SHEETS ─── */
+    function fetchGoogleSheetsData() {
+      const url = getFromStorage('syn_sheets_url', typeof DEFAULT_SHEETS_URL !== 'undefined' ? DEFAULT_SHEETS_URL : '');
+      if (!url) return;
+
+      fetch(url)
+        .then(response => response.text())
+        .then(csvText => {
+          const lines = csvText.split('\n');
+          lines.forEach(line => {
+            const parts = line.split(',');
+            if (parts.length >= 2) {
+              const key = parts[0].trim().toLowerCase();
+              let val = parts.slice(1).join(',').trim();
+              if (val.startsWith('"') && val.endsWith('"')) val = val.substring(1, val.length - 1);
+              val = val.replace(/""/g, '"').replace(/\\n/g, '\n');
+
+              if (key === 'header') localStorage.setItem('syn_header', val);
+              if (key === 'prayers') localStorage.setItem('syn_prayers', val);
+              if (key === 'notices') localStorage.setItem('syn_notices', val);
+              if (key === 'shabbat') localStorage.setItem('syn_shabbat_times', val);
+              if (key === 'parnas') localStorage.setItem('syn_parnas_text', val);
+              if (key === 'halacha') localStorage.setItem('syn_halacha_text', val);
+              if (key === 'memorial') localStorage.setItem('syn_memorial_text', val);
+            }
+          });
+          applyDataToUI();
+        })
+        .catch(err => console.log('Google Sheets Sync Error:', err));
+    }
+
+    /* ─── רוטציית מסכים ─── */
     let screenSwitchTimeout = null;
 
     function showScreen(screenId) {
@@ -657,7 +684,7 @@
       const target = document.getElementById(screenId);
       if (target) target.classList.add('active');
 
-      document.querySelectorAll('.announcement-text, .shabbat-scroll-text, .memorial-list').forEach(el => {
+      document.querySelectorAll('.announcement-text, .shabbat-scroll-text, .memorial-list, .parnas-text').forEach(el => {
         const cur = el.style.animation;
         el.style.animation = 'none';
         void el.offsetHeight;
@@ -670,6 +697,7 @@
       const times = {
         main: parseInt(getFromStorage('syn_main_time', '20')) * 1000,
         shabbat: parseInt(getFromStorage('syn_shabbat_time', '12')) * 1000,
+        parnas: parseInt(getFromStorage('syn_parnas_time', '10')) * 1000,
         memorial: parseInt(getFromStorage('syn_memorial_time', '10')) * 1000,
         halacha: parseInt(getFromStorage('syn_halacha_time', '15')) * 1000,
       };
@@ -678,6 +706,7 @@
       const steps = [
         { id: 'screen-main', delay: times.main },
         { id: 'screen-shabbat', delay: times.shabbat },
+        { id: 'screen-parnas', delay: times.parnas },
         { id: 'screen-memorial', delay: times.memorial },
         { id: 'screen-halacha', delay: times.halacha }
       ];
@@ -694,6 +723,7 @@
     const defaultPrayers = `ברוכים הבאים לבית הכנסת שביל התפילה\n• מנחה : 25 דקות לפני השקיעה\n• ערבית: 15 דקות אחרי השקיעה\n• שחרית יום שישי בלבד - 7:30`;
     const defaultNotices = `שיעורי תורה בין מנחה לערבית (בימי חול)\n• ימים א-ג' : שיעור בהלכה עם הרב דוד\n• יום ד' : שיעור באור החיים עם הרב יחיא\n• יום ה' : שיעור בגמרא עם הרב משה אמסלם`;
     const defaultShabbat = `18:55 מנחה וקבלת שבת\n7:45 שחרית\n13:15 מנחה-א\n16:30 תהילים לילדים\n17:50 מנחה-ב\n18:20 סעודה שלישית ושיעור\n19:00 שיעור עם הרב אלרואי\n19:50 ערבית מוצ"ש שיעור בזוהר הקדוש`;
+    const defaultParnas = `👑 פרנס השבוע מבורך:\nמשפחת כהן היקרה\n\nתורמים להחזקת בית הכנסת והרחבת הלימוד.\nימלא ה' כל משאלות ליבם לטובה ולברכה!`;
     const defaultHalacha = `אמר רבי אלעזר אמר רבי חנינא: תלמידי חכמים מרבים שלום בעולם.\nהלכה: יש לנהוג כבוד וזהירות בקדושת בית הכנסת.`;
     const defaultMemorial = `🕯️ שמואל בן רחל ונונו ז"ל\n🕯️ אברהם בן איידה ז"ל`;
 
@@ -701,6 +731,7 @@
       const prayers = getFromStorage('syn_prayers', defaultPrayers);
       const notices = getFromStorage('syn_notices', defaultNotices);
       const shabbat = getFromStorage('syn_shabbat_times', defaultShabbat);
+      const parnas = getFromStorage('syn_parnas_text', defaultParnas);
       const halacha = getFromStorage('syn_halacha_text', defaultHalacha);
       const memorial = getFromStorage('syn_memorial_text', defaultMemorial);
       const header = getFromStorage('syn_header', 'בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל (ונונו)');
@@ -708,6 +739,7 @@
       document.getElementById('synagogue-name').textContent = header;
       document.getElementById('announcement-text').textContent = prayers + "\n\n" + notices;
       document.getElementById('shabbat-times-content').textContent = shabbat;
+      document.getElementById('parnas-text-content').textContent = parnas;
       document.getElementById('halacha-content').textContent = halacha;
       document.getElementById('memorial-list').textContent = memorial;
 
@@ -734,10 +766,13 @@
 
       applyDataToUI();
 
+      const defaultUrl = typeof DEFAULT_SHEETS_URL !== 'undefined' ? DEFAULT_SHEETS_URL : '';
+      document.getElementById('input-sheets-url').value = getFromStorage('syn_sheets_url', defaultUrl);
       document.getElementById('input-header').value = getFromStorage('syn_header', 'בית כנסת שביל התפילה | לעילוי נשמת שמואל בן רחל (ונונו)');
       document.getElementById('input-prayers').value = getFromStorage('syn_prayers', defaultPrayers);
       document.getElementById('input-notices').value = getFromStorage('syn_notices', defaultNotices);
       document.getElementById('input-shabbat-times').value = getFromStorage('syn_shabbat_times', defaultShabbat);
+      document.getElementById('input-parnas-text').value = getFromStorage('syn_parnas_text', defaultParnas);
       document.getElementById('input-halacha-text').value = getFromStorage('syn_halacha_text', defaultHalacha);
       document.getElementById('input-memorial-text').value = getFromStorage('syn_memorial_text', defaultMemorial);
     }
@@ -747,6 +782,7 @@
     }
 
     function saveSettings() {
+      localStorage.setItem('syn_sheets_url', document.getElementById('input-sheets-url').value);
       localStorage.setItem('syn_header', document.getElementById('input-header').value);
       localStorage.setItem('syn_gold_color', document.getElementById('input-gold-color').value);
       localStorage.setItem('syn_bg_color', document.getElementById('input-bg-color').value);
@@ -759,20 +795,25 @@
       localStorage.setItem('syn_prayers', document.getElementById('input-prayers').value);
       localStorage.setItem('syn_notices', document.getElementById('input-notices').value);
       localStorage.setItem('syn_shabbat_times', document.getElementById('input-shabbat-times').value);
+      localStorage.setItem('syn_parnas_text', document.getElementById('input-parnas-text').value);
       localStorage.setItem('syn_halacha_text', document.getElementById('input-halacha-text').value);
       localStorage.setItem('syn_memorial_text', document.getElementById('input-memorial-text').value);
 
       localStorage.setItem('syn_main_time', document.getElementById('input-main-time').value);
       localStorage.setItem('syn_shabbat_time', document.getElementById('input-shabbat-time').value);
+      localStorage.setItem('syn_parnas_time', document.getElementById('input-parnas-time').value);
       localStorage.setItem('syn_memorial_time', document.getElementById('input-memorial-time').value);
       localStorage.setItem('syn_halacha_time', document.getElementById('input-halacha-time').value);
 
       document.getElementById('editModal').style.display = 'none';
       loadSettings();
+      fetchGoogleSheetsData();
       startScreenRotation();
     }
 
     loadSettings();
+    fetchGoogleSheetsData();
+    setInterval(fetchGoogleSheetsData, 5 * 60 * 1000);
     startScreenRotation();
   </script>
 </body>
