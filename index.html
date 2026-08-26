@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Hofshi:wght@700;900&family=Rubik:wght@600;800;900&family=Assistant:wght@600;800&family=Heebo:wght@700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Frank+Ruhl+Hofshi:wght@700;900&family=Rubik:wght@600;800;900&family=Assistant:wght@600;800&family=Heebo:wght@700;900&family=Tangerine:wght@700&family=Tinos:wght@700&display=swap" rel="stylesheet" />
 
   <script src="https://cdn.jsdelivr.net/npm/@hebcal/core@5.5.0/dist/bundle.min.js"></script>
 
@@ -23,6 +23,14 @@
       --shabbat-font-size: 2.5rem;
       --shabbat-time-font-size: 3.5rem;
       --shabbat-font-family: 'Frank Ruhl Hofshi', serif;
+      
+      /* גווני חלונות השבת */
+      --shabbat-arch-bg-start: rgba(13, 89, 66, 0.8);
+      --shabbat-arch-bg-end: rgba(5, 36, 26, 0.95);
+      --shabbat-title-color: #e2f7ef;
+
+      /* גופן פרנס השבוע */
+      --parnas-font-family: 'Frank Ruhl Hofshi', serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -100,7 +108,7 @@
       border: 3px solid var(--gold);
       border-radius: 50px;
       padding: 6px 30px;
-      font-size: 2.1rem;
+      font-size: calc(var(--title-size) * 0.95);
       color: var(--gold-light);
     }
 
@@ -250,7 +258,7 @@
     }
 
     .vitrage-arch {
-      background: linear-gradient(180deg, rgba(13, 89, 66, 0.8) 0%, rgba(5, 36, 26, 0.95) 100%);
+      background: linear-gradient(180deg, var(--shabbat-arch-bg-start) 0%, var(--shabbat-arch-bg-end) 100%);
       border: 4px solid var(--gold);
       border-radius: clamp(30px, 8vw, 120px) clamp(30px, 8vw, 120px) 25px 25px;
       padding: 2vh 1vw;
@@ -279,8 +287,8 @@
     }
 
     .vitrage-time-title {
-      font-size: min(var(--shabbat-font-size), 3.4vh);
-      color: #e2f7ef;
+      font-size: var(--shabbat-font-size);
+      color: var(--shabbat-title-color);
       font-weight: 900;
       text-align: center;
       line-height: 1.2;
@@ -294,7 +302,7 @@
     }
 
     .vitrage-time-value {
-      font-size: min(var(--shabbat-time-font-size), 4.5vh);
+      font-size: var(--shabbat-time-font-size);
       font-weight: 900;
       color: var(--gold-light);
       text-shadow: 0 0 15px rgba(223, 178, 53, 0.6);
@@ -315,6 +323,7 @@
     #screen-parnas {
       background: radial-gradient(circle at 50% 40%, #5c0b19 0%, #1c0206 100%);
       padding: 2vh 2vw;
+      font-family: var(--parnas-font-family);
     }
 
     .parnas-frame-wrapper {
@@ -332,7 +341,6 @@
       padding: 1vh 2vw 0;
     }
 
-    /* קשת הזהב העליונה */
     .parnas-arch-top {
       width: 46%;
       min-width: 260px;
@@ -358,7 +366,6 @@
       filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6));
     }
 
-    /* פסי הקישוט של הקשת */
     .parnas-arch-top::after {
       content: '';
       position: absolute;
@@ -381,7 +388,6 @@
       z-index: 2;
     }
 
-    /* עמודים מוזהבים בצדדים */
     .parnas-column {
       width: 6.5%;
       min-width: 26px;
@@ -394,7 +400,7 @@
       border-radius: 10px;
       box-shadow: inset 0 0 12px rgba(0,0,0,0.45), 0 8px 16px rgba(0,0,0,0.5);
     }
-    .parnas-column::before { /* כותרת העמוד */
+    .parnas-column::before {
       content: '';
       position: absolute;
       top: -16px; left: -35%; right: -35%;
@@ -403,7 +409,7 @@
       border-radius: 10px 10px 4px 4px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
-    .parnas-column::after { /* בסיס העמוד */
+    .parnas-column::after {
       content: '';
       position: absolute;
       bottom: -14px; left: -35%; right: -35%;
@@ -413,7 +419,6 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
 
-    /* לוח הזכוכית/קלף המרכזי - כאן מוצג התוכן */
     .parnas-glass-pane {
       flex: 1;
       min-width: 0;
@@ -452,7 +457,20 @@
       justify-content: center;
     }
 
-    /* מדרגות זהב בבסיס המסגרת */
+    .parnas-card-body .scrollable-text {
+      position: static;
+      width: 100%;
+      max-height: 100%;
+      animation: none;
+      opacity: 1;
+      transform: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-family: inherit;
+    }
+
     .parnas-pedestal {
       flex-shrink: 0;
       width: 92%;
@@ -487,7 +505,8 @@
 
     /* 6. מסך תמונה */
     #screen-image { background: #000; justify-content: center; align-items: center; padding: 0; }
-    #screen-image img { width: 100vw; height: 100vh; object-fit: contain; }
+    #screen-image img { width: 100vw; height: 100vh; object-fit: contain; color: transparent; }
+    #screen-image img.img-broken { display: none; }
 
     /* רכיבים משותפים */
     .sub-clock-badge {
@@ -651,6 +670,29 @@
             <option value="'Rubik', sans-serif">רוביק (מודרני וקריא)</option>
             <option value="'Heebo', sans-serif">היבו (נקי ובולט)</option>
             <option value="'Assistant', sans-serif">אסיסטנט (עדין ומודרני)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>גוונים לחלונות/קשתות השבת:</label>
+          <select id="input-shabbat-theme">
+            <option value="emerald">ירוק אמרלד ותורני (ברירת מחדל)</option>
+            <option value="royal-blue">כחול מלכותי וזהב</option>
+            <option value="purple">סגול מלכותי וזהב</option>
+            <option value="burgundy">בורדו עמוק וזהב</option>
+          </select>
+        </div>
+      </div>
+
+      <h3>👑 הגדרות מיוחדות למסך פרנס השבוע</h3>
+      <div class="control-row">
+        <div class="control-group">
+          <label>גופן מסך פרנס השבוע:</label>
+          <select id="input-parnas-font-family">
+            <option value="'Tangerine', cursive">ASHKENAZI / סופר סתם אמנותי (Tangerine)</option>
+            <option value="'Frank Ruhl Hofshi', serif">פרנק רוהל (סגנון תורני קלאסי)</option>
+            <option value="'Cinzel Decorative', serif">סגנון כתב עיטורי / עתיק (Cinzel)</option>
+            <option value="'Tinos', serif">סגנון כתב ספרדי / עתיק (Tinos)</option>
+            <option value="'Rubik', sans-serif">רוביק (מודרני קריא)</option>
           </select>
         </div>
       </div>
@@ -819,7 +861,7 @@
       nextStep();
     }
 
-    /* ─── 4. טעינת תוכן ─── */
+    /* ─── 4. טעינת תוכן ועיצוב ─── */
     const defaultBoard = `ברוכים הבאים לבית הכנסת שביל התפילה\nמנחה: 25 דקות לפני השקיעה\nערבית: 15 דקות אחרי השקיעה`;
     const defaultShabbat = `כניסת שבת: 18:30\nמנחה וקבלת שבת: 18:45\nשחרית: 08:00\nמוצאי שבת: 19:40`;
     const defaultParnas = `השבת פרנס בית הכנסת הוא:\n\nמשפחת היקרה`;
@@ -886,6 +928,33 @@
       });
     }
 
+    function applyShabbatTheme(themeName) {
+      const root = document.documentElement;
+      switch (themeName) {
+        case 'royal-blue':
+          root.style.setProperty('--shabbat-arch-bg-start', 'rgba(10, 45, 95, 0.85)');
+          root.style.setProperty('--shabbat-arch-bg-end', 'rgba(3, 15, 35, 0.95)');
+          root.style.setProperty('--shabbat-title-color', '#e0edff');
+          break;
+        case 'purple':
+          root.style.setProperty('--shabbat-arch-bg-start', 'rgba(65, 15, 80, 0.85)');
+          root.style.setProperty('--shabbat-arch-bg-end', 'rgba(25, 3, 30, 0.95)');
+          root.style.setProperty('--shabbat-title-color', '#f4e5ff');
+          break;
+        case 'burgundy':
+          root.style.setProperty('--shabbat-arch-bg-start', 'rgba(90, 15, 25, 0.85)');
+          root.style.setProperty('--shabbat-arch-bg-end', 'rgba(35, 3, 8, 0.95)');
+          root.style.setProperty('--shabbat-title-color', '#ffe5e8');
+          break;
+        case 'emerald':
+        default:
+          root.style.setProperty('--shabbat-arch-bg-start', 'rgba(13, 89, 66, 0.8)');
+          root.style.setProperty('--shabbat-arch-bg-end', 'rgba(5, 36, 26, 0.95)');
+          root.style.setProperty('--shabbat-title-color', '#e2f7ef');
+          break;
+      }
+    }
+
     function applyDataToUI() {
       document.getElementById('synagogue-name').textContent = getFromStorage('syn_header', 'בית כנסת שביל התפילה');
       renderBoard(getFromStorage('syn_board', defaultBoard));
@@ -905,6 +974,9 @@
       document.documentElement.style.setProperty('--shabbat-font-size', `${getFromStorage('syn_shabbat_font_size', '2.5')}rem`);
       document.documentElement.style.setProperty('--shabbat-time-font-size', `${getFromStorage('syn_shabbat_time_font_size', '3.5')}rem`);
       document.documentElement.style.setProperty('--shabbat-font-family', getFromStorage('syn_shabbat_font_family', "'Frank Ruhl Hofshi', serif"));
+      
+      applyShabbatTheme(getFromStorage('syn_shabbat_theme', 'emerald'));
+      document.documentElement.style.setProperty('--parnas-font-family', getFromStorage('syn_parnas_font_family', "'Tangerine', cursive"));
     }
 
     function loadSettings() {
@@ -925,6 +997,9 @@
       document.getElementById('input-shabbat-font-size').value = getFromStorage('syn_shabbat_font_size', '2.5');
       document.getElementById('input-shabbat-time-font-size').value = getFromStorage('syn_shabbat_time_font_size', '3.5');
       document.getElementById('input-shabbat-font-family').value = getFromStorage('syn_shabbat_font_family', "'Frank Ruhl Hofshi', serif");
+      document.getElementById('input-shabbat-theme').value = getFromStorage('syn_shabbat_theme', 'emerald');
+
+      document.getElementById('input-parnas-font-family').value = getFromStorage('syn_parnas_font_family', "'Tangerine', cursive");
 
       document.getElementById('input-sheet-url').value = getFromStorage('syn_sheet_url', '');
     }
@@ -941,6 +1016,9 @@
       localStorage.setItem('syn_shabbat_font_size', document.getElementById('input-shabbat-font-size').value);
       localStorage.setItem('syn_shabbat_time_font_size', document.getElementById('input-shabbat-time-font-size').value);
       localStorage.setItem('syn_shabbat_font_family', document.getElementById('input-shabbat-font-family').value);
+      localStorage.setItem('syn_shabbat_theme', document.getElementById('input-shabbat-theme').value);
+
+      localStorage.setItem('syn_parnas_font_family', document.getElementById('input-parnas-font-family').value);
 
       localStorage.setItem('syn_board', document.getElementById('input-board').value);
       localStorage.setItem('syn_shabbat_times', document.getElementById('input-shabbat-times').value);
@@ -1057,6 +1135,17 @@
     syncFromSheet(false);
 
     setInterval(() => syncFromSheet(false), 120000);
+
+    /* ─── 7. הסתרת אייקון "תמונה שבורה" כשאין טעינה תקינה ─── */
+    const customImageEl = document.getElementById('custom-image-display');
+    if (customImageEl) {
+      customImageEl.addEventListener('error', function () {
+        this.classList.add('img-broken');
+      });
+      customImageEl.addEventListener('load', function () {
+        this.classList.remove('img-broken');
+      });
+    }
   </script>
 </body>
 </html>
