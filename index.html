@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Frank+Ruhl+Hofshi:wght@700;900&family=Rubik:wght@600;800;900&family=Assistant:wght@600;800&family=Heebo:wght@700;900&family=Tangerine:wght@700&family=Tinos:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Hofshi:wght@700;900&family=Suez+One&family=Miriam+Libre:wght@400;700&family=David+Libre:wght@500;700&family=BelleFair&family=Tinos:wght@700&family=Rubik:wght@600;800;900&family=Assistant:wght@600;800&family=Heebo:wght@700;900&display=swap" rel="stylesheet" />
 
   <script src="https://cdn.jsdelivr.net/npm/@hebcal/core@5.5.0/dist/bundle.min.js"></script>
 
@@ -20,17 +20,32 @@
       --clock-size: 11rem;
       --title-size: 2.2rem;
       --content-size: 2.6rem;
+      
+      /* 1. מסך ראשי */
+      --main-font-family: 'Frank Ruhl Hofshi', serif;
+      --main-bg: #050b14;
+
+      /* 2. מסך שבת */
       --shabbat-font-size: 2.5rem;
       --shabbat-time-font-size: 3.5rem;
       --shabbat-font-family: 'Frank Ruhl Hofshi', serif;
-      
-      /* גווני חלונות השבת */
-      --shabbat-arch-bg-start: rgba(13, 89, 66, 0.8);
-      --shabbat-arch-bg-end: rgba(5, 36, 26, 0.95);
-      --shabbat-title-color: #e2f7ef;
+      --shabbat-bg: #02120d;
+      --shabbat-accent: #0d5942;
 
-      /* גופן פרנס השבוע */
-      --parnas-font-family: 'Frank Ruhl Hofshi', serif;
+      /* 3. מסך פרנס השבוע */
+      --parnas-font-family: 'Suez One', serif;
+      --parnas-bg: #1c0206;
+      --parnas-title-font-size: 2.2rem;
+      --parnas-name-font-size: 6rem;
+      --parnas-extra-font-size: 1.7rem;
+
+      /* 4. מסך נפטרים */
+      --memorial-font-family: 'Frank Ruhl Hofshi', serif;
+      --memorial-bg: #0a0c0e;
+
+      /* 5. מסך הלכה */
+      --halacha-font-family: 'Frank Ruhl Hofshi', serif;
+      --halacha-bg: #1c0e04;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -57,11 +72,12 @@
 
     /* 1. מסך ראשי */
     #screen-main {
-      background: radial-gradient(circle at 50% 30%, #102a45 0%, #050e1a 100%);
+      background-color: var(--main-bg);
       background-image: 
         radial-gradient(circle at 50% 50%, rgba(223, 178, 53, 0.15) 2px, transparent 2px),
-        linear-gradient(45deg, rgba(18, 61, 79, 0.3) 25%, transparent 25%, transparent 75%, rgba(18, 61, 79, 0.3) 75%);
+        linear-gradient(45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.03) 75%);
       background-size: 40px 40px, 80px 80px;
+      font-family: var(--main-font-family);
     }
 
     #screen-main .top-section {
@@ -74,12 +90,12 @@
       border-bottom: 6px solid var(--gold);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
       position: relative;
-      background: linear-gradient(180deg, rgba(5,14,26,0.95) 0%, rgba(15,40,68,0.9) 100%);
+      background: rgba(0, 0, 0, 0.4);
     }
 
     #screen-main .synagogue-title {
       font-size: var(--title-size);
-      background: linear-gradient(135deg, #091a2e, #123d4f);
+      background: rgba(0, 0, 0, 0.6);
       color: var(--gold-light);
       padding: 12px 50px;
       border-radius: 0 0 40px 40px;
@@ -104,7 +120,7 @@
       justify-content: space-around;
       align-items: center;
       width: 90%;
-      background: rgba(9, 26, 46, 0.9);
+      background: rgba(0, 0, 0, 0.6);
       border: 3px solid var(--gold);
       border-radius: 50px;
       padding: 6px 30px;
@@ -193,7 +209,7 @@
 
     /* 2. מסך שבת */
     #screen-shabbat {
-      background: radial-gradient(circle at 50% 30%, #06382b 0%, #02120d 100%);
+      background-color: var(--shabbat-bg);
       padding: 2vh 2vw;
       font-family: var(--shabbat-font-family);
     }
@@ -206,7 +222,7 @@
       min-height: 0;
       display: flex;
       flex-direction: column;
-      background: rgba(3, 24, 18, 0.95);
+      background: rgba(0, 0, 0, 0.6);
       padding: 1.5vh 2vw;
       position: relative;
       box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.9), 0 0 30px rgba(223, 178, 53, 0.2);
@@ -233,7 +249,7 @@
     .shabbat-parasha { 
       font-size: min(3.8rem, 6vh); 
       color: #ffffff; 
-      background: linear-gradient(135deg, #094735, #02241a); 
+      background: rgba(0, 0, 0, 0.5); 
       display: inline-block; 
       padding: 0.6vh 3vw; 
       border-radius: 50px; 
@@ -258,7 +274,9 @@
     }
 
     .vitrage-arch {
-      background: linear-gradient(180deg, var(--shabbat-arch-bg-start) 0%, var(--shabbat-arch-bg-end) 100%);
+      background: linear-gradient(180deg,
+        color-mix(in srgb, var(--shabbat-accent) 78%, white 12%) 0%,
+        color-mix(in srgb, var(--shabbat-accent) 55%, black 45%) 100%);
       border: 4px solid var(--gold);
       border-radius: clamp(30px, 8vw, 120px) clamp(30px, 8vw, 120px) 25px 25px;
       padding: 2vh 1vw;
@@ -288,7 +306,7 @@
 
     .vitrage-time-title {
       font-size: var(--shabbat-font-size);
-      color: var(--shabbat-title-color);
+      color: #e2f7ef;
       font-weight: 900;
       text-align: center;
       line-height: 1.2;
@@ -297,7 +315,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      word-break: break-word;
+      word-break: keep-all;
+      overflow-wrap: normal;
+      white-space: normal;
+      hyphens: none;
       overflow: hidden;
     }
 
@@ -316,14 +337,53 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      word-break: keep-all;
+      overflow-wrap: normal;
+      white-space: normal;
       overflow: hidden;
     }
 
     /* 3. מסך פרנס השבוע */
     #screen-parnas {
-      background: radial-gradient(circle at 50% 40%, #5c0b19 0%, #1c0206 100%);
+      background-color: var(--parnas-bg);
       padding: 2vh 2vw;
       font-family: var(--parnas-font-family);
+      position: relative;
+    }
+
+    .parnas-curtain-rod {
+      position: absolute;
+      top: 0; left: 2%; right: 2%;
+      height: 1.4vh;
+      background: linear-gradient(180deg, #fff2c0, #8c6008);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+      z-index: 6;
+    }
+
+    .parnas-curtain {
+      position: absolute;
+      top: 1.4vh;
+      width: 12%;
+      height: 84%;
+      background:
+        repeating-linear-gradient(90deg,
+          #5a0815 0%,
+          #8a1024 6%,
+          #5a0815 12%);
+      box-shadow: inset -14px 0 30px rgba(0,0,0,0.55), 10px 0 25px rgba(0,0,0,0.6);
+      z-index: 6;
+    }
+    .parnas-curtain-left { left: 0; border-radius: 0 0 55% 8% / 0 0 25% 6%; }
+    .parnas-curtain-right { right: 0; border-radius: 0 0 8% 55% / 0 0 6% 25%; box-shadow: inset 14px 0 30px rgba(0,0,0,0.55), -10px 0 25px rgba(0,0,0,0.6); }
+
+    .parnas-curtain-tieback {
+      position: absolute;
+      top: 46%; left: 50%; transform: translate(-50%, -50%);
+      width: 68%; height: 5.5vh;
+      background: linear-gradient(180deg, #fff2c0, #8c6008);
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
     }
 
     .parnas-frame-wrapper {
@@ -338,12 +398,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 1vh 2vw 0;
+      padding: 1vh 15% 0;
     }
 
     .parnas-arch-top {
       width: 46%;
-      min-width: 260px;
+      min-width: 220px;
       height: 9vh;
       max-height: 90px;
       flex-shrink: 0;
@@ -390,7 +450,7 @@
 
     .parnas-column {
       width: 6.5%;
-      min-width: 26px;
+      min-width: 22px;
       max-width: 70px;
       flex-shrink: 0;
       position: relative;
@@ -431,45 +491,67 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       padding: 2vh 3vw 1.5vh;
       box-shadow: inset 0 0 30px rgba(0,0,0,0.15), 0 10px 25px rgba(0,0,0,0.5);
       position: relative;
       overflow: hidden;
-      gap: 1vh;
+      gap: 1.5vh;
     }
 
     .parnas-main-title {
-      font-size: min(3rem, 5.5vh);
-      color: #6b1010;
+      font-size: var(--parnas-title-font-size);
+      color: #8a1b1b;
       font-weight: 900;
       flex-shrink: 0;
       text-align: center;
+      letter-spacing: 1px;
+      opacity: 0.85;
     }
 
     .parnas-card-body {
       width: 100%;
-      flex: 1;
-      min-height: 0;
+      flex-shrink: 0;
       color: #2b080c;
       position: relative;
-      overflow: hidden;
       display: flex;
-      justify-content: center;
-    }
-
-    .parnas-card-body .scrollable-text {
-      position: static;
-      width: 100%;
-      max-height: 100%;
-      animation: none;
-      opacity: 1;
-      transform: none;
-      display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      font-family: inherit;
+      gap: 1.2vh;
+      min-height: 0;
     }
+
+    /* השם הגרפי והמודגש של הפרנס */
+    .parnas-name-display {
+      width: 100%;
+      font-size: var(--parnas-name-font-size);
+      font-weight: 900;
+      line-height: 1.15;
+      text-align: center;
+      color: #7a0f0f;
+      background: linear-gradient(180deg, #b8860b 0%, #6b1010 55%, #b8860b 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 3px 2px rgba(0,0,0,0.35));
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      padding: 0.5vh 0;
+    }
+
+    .parnas-extra-text {
+      width: 100%;
+      font-size: var(--parnas-extra-font-size);
+      font-weight: 600;
+      color: #3a1414;
+      text-align: center;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      overflow: hidden;
+      max-height: 30vh;
+    }
+    .parnas-extra-text:empty { display: none; }
 
     .parnas-pedestal {
       flex-shrink: 0;
@@ -491,17 +573,25 @@
     .parnas-pedestal .step3 { width: 40%; height: 1.6vh; border-radius: 0 0 12px 12px; margin-top: -2px; }
 
     /* 4. מסך נפטרים */
-    #screen-memorial { background: radial-gradient(circle at 50% 50%, #222930 0%, #0a0c0e 100%); padding: 30px; }
-    .memorial-container { height: 100%; border: 6px solid #94a3b8; border-radius: 25px; display: flex; flex-direction: column; padding: 25px; position: relative; }
-    .memorial-header { display: flex; align-items: center; justify-content: center; gap: 25px; border-bottom: 3px solid #64748b; padding-bottom: 15px; margin-bottom: 20px; }
+    #screen-memorial {
+      background-color: var(--memorial-bg);
+      padding: 30px;
+      font-family: var(--memorial-font-family);
+    }
+    .memorial-container { height: 100%; border: 6px solid var(--gold); border-radius: 25px; display: flex; flex-direction: column; padding: 25px; position: relative; }
+    .memorial-header { display: flex; align-items: center; justify-content: center; gap: 25px; border-bottom: 3px solid var(--gold); padding-bottom: 15px; margin-bottom: 20px; }
     .memorial-header-title { font-size: 4.5rem; color: #f1f5f9; font-weight: 900; }
-    .memorial-body { flex: 1; background: #f8fafc; border-radius: 20px; border: 5px solid #475569; position: relative; overflow: hidden; display: flex; justify-content: center; }
+    .memorial-body { flex: 1; background: #f8fafc; border-radius: 20px; border: 5px solid var(--gold); position: relative; overflow: hidden; display: flex; justify-content: center; }
 
     /* 5. מסך הלכה */
-    #screen-halacha { background: radial-gradient(circle at 50% 50%, #4a2810 0%, #1c0e04 100%); padding: 30px; }
-    .halacha-book-frame { height: 100%; border: 12px double #d97706; border-radius: 30px; background: rgba(28, 14, 4, 0.95); display: flex; flex-direction: column; padding: 25px; position: relative; }
-    .halacha-header { text-align: center; font-size: 4.8rem; color: #fef08a; font-weight: 900; border-bottom: 4px solid #d97706; padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 20px; }
-    .halacha-body { flex: 1; background: #fef3c7; border: 5px solid #92400e; border-radius: 20px; color: #451a03; padding: 40px; font-size: var(--content-size); line-height: 1.8; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; white-space: pre-wrap; }
+    #screen-halacha {
+      background-color: var(--halacha-bg);
+      padding: 30px;
+      font-family: var(--halacha-font-family);
+    }
+    .halacha-book-frame { height: 100%; border: 12px double var(--gold); border-radius: 30px; background: rgba(0, 0, 0, 0.6); display: flex; flex-direction: column; padding: 25px; position: relative; }
+    .halacha-header { text-align: center; font-size: 4.8rem; color: #fef08a; font-weight: 900; border-bottom: 4px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 20px; }
+    .halacha-body { flex: 1; background: #fef3c7; border: 5px solid var(--gold); border-radius: 20px; color: #451a03; padding: 40px; font-size: var(--content-size); line-height: 1.8; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; white-space: pre-wrap; }
 
     /* 6. מסך תמונה */
     #screen-image { background: #000; justify-content: center; align-items: center; padding: 0; }
@@ -535,9 +625,11 @@
     .control-group { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 150px; }
     .control-group label { font-weight: 700; font-size: 0.9rem; }
     .control-group input, .control-group select, .control-group textarea { padding: 8px; border: 2px solid #ccc; border-radius: 10px; font-size: 0.95rem; font-family: inherit; }
+    .control-group input[type="color"] { padding: 3px; height: 42px; cursor: pointer; }
     .control-group textarea { height: 75px; resize: vertical; }
     .btn-save { background: var(--gold); color: #000; padding: 12px; border: none; border-radius: 30px; font-size: 1.3rem; font-weight: 900; cursor: pointer; margin-top: 10px; }
     .btn-secondary { background: #eee; color: #000; padding: 10px; border: 2px solid #ccc; border-radius: 20px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+    .section-title { margin-top: 6px; }
   </style>
 </head>
 <body>
@@ -579,6 +671,9 @@
 
   <!-- 3. מסך פרנס השבוע -->
   <div id="screen-parnas" class="screen">
+    <div class="parnas-curtain-rod"></div>
+    <div class="parnas-curtain parnas-curtain-left"><div class="parnas-curtain-tieback"></div></div>
+    <div class="parnas-curtain parnas-curtain-right"><div class="parnas-curtain-tieback"></div></div>
     <div class="parnas-frame-wrapper">
       <div class="sub-clock-badge sub-clock">00:00:00</div>
       <div class="parnas-ornate-frame">
@@ -588,7 +683,8 @@
           <div class="parnas-glass-pane">
             <div class="parnas-main-title">פרנס השבוע</div>
             <div class="parnas-card-body">
-              <div class="scrollable-text" id="parnas-text">טוען...</div>
+              <div class="parnas-name-display" id="parnas-name">שם הפרנס</div>
+              <div class="parnas-extra-text" id="parnas-extra"></div>
             </div>
           </div>
           <div class="parnas-column"></div>
@@ -645,7 +741,7 @@
         <input type="text" id="input-header" value="בית כנסת שביל התפילה">
       </div>
 
-      <h3>🎨 הגדרות עיצוב וגופנים</h3>
+      <h3 class="section-title">🎨 הגדרות כלליות</h3>
       <div class="control-row">
         <div class="control-group"><label>גודל שעון ראשי (rem):</label><input type="number" id="input-clock-size" value="11" min="6" max="30" step="0.5"></div>
         <div class="control-group"><label>גודל כותרת (rem):</label><input type="number" id="input-title-size" value="2.2" min="1" max="6" step="0.2"></div>
@@ -653,59 +749,53 @@
         <div class="control-group"><label>מהירות גלילה (שניות):</label><input type="number" id="input-scroll-duration" value="20" min="5" max="120" step="1"></div>
       </div>
 
-      <h3>🕯️ הגדרות מיוחדות למסך שבת</h3>
+      <h3 class="section-title">🏠 מסך ראשי</h3>
       <div class="control-row">
-        <div class="control-group">
-          <label>גודל מלל במסך שבת (rem):</label>
-          <input type="number" id="input-shabbat-font-size" value="2.5" min="1" max="8" step="0.2">
-        </div>
-        <div class="control-group">
-          <label>גודל שעות במסך שבת (rem):</label>
-          <input type="number" id="input-shabbat-time-font-size" value="3.5" min="1" max="8" step="0.2">
-        </div>
-        <div class="control-group">
-          <label>סוג גופן במסך שבת:</label>
-          <select id="input-shabbat-font-family">
-            <option value="'Frank Ruhl Hofshi', serif">פרנק רוהל (קלאסי / תורני)</option>
-            <option value="'Rubik', sans-serif">רוביק (מודרני וקריא)</option>
-            <option value="'Heebo', sans-serif">היבו (נקי ובולט)</option>
-            <option value="'Assistant', sans-serif">אסיסטנט (עדין ומודרני)</option>
-          </select>
-        </div>
-        <div class="control-group">
-          <label>גוונים לחלונות/קשתות השבת:</label>
-          <select id="input-shabbat-theme">
-            <option value="emerald">ירוק אמרלד ותורני (ברירת מחדל)</option>
-            <option value="royal-blue">כחול מלכותי וזהב</option>
-            <option value="purple">סגול מלכותי וזהב</option>
-            <option value="burgundy">בורדו עמוק וזהב</option>
-          </select>
-        </div>
+        <div class="control-group"><label>גופן מסך ראשי:</label><select id="input-main-font-family"></select></div>
+        <div class="control-group"><label>צבע רקע מסך ראשי:</label><input type="color" id="input-main-bg" value="#050b14"></div>
       </div>
 
-      <h3>👑 הגדרות מיוחדות למסך פרנס השבוע</h3>
+      <h3 class="section-title">🕯️ מסך שבת</h3>
       <div class="control-row">
-        <div class="control-group">
-          <label>גופן מסך פרנס השבוע:</label>
-          <select id="input-parnas-font-family">
-            <option value="'Tangerine', cursive">ASHKENAZI / סופר סתם אמנותי (Tangerine)</option>
-            <option value="'Frank Ruhl Hofshi', serif">פרנק רוהל (סגנון תורני קלאסי)</option>
-            <option value="'Cinzel Decorative', serif">סגנון כתב עיטורי / עתיק (Cinzel)</option>
-            <option value="'Tinos', serif">סגנון כתב ספרדי / עתיק (Tinos)</option>
-            <option value="'Rubik', sans-serif">רוביק (מודרני קריא)</option>
-          </select>
-        </div>
+        <div class="control-group"><label>גודל מלל במסך שבת (rem):</label><input type="number" id="input-shabbat-font-size" value="2.5" min="1" max="8" step="0.2"></div>
+        <div class="control-group"><label>גודל שעות במסך שבת (rem):</label><input type="number" id="input-shabbat-time-font-size" value="3.5" min="1" max="8" step="0.2"></div>
+        <div class="control-group"><label>גופן במסך שבת:</label><select id="input-shabbat-font-family"></select></div>
+        <div class="control-group"><label>צבע רקע מסך שבת:</label><input type="color" id="input-shabbat-bg" value="#02120d"></div>
       </div>
 
-      <h3>📜 תוכן מקומי (גיבוי)</h3>
+      <h3 class="section-title">👑 מסך פרנס השבוע</h3>
+      <div class="control-row">
+        <div class="control-group"><label>גופן שם הפרנס:</label><select id="input-parnas-font-family"></select></div>
+        <div class="control-group"><label>צבע רקע מסך פרנס:</label><input type="color" id="input-parnas-bg" value="#1c0206"></div>
+      </div>
+      <div class="control-row">
+        <div class="control-group"><label>גודל כותרת (rem):</label><input type="number" id="input-parnas-title-font-size" value="2.2" min="1" max="6" step="0.2"></div>
+        <div class="control-group"><label>גודל שם הפרנס (rem):</label><input type="number" id="input-parnas-name-font-size" value="6" min="2" max="12" step="0.2"></div>
+        <div class="control-group"><label>גודל ברכה/הקדשה (rem):</label><input type="number" id="input-parnas-extra-font-size" value="1.7" min="1" max="5" step="0.1"></div>
+      </div>
+      <div class="control-group"><label>👑 שם הפרנס (יוצג בגדול ובאופן מודגש):</label><input type="text" id="input-parnas-name" placeholder="לדוגמה: משפחת כהן"></div>
+      <div class="control-group"><label>פסקה נוספת (ברכה / הקדשה - אופציונלי):</label><textarea id="input-parnas-text"></textarea></div>
+
+      <h3 class="section-title">🕯️ מסך נפטרים</h3>
+      <div class="control-row">
+        <div class="control-group"><label>גופן מסך נפטרים:</label><select id="input-memorial-font-family"></select></div>
+        <div class="control-group"><label>צבע רקע מסך נפטרים:</label><input type="color" id="input-memorial-bg" value="#0a0c0e"></div>
+      </div>
+      <div class="control-group"><label>שמות הנפטרים:</label><textarea id="input-memorial-text"></textarea></div>
+
+      <h3 class="section-title">📖 מסך הלכה</h3>
+      <div class="control-row">
+        <div class="control-group"><label>גופן מסך הלכה:</label><select id="input-halacha-font-family"></select></div>
+        <div class="control-group"><label>צבע רקע מסך הלכה:</label><input type="color" id="input-halacha-bg" value="#1c0e04"></div>
+      </div>
+      <div class="control-group"><label>הלכה יומית:</label><textarea id="input-halacha-text"></textarea></div>
+
+      <h3 class="section-title">📜 תוכן נוסף</h3>
       <div class="control-group"><label>לוח מודעות ראשי:</label><textarea id="input-board"></textarea></div>
       <div class="control-group"><label>זמני שבת:</label><textarea id="input-shabbat-times"></textarea></div>
-      <div class="control-group"><label>👑 פרנס השבוע:</label><textarea id="input-parnas-text"></textarea></div>
-      <div class="control-group"><label>הלכה יומית:</label><textarea id="input-halacha-text"></textarea></div>
-      <div class="control-group"><label>שמות הנפטרים:</label><textarea id="input-memorial-text"></textarea></div>
       <div class="control-group"><label>🖼️ קישור לתמונה (URL):</label><input type="text" id="input-image-url" placeholder="https://example.com/image.jpg"></div>
 
-      <h3>⏱️ זמני מעבר בין מסכים (שניות)</h3>
+      <h3 class="section-title">⏱️ זמני מעבר בין מסכים (שניות)</h3>
       <div class="control-row">
         <div class="control-group"><label>ראשי:</label><input type="number" id="input-main-time" value="20" min="5"></div>
         <div class="control-group"><label>שבת:</label><input type="number" id="input-shabbat-time" value="12" min="5"></div>
@@ -715,7 +805,7 @@
         <div class="control-group"><label>תמונה:</label><input type="number" id="input-image-time" value="15" min="5"></div>
       </div>
 
-      <h3>📊 סנכרון מ-Google Apps Script Web App</h3>
+      <h3 class="section-title">📊 סנכרון מ-Google Apps Script Web App</h3>
       <div class="control-row">
         <div class="control-group" style="flex:3;">
           <label>קישור ה-Web App של Apps Script:</label>
@@ -732,6 +822,79 @@
   </div>
 
   <script>
+    /* ─── 0. שכבת אחסון ─── */
+    const STORAGE_PREFIX = 'syn_';
+    let storageCache = {};
+    const hasCloudStorage = (typeof window.storage !== 'undefined' && window.storage !== null);
+
+    async function initStorage() {
+      if (hasCloudStorage) {
+        try {
+          const listResult = await window.storage.list(STORAGE_PREFIX, false);
+          const keys = (listResult && listResult.keys) ? listResult.keys : [];
+          for (const key of keys) {
+            try {
+              const item = await window.storage.get(key, false);
+              if (item && item.value !== undefined) storageCache[key] = item.value;
+            } catch (e) {}
+          }
+        } catch (e) { console.error('שגיאת אחסון ענן:', e); }
+      } else {
+        try {
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && k.indexOf(STORAGE_PREFIX) === 0) {
+              storageCache[k] = localStorage.getItem(k);
+            }
+          }
+        } catch (e) { console.error('שגיאת localStorage:', e); }
+      }
+    }
+
+    function getFromStorage(key, defaultVal) {
+      const val = storageCache[key];
+      return (val !== undefined && val !== null && val !== 'null' && val !== 'undefined') ? val : defaultVal;
+    }
+
+    function setToStorage(key, value) {
+      storageCache[key] = value;
+      if (hasCloudStorage) {
+        window.storage.set(key, value, false).catch(e => console.error('שגיאת שמירה בענן:', key, e));
+      } else {
+        try { localStorage.setItem(key, value); } catch (e) { console.error('שגיאת שמירה מקומית:', key, e); }
+      }
+    }
+
+    /* ─── רשימת גופנים משותפת ─── */
+    const FONT_OPTIONS = [
+      { value: "'Frank Ruhl Hofshi', serif", label: "פרנק רוהל - קלאסי / תורני" },
+      { value: "'Suez One', serif", label: "סואץ - עיטורי ומודגש (יודאיקה)" },
+      { value: "'Miriam Libre', serif", label: "מרים ליברה - סת״ם / כתב מסורתי" },
+      { value: "'David Libre', serif", label: "דוד ליברה - ספרי קודש קלאסי" },
+      { value: "'BelleFair', serif", label: "בלפייר - עיטורי ואלגנטי" },
+      { value: "'Tinos', serif", label: "טינוס - קלאסי בינלאומי" },
+      { value: "'Rubik', sans-serif", label: "רוביק - מודרני וקריא" },
+      { value: "'Heebo', sans-serif", label: "היבו - נקי ובולט" },
+      { value: "'Assistant', sans-serif", label: "אסיסטנט - עדין ומודרני" }
+    ];
+    const FONT_VALUES = FONT_OPTIONS.map(f => f.value);
+
+    function populateFontSelect(selectId) {
+      const sel = document.getElementById(selectId);
+      if (!sel) return;
+      sel.innerHTML = '';
+      FONT_OPTIONS.forEach(opt => {
+        const o = document.createElement('option');
+        o.value = opt.value;
+        o.textContent = opt.label;
+        sel.appendChild(o);
+      });
+    }
+
+    function sanitizeFont(value, fallback) {
+      return FONT_VALUES.includes(value) ? value : fallback;
+    }
+
     const HEBREW_MONTHS = {
       1: "ניסן", 2: "אייר", 3: "סיון", 4: "תמוז", 5: "אב", 6: "אלול",
       7: "תשרי", 8: "חשון", 9: "כסלו", 10: "טבת", 11: "שבט", 12: "אדר",
@@ -745,11 +908,6 @@
         "כ\"א", "כ\"ב", "כ\"ג", "כ\"ד", "כ\"ה", "כ\"ו", "כ\"ז", "כ\"ח", "כ\"ט", "ל'", "ל\"א"
       ];
       return letters[num] || String(num);
-    }
-
-    function getFromStorage(key, defaultVal) {
-      const val = localStorage.getItem(key);
-      return (val && val !== 'null' && val !== 'undefined') ? val : defaultVal;
     }
 
     /* ─── 1. עדכון שעונים ותאריכים ─── */
@@ -864,7 +1022,8 @@
     /* ─── 4. טעינת תוכן ועיצוב ─── */
     const defaultBoard = `ברוכים הבאים לבית הכנסת שביל התפילה\nמנחה: 25 דקות לפני השקיעה\nערבית: 15 דקות אחרי השקיעה`;
     const defaultShabbat = `כניסת שבת: 18:30\nמנחה וקבלת שבת: 18:45\nשחרית: 08:00\nמוצאי שבת: 19:40`;
-    const defaultParnas = `השבת פרנס בית הכנסת הוא:\n\nמשפחת היקרה`;
+    const defaultParnasName = `משפחת היקרה`;
+    const defaultParnasExtra = ``;
     const defaultHalacha = `אמר רבי אלעזר אמר רבי חנינא: תלמידי חכמים מרבים שלום בעולם.`;
     const defaultMemorial = `🕯️ שמואל בן רחל ונונו ז"ל`;
 
@@ -928,38 +1087,14 @@
       });
     }
 
-    function applyShabbatTheme(themeName) {
-      const root = document.documentElement;
-      switch (themeName) {
-        case 'royal-blue':
-          root.style.setProperty('--shabbat-arch-bg-start', 'rgba(10, 45, 95, 0.85)');
-          root.style.setProperty('--shabbat-arch-bg-end', 'rgba(3, 15, 35, 0.95)');
-          root.style.setProperty('--shabbat-title-color', '#e0edff');
-          break;
-        case 'purple':
-          root.style.setProperty('--shabbat-arch-bg-start', 'rgba(65, 15, 80, 0.85)');
-          root.style.setProperty('--shabbat-arch-bg-end', 'rgba(25, 3, 30, 0.95)');
-          root.style.setProperty('--shabbat-title-color', '#f4e5ff');
-          break;
-        case 'burgundy':
-          root.style.setProperty('--shabbat-arch-bg-start', 'rgba(90, 15, 25, 0.85)');
-          root.style.setProperty('--shabbat-arch-bg-end', 'rgba(35, 3, 8, 0.95)');
-          root.style.setProperty('--shabbat-title-color', '#ffe5e8');
-          break;
-        case 'emerald':
-        default:
-          root.style.setProperty('--shabbat-arch-bg-start', 'rgba(13, 89, 66, 0.8)');
-          root.style.setProperty('--shabbat-arch-bg-end', 'rgba(5, 36, 26, 0.95)');
-          root.style.setProperty('--shabbat-title-color', '#e2f7ef');
-          break;
-      }
-    }
-
     function applyDataToUI() {
       document.getElementById('synagogue-name').textContent = getFromStorage('syn_header', 'בית כנסת שביל התפילה');
       renderBoard(getFromStorage('syn_board', defaultBoard));
       renderShabbatTimes(getFromStorage('syn_shabbat_times', defaultShabbat));
-      document.getElementById('parnas-text').textContent = getFromStorage('syn_parnas_text', defaultParnas);
+
+      document.getElementById('parnas-name').textContent = getFromStorage('syn_parnas_name', defaultParnasName);
+      document.getElementById('parnas-extra').textContent = getFromStorage('syn_parnas_text', defaultParnasExtra);
+
       document.getElementById('halacha-content').textContent = getFromStorage('syn_halacha_text', defaultHalacha);
       document.getElementById('memorial-list').textContent = getFromStorage('syn_memorial_text', defaultMemorial);
 
@@ -970,13 +1105,31 @@
 
       const dur = getFromStorage('syn_scroll_duration', '20');
       document.documentElement.style.setProperty('--scroll-duration', `${dur}s`);
-      
+
+      // הגדרות עיצוב - ראשי
+      document.documentElement.style.setProperty('--main-font-family', sanitizeFont(getFromStorage('syn_main_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
+      document.documentElement.style.setProperty('--main-bg', getFromStorage('syn_main_bg', '#050b14'));
+
+      // הגדרות עיצוב - שבת
       document.documentElement.style.setProperty('--shabbat-font-size', `${getFromStorage('syn_shabbat_font_size', '2.5')}rem`);
       document.documentElement.style.setProperty('--shabbat-time-font-size', `${getFromStorage('syn_shabbat_time_font_size', '3.5')}rem`);
-      document.documentElement.style.setProperty('--shabbat-font-family', getFromStorage('syn_shabbat_font_family', "'Frank Ruhl Hofshi', serif"));
-      
-      applyShabbatTheme(getFromStorage('syn_shabbat_theme', 'emerald'));
-      document.documentElement.style.setProperty('--parnas-font-family', getFromStorage('syn_parnas_font_family', "'Tangerine', cursive"));
+      document.documentElement.style.setProperty('--shabbat-font-family', sanitizeFont(getFromStorage('syn_shabbat_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
+      document.documentElement.style.setProperty('--shabbat-bg', getFromStorage('syn_shabbat_bg', '#02120d'));
+
+      // הגדרות עיצוב - פרנס השבוע
+      document.documentElement.style.setProperty('--parnas-font-family', sanitizeFont(getFromStorage('syn_parnas_font_family', "'Suez One', serif"), "'Suez One', serif"));
+      document.documentElement.style.setProperty('--parnas-bg', getFromStorage('syn_parnas_bg', '#1c0206'));
+      document.documentElement.style.setProperty('--parnas-title-font-size', `${getFromStorage('syn_parnas_title_font_size', '2.2')}rem`);
+      document.documentElement.style.setProperty('--parnas-name-font-size', `${getFromStorage('syn_parnas_name_font_size', '6')}rem`);
+      document.documentElement.style.setProperty('--parnas-extra-font-size', `${getFromStorage('syn_parnas_extra_font_size', '1.7')}rem`);
+
+      // הגדרות עיצוב - נפטרים
+      document.documentElement.style.setProperty('--memorial-font-family', sanitizeFont(getFromStorage('syn_memorial_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
+      document.documentElement.style.setProperty('--memorial-bg', getFromStorage('syn_memorial_bg', '#0a0c0e'));
+
+      // הגדרות עיצוב - הלכה
+      document.documentElement.style.setProperty('--halacha-font-family', sanitizeFont(getFromStorage('syn_halacha_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
+      document.documentElement.style.setProperty('--halacha-bg', getFromStorage('syn_halacha_bg', '#1c0e04'));
     }
 
     function loadSettings() {
@@ -989,17 +1142,36 @@
       document.getElementById('input-header').value = getFromStorage('syn_header', 'בית כנסת שביל התפילה');
       document.getElementById('input-board').value = getFromStorage('syn_board', defaultBoard);
       document.getElementById('input-shabbat-times').value = getFromStorage('syn_shabbat_times', defaultShabbat);
-      document.getElementById('input-parnas-text').value = getFromStorage('syn_parnas_text', defaultParnas);
+      document.getElementById('input-parnas-name').value = getFromStorage('syn_parnas_name', defaultParnasName);
+      document.getElementById('input-parnas-text').value = getFromStorage('syn_parnas_text', defaultParnasExtra);
       document.getElementById('input-halacha-text').value = getFromStorage('syn_halacha_text', defaultHalacha);
       document.getElementById('input-memorial-text').value = getFromStorage('syn_memorial_text', defaultMemorial);
       document.getElementById('input-image-url').value = getFromStorage('syn_image_url', '');
 
+      document.getElementById('input-clock-size').value = getFromStorage('syn_clock_size', '11');
+      document.getElementById('input-title-size').value = getFromStorage('syn_title_size', '2.2');
+      document.getElementById('input-content-size').value = getFromStorage('syn_content_size', '2.6');
+      document.getElementById('input-scroll-duration').value = getFromStorage('syn_scroll_duration', '20');
+
+      document.getElementById('input-main-font-family').value = sanitizeFont(getFromStorage('syn_main_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif");
+      document.getElementById('input-main-bg').value = getFromStorage('syn_main_bg', '#050b14');
+
       document.getElementById('input-shabbat-font-size').value = getFromStorage('syn_shabbat_font_size', '2.5');
       document.getElementById('input-shabbat-time-font-size').value = getFromStorage('syn_shabbat_time_font_size', '3.5');
-      document.getElementById('input-shabbat-font-family').value = getFromStorage('syn_shabbat_font_family', "'Frank Ruhl Hofshi', serif");
-      document.getElementById('input-shabbat-theme').value = getFromStorage('syn_shabbat_theme', 'emerald');
+      document.getElementById('input-shabbat-font-family').value = sanitizeFont(getFromStorage('syn_shabbat_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif");
+      document.getElementById('input-shabbat-bg').value = getFromStorage('syn_shabbat_bg', '#02120d');
 
-      document.getElementById('input-parnas-font-family').value = getFromStorage('syn_parnas_font_family', "'Tangerine', cursive");
+      document.getElementById('input-parnas-font-family').value = sanitizeFont(getFromStorage('syn_parnas_font_family', "'Suez One', serif"), "'Suez One', serif");
+      document.getElementById('input-parnas-bg').value = getFromStorage('syn_parnas_bg', '#1c0206');
+      document.getElementById('input-parnas-title-font-size').value = getFromStorage('syn_parnas_title_font_size', '2.2');
+      document.getElementById('input-parnas-name-font-size').value = getFromStorage('syn_parnas_name_font_size', '6');
+      document.getElementById('input-parnas-extra-font-size').value = getFromStorage('syn_parnas_extra_font_size', '1.7');
+
+      document.getElementById('input-memorial-font-family').value = sanitizeFont(getFromStorage('syn_memorial_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif");
+      document.getElementById('input-memorial-bg').value = getFromStorage('syn_memorial_bg', '#0a0c0e');
+
+      document.getElementById('input-halacha-font-family').value = sanitizeFont(getFromStorage('syn_halacha_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif");
+      document.getElementById('input-halacha-bg').value = getFromStorage('syn_halacha_bg', '#1c0e04');
 
       document.getElementById('input-sheet-url').value = getFromStorage('syn_sheet_url', '');
     }
@@ -1007,34 +1179,48 @@
     function openModal() { document.getElementById('editModal').style.display = 'flex'; }
 
     function saveSettings() {
-      localStorage.setItem('syn_header', document.getElementById('input-header').value);
-      localStorage.setItem('syn_clock_size', document.getElementById('input-clock-size').value);
-      localStorage.setItem('syn_title_size', document.getElementById('input-title-size').value);
-      localStorage.setItem('syn_content_size', document.getElementById('input-content-size').value);
-      localStorage.setItem('syn_scroll_duration', document.getElementById('input-scroll-duration').value);
+      setToStorage('syn_header', document.getElementById('input-header').value);
+      setToStorage('syn_clock_size', document.getElementById('input-clock-size').value);
+      setToStorage('syn_title_size', document.getElementById('input-title-size').value);
+      setToStorage('syn_content_size', document.getElementById('input-content-size').value);
+      setToStorage('syn_scroll_duration', document.getElementById('input-scroll-duration').value);
 
-      localStorage.setItem('syn_shabbat_font_size', document.getElementById('input-shabbat-font-size').value);
-      localStorage.setItem('syn_shabbat_time_font_size', document.getElementById('input-shabbat-time-font-size').value);
-      localStorage.setItem('syn_shabbat_font_family', document.getElementById('input-shabbat-font-family').value);
-      localStorage.setItem('syn_shabbat_theme', document.getElementById('input-shabbat-theme').value);
+      setToStorage('syn_main_font_family', document.getElementById('input-main-font-family').value);
+      setToStorage('syn_main_bg', document.getElementById('input-main-bg').value);
 
-      localStorage.setItem('syn_parnas_font_family', document.getElementById('input-parnas-font-family').value);
+      setToStorage('syn_shabbat_font_size', document.getElementById('input-shabbat-font-size').value);
+      setToStorage('syn_shabbat_time_font_size', document.getElementById('input-shabbat-time-font-size').value);
+      setToStorage('syn_shabbat_font_family', document.getElementById('input-shabbat-font-family').value);
+      setToStorage('syn_shabbat_bg', document.getElementById('input-shabbat-bg').value);
 
-      localStorage.setItem('syn_board', document.getElementById('input-board').value);
-      localStorage.setItem('syn_shabbat_times', document.getElementById('input-shabbat-times').value);
-      localStorage.setItem('syn_parnas_text', document.getElementById('input-parnas-text').value);
-      localStorage.setItem('syn_halacha_text', document.getElementById('input-halacha-text').value);
-      localStorage.setItem('syn_memorial_text', document.getElementById('input-memorial-text').value);
-      localStorage.setItem('syn_image_url', document.getElementById('input-image-url').value.trim());
+      setToStorage('syn_parnas_font_family', document.getElementById('input-parnas-font-family').value);
+      setToStorage('syn_parnas_bg', document.getElementById('input-parnas-bg').value);
+      setToStorage('syn_parnas_title_font_size', document.getElementById('input-parnas-title-font-size').value);
+      setToStorage('syn_parnas_name_font_size', document.getElementById('input-parnas-name-font-size').value);
+      setToStorage('syn_parnas_extra_font_size', document.getElementById('input-parnas-extra-font-size').value);
+      setToStorage('syn_parnas_name', document.getElementById('input-parnas-name').value);
+      setToStorage('syn_parnas_text', document.getElementById('input-parnas-text').value);
 
-      localStorage.setItem('syn_main_time', document.getElementById('input-main-time').value);
-      localStorage.setItem('syn_shabbat_time', document.getElementById('input-shabbat-time').value);
-      localStorage.setItem('syn_parnas_time', document.getElementById('input-parnas-time').value);
-      localStorage.setItem('syn_memorial_time', document.getElementById('input-memorial-time').value);
-      localStorage.setItem('syn_halacha_time', document.getElementById('input-halacha-time').value);
-      localStorage.setItem('syn_image_time', document.getElementById('input-image-time').value);
+      setToStorage('syn_memorial_font_family', document.getElementById('input-memorial-font-family').value);
+      setToStorage('syn_memorial_bg', document.getElementById('input-memorial-bg').value);
 
-      localStorage.setItem('syn_sheet_url', document.getElementById('input-sheet-url').value.trim());
+      setToStorage('syn_halacha_font_family', document.getElementById('input-halacha-font-family').value);
+      setToStorage('syn_halacha_bg', document.getElementById('input-halacha-bg').value);
+
+      setToStorage('syn_board', document.getElementById('input-board').value);
+      setToStorage('syn_shabbat_times', document.getElementById('input-shabbat-times').value);
+      setToStorage('syn_halacha_text', document.getElementById('input-halacha-text').value);
+      setToStorage('syn_memorial_text', document.getElementById('input-memorial-text').value);
+      setToStorage('syn_image_url', document.getElementById('input-image-url').value.trim());
+
+      setToStorage('syn_main_time', document.getElementById('input-main-time').value);
+      setToStorage('syn_shabbat_time', document.getElementById('input-shabbat-time').value);
+      setToStorage('syn_parnas_time', document.getElementById('input-parnas-time').value);
+      setToStorage('syn_memorial_time', document.getElementById('input-memorial-time').value);
+      setToStorage('syn_halacha_time', document.getElementById('input-halacha-time').value);
+      setToStorage('syn_image_time', document.getElementById('input-image-time').value);
+
+      setToStorage('syn_sheet_url', document.getElementById('input-sheet-url').value.trim());
 
       document.getElementById('editModal').style.display = 'none';
       loadSettings();
@@ -1046,19 +1232,21 @@
     function updateStorageByKey(key, val) {
       const k = String(key).toLowerCase();
       if (k.includes('כותרת')) {
-        localStorage.setItem('syn_header', val);
+        setToStorage('syn_header', val);
       } else if (k.includes('לוח') || k.includes('מודעות')) {
-        localStorage.setItem('syn_board', val);
+        setToStorage('syn_board', val);
       } else if (k.includes('שבת')) {
-        localStorage.setItem('syn_shabbat_times', val);
+        setToStorage('syn_shabbat_times', val);
+      } else if (k.includes('שם') && k.includes('פרנס')) {
+        setToStorage('syn_parnas_name', val);
       } else if (k.includes('פרנס')) {
-        localStorage.setItem('syn_parnas_text', val);
+        setToStorage('syn_parnas_text', val);
       } else if (k.includes('הלכה')) {
-        localStorage.setItem('syn_halacha_text', val);
+        setToStorage('syn_halacha_text', val);
       } else if (k.includes('נפטר') || k.includes('נשמת') || k.includes('זיכרון')) {
-        localStorage.setItem('syn_memorial_text', val);
+        setToStorage('syn_memorial_text', val);
       } else if (k.includes('תמונה') || k.includes('image') || k.includes('url')) {
-        localStorage.setItem('syn_image_url', val);
+        setToStorage('syn_image_url', val);
       }
     }
 
@@ -1097,6 +1285,7 @@
           document.getElementById('input-header').value = getFromStorage('syn_header', '');
           document.getElementById('input-board').value = getFromStorage('syn_board', '');
           document.getElementById('input-shabbat-times').value = getFromStorage('syn_shabbat_times', '');
+          document.getElementById('input-parnas-name').value = getFromStorage('syn_parnas_name', '');
           document.getElementById('input-parnas-text').value = getFromStorage('syn_parnas_text', '');
           document.getElementById('input-halacha-text').value = getFromStorage('syn_halacha_text', '');
           document.getElementById('input-memorial-text').value = getFromStorage('syn_memorial_text', '');
@@ -1130,13 +1319,7 @@
     window.addEventListener('touchstart', showControlsTemporarily);
     window.addEventListener('keydown', showControlsTemporarily);
 
-    loadSettings();
-    startScreenRotation();
-    syncFromSheet(false);
-
-    setInterval(() => syncFromSheet(false), 120000);
-
-    /* ─── 7. הסתרת אייקון "תמונה שבורה" כשאין טעינה תקינה ─── */
+    /* ─── 7. הסתרת אייקון "תמונה שבורה" ─── */
     const customImageEl = document.getElementById('custom-image-display');
     if (customImageEl) {
       customImageEl.addEventListener('error', function () {
@@ -1146,6 +1329,17 @@
         this.classList.remove('img-broken');
       });
     }
+
+    /* ─── 8. אתחול ראשוני ─── */
+    ['input-main-font-family', 'input-shabbat-font-family', 'input-parnas-font-family', 'input-memorial-font-family', 'input-halacha-font-family'].forEach(populateFontSelect);
+
+    (async function boot() {
+      await initStorage();
+      loadSettings();
+      startScreenRotation();
+      syncFromSheet(false);
+      setInterval(() => syncFromSheet(false), 120000);
+    })();
   </script>
 </body>
 </html>
