@@ -111,6 +111,7 @@
       border-top: none;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
       text-align: center;
+      line-height: 1.4;
     }
 
     #screen-main .clock-display {
@@ -643,19 +644,47 @@
     .flame-container {
       position: relative;
       width: 4.5vw;
-      height: 13vh;
-      margin-bottom: -2.5vh;
+      height: 12vh;
+      margin-bottom: 0vh;
       z-index: 10;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .candle-body {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 45%;
+      height: 30%;
+      background: linear-gradient(180deg, #f5e6d3, #d4b896, #b8956a);
+      border-radius: 2px 2px 6px 6px;
+      border: 1px solid rgba(180, 140, 100, 0.6);
+    }
+
+    .candle-body::after {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40%;
+      height: 8px;
+      background: linear-gradient(180deg, #3a2a1a, #2a1a0a);
+      border-radius: 2px;
     }
 
     .real-flame {
       position: absolute;
-      bottom: 0;
+      bottom: 28%;
       left: 50%;
-      width: 100%;
-      height: 100%;
+      width: 70%;
+      height: 72%;
       transform: translateX(-50%);
-      background: radial-gradient(ellipse at bottom, #ffffff 0%, #ffcc00 25%, #ff3300 70%, rgba(204, 0, 0, 0) 100%);
+      background: radial-gradient(ellipse at bottom, #ffffff 0%, #ffcc00 20%, #ff8800 50%, #ff3300 80%, rgba(204, 0, 0, 0) 100%);
       border-radius: 50% 50% 20% 20% / 80% 80% 20% 20%;
       box-shadow: 0 0 20px #ff3300, 0 0 40px #ff9900;
       animation: realCandleBurn 1.2s infinite ease-in-out alternate;
@@ -665,10 +694,10 @@
     .real-flame::after {
       content: '';
       position: absolute;
-      bottom: 5%;
-      left: 35%;
-      width: 30%;
-      height: 45%;
+      bottom: 10%;
+      left: 30%;
+      width: 40%;
+      height: 50%;
       background: #ffffff;
       border-radius: 50%;
       box-shadow: 0 0 10px #ffffff;
@@ -697,6 +726,7 @@
       position: relative;
       box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
       transition: opacity 0.3s ease-in-out;
+      flex-shrink: 0;
     }
 
     .curve-right {
@@ -711,6 +741,7 @@
 
     .main-plaque {
       height: 35vh !important;
+      min-height: 200px;
       background: linear-gradient(145deg, #3a322b, #1f1b17) !important;
       border: 4px solid #d4af37 !important;
       border-radius: 20px !important;
@@ -727,7 +758,7 @@
       text-shadow: 0 0 6px rgba(0,0,0,0.95);
       text-align: center;
       transform: skewX(0deg);
-      line-height: 1.2;
+      line-height: 1.3;
       word-break: break-word;
       transition: opacity 0.3s ease-in-out;
     }
@@ -831,7 +862,7 @@
   <!-- 1. מסך ראשי -->
   <div id="screen-main" class="screen active">
     <div class="top-section">
-      <div class="synagogue-title" id="synagogue-name">בית כנסת שביל התפילה</div>
+      <div class="synagogue-title" id="synagogue-name">בית הכנסת שביל התפילה | לעילוי נשמת שמואל בן רחל (ונונו)</div>
       <div class="clock-display" id="clock">00:00:00</div>
       <div class="date-bar">
         <div class="date-item" id="day-name">יום ראשון</div>
@@ -926,10 +957,7 @@
     <div class="modal-box">
       <h2>⚜️ הגדרות לוח בית כנסת</h2>
 
-      <div class="control-group">
-        <label>כותרת ראשי:</label>
-        <input type="text" id="input-header" value="בית כנסת שביל התפילה">
-      </div>
+      <p style="color:#666;font-size:0.9rem;">⚠️ הכותרת הראשית קבועה: <strong>"בית הכנסת שביל התפילה | לעילוי נשמת שמואל בן רחל (ונונו)"</strong></p>
 
       <h3 class="section-title">🎨 הגדרות כלליות ושעון</h3>
       <div class="control-row">
@@ -1027,6 +1055,7 @@
     const defaultMemorialHeader = `לזכרון עולם בהיכל ה'`;
     const defaultMemorialMainName = `מרן הרב עובדיה יוסף זצוק"ל`;
     const defaultMemorialText = `אברהם בן משה\nשרה בת אברהם\nדוד בן יוסף\nרחל בת יעקב\nמשה בן עמרם\nלאה בת לבן\nיצחק בן אברהם\nרבקה בת בתואל\nשמעון בן יעקב\nמרים בת עמרם`;
+    const defaultMainHeader = `בית הכנסת שביל התפילה | לעילוי נשמת שמואל בן רחל (ונונו)`;
 
     /* ─── 1. שכבת אחסון ─── */
     const STORAGE_PREFIX = 'syn_';
@@ -1104,6 +1133,7 @@
     function formatCssSize(val, defaultVal, unit = 'rem') {
       if (!val) return defaultVal;
       val = String(val).trim();
+      // אם המספר הוא מספר טהור (ללא יחידה) - נוסיף את היחידה
       if (/^\d+(\.\d+)?$/.test(val)) return val + unit;
       return val;
     }
@@ -1167,17 +1197,40 @@
       try {
         const hebcalObj = window.hebcal || window.Hebcal;
         if (hebcalObj && hebcalObj.HebrewCalendar) {
-          const events = hebcalObj.HebrewCalendar.calendar({ start: new Date(), end: new Date(Date.now() + 7*86400000), israel: true, sedrot: true });
+          const events = hebcalObj.HebrewCalendar.calendar({ 
+            start: new Date(), 
+            end: new Date(Date.now() + 7*86400000), 
+            israel: true, 
+            sedrot: true 
+          });
           for (const ev of events) {
             if (ev.getDesc && ev.getDesc().includes("Parashat")) {
-              document.getElementById('shabbat-parasha-title').textContent = ev.render('he');
+              const parashaName = ev.render('he');
+              document.getElementById('shabbat-parasha-title').textContent = parashaName;
+              return;
+            }
+          }
+          // אם לא נמצאה פרשה בשבוע הקרוב, נבדוק את השבוע הנוכחי
+          const eventsNow = hebcalObj.HebrewCalendar.calendar({ 
+            start: new Date(Date.now() - 7*86400000), 
+            end: new Date(Date.now() + 7*86400000), 
+            israel: true, 
+            sedrot: true 
+          });
+          for (const ev of eventsNow) {
+            if (ev.getDesc && ev.getDesc().includes("Parashat")) {
+              const parashaName = ev.render('he');
+              document.getElementById('shabbat-parasha-title').textContent = parashaName;
               return;
             }
           }
         }
-      } catch (e) {}
+      } catch (e) {
+        console.error('שגיאה בטעינת פרשת השבוע:', e);
+      }
       document.getElementById('shabbat-parasha-title').textContent = 'פרשת השבוע';
     }
+    
     updateParasha();
     setInterval(updateParasha, 3600000);
 
@@ -1274,12 +1327,18 @@
         const colDiv = document.createElement('div');
         colDiv.className = 'wave-column';
 
-        const flame = document.createElement('div');
-        flame.className = 'flame-container';
+        const flameContainer = document.createElement('div');
+        flameContainer.className = 'flame-container';
+        
+        const candleBody = document.createElement('div');
+        candleBody.className = 'candle-body';
+        flameContainer.appendChild(candleBody);
+        
         const flameInner = document.createElement('div');
         flameInner.className = 'real-flame';
-        flame.appendChild(flameInner);
-        colDiv.appendChild(flame);
+        flameContainer.appendChild(flameInner);
+        
+        colDiv.appendChild(flameContainer);
 
         const namesInCol = columnNames[colIdx] || [];
         const segments = [];
@@ -1429,7 +1488,7 @@
 
     /* ─── 8. החלת כל ההגדרות על המסך ─── */
     function applyDataToUI() {
-      document.getElementById('synagogue-name').textContent = getFromStorage('syn_header', 'בית כנסת שביל התפילה');
+      document.getElementById('synagogue-name').textContent = defaultMainHeader;
       renderBoard(getFromStorage('syn_board', defaultBoard));
       renderShabbatTimes(getFromStorage('syn_shabbat_times', defaultShabbat));
 
@@ -1471,7 +1530,12 @@
       document.documentElement.style.setProperty('--memorial-bg', getFromStorage('syn_memorial_bg', '#040406'));
       document.documentElement.style.setProperty('--memorial-title-size', formatCssSize(getFromStorage('syn_memorial_title_size', '4vh'), '4vh', 'vh'));
       document.documentElement.style.setProperty('--memorial-title-font-family', sanitizeFont(getFromStorage('syn_memorial_title_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
-      document.documentElement.style.setProperty('--memorial-name-size', formatCssSize(getFromStorage('syn_memorial_name_size', '1.6vw'), '1.6vw', 'vw'));
+      
+      // תיקון קריאת גודל השמות - שימוש באותו פורמט כמו שאר המשתנים
+      const nameSize = getFromStorage('syn_memorial_name_size', '1.6vw');
+      // אם הערך הוא מספר בלבד, נוסיף את היחידה vw
+      const formattedNameSize = formatCssSize(nameSize, '1.6vw', 'vw');
+      document.documentElement.style.setProperty('--memorial-name-size', formattedNameSize);
 
       document.documentElement.style.setProperty('--halacha-font-family', sanitizeFont(getFromStorage('syn_halacha_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
       document.documentElement.style.setProperty('--halacha-bg', getFromStorage('syn_halacha_bg', '#1c0e04'));
@@ -1481,7 +1545,6 @@
     function loadSettings() {
       applyDataToUI();
 
-      document.getElementById('input-header').value = getFromStorage('syn_header', 'בית כנסת שביל התפילה');
       document.getElementById('input-board').value = getFromStorage('syn_board', defaultBoard);
       document.getElementById('input-shabbat-times').value = getFromStorage('syn_shabbat_times', defaultShabbat);
       document.getElementById('input-parnas-name').value = getFromStorage('syn_parnas_name', defaultParnasName);
@@ -1529,7 +1592,7 @@
     function openModal() { document.getElementById('editModal').style.display = 'flex'; }
 
     function saveSettings() {
-      setToStorage('syn_header', document.getElementById('input-header').value);
+      // הכותרת הראשית קבועה - לא נשמרת
       setToStorage('syn_clock_size', document.getElementById('input-clock-size').value);
       setToStorage('syn_sub_clock_size', document.getElementById('input-sub-clock-size').value);
       setToStorage('syn_title_size', document.getElementById('input-title-size').value);
@@ -1589,16 +1652,21 @@
       const k = String(key).trim().toLowerCase();
 
       // מפתחות גודל ועיצוב
-      if (k.includes('גודל')) {
-        if (k.includes('שעון משני') || k.includes('שעון קטן')) { setToStorage('syn_sub_clock_size', val); return; }
-        if (k.includes('שעון')) { setToStorage('syn_clock_size', val); return; }
-        if (k.includes('כותרת') && (k.includes('נפטר') || k.includes('זיכרון') || k.includes('נשמת'))) { setToStorage('syn_memorial_title_font_size', val); return; }
-        if (k.includes('כותרת')) { setToStorage('syn_title_size', val); return; }
-        if (k.includes('תוכן')) { setToStorage('syn_content_size', val); return; }
-        if (k.includes('פרנס')) { setToStorage('syn_parnas_name_font_size', val); return; }
-        if (k.includes('שם') && (k.includes('נפטר') || k.includes('הנצחה') || k.includes('זיכרון'))) { setToStorage('syn_memorial_name_font_size', val); return; }
+      if (k.includes('גודל שעון משני') || k.includes('גודל שעון קטן') || k.includes('sub clock')) { setToStorage('syn_sub_clock_size', val); return; }
+      if (k.includes('גודל שעון') || k.includes('clock size')) { setToStorage('syn_clock_size', val); return; }
+      if (k.includes('גודל כותרת') && (k.includes('נפטר') || k.includes('זיכרון') || k.includes('נשמת'))) { setToStorage('syn_memorial_title_size', val); return; }
+      if (k.includes('גודל כותרת') || k.includes('title size')) { setToStorage('syn_title_size', val); return; }
+      if (k.includes('גודל תוכן') || k.includes('content size')) { setToStorage('syn_content_size', val); return; }
+      if (k.includes('פרנס') && k.includes('גודל')) { setToStorage('syn_parnas_name_font_size', val); return; }
+      
+      // תיקון: זיהוי מפתחות של גודל שמות נפטרים
+      if (k.includes('גודל שם') || k.includes('גודל שמות') || 
+          (k.includes('שם') && (k.includes('נפטר') || k.includes('הנצחה') || k.includes('זיכרון')))) { 
+        setToStorage('syn_memorial_name_size', val); 
+        return; 
       }
-      if (k.includes('מהירות גלילה')) { setToStorage('syn_scroll_duration', val); return; }
+      
+      if (k.includes('מהירות גלילה') || k.includes('scroll speed')) { setToStorage('syn_scroll_duration', val); return; }
 
       // מפתחות ייחודיים למסך נפטרים
       if (k.includes('לוחית מרכזית') || (k.includes('נפטר') && k.includes('מרכזי'))) {
@@ -1607,22 +1675,50 @@
         return;
       }
 
-      // כותרת נפטרים – חשוב לבדוק לפני 'כותרת' רגיל
+      // כותרת נפטרים
       if ((k.includes('כותרת') || k.includes('זיכרון') || k.includes('נשמת')) && 
           (k.includes('נפטר') || k.includes('הנצחה') || k.includes('זיכרון'))) {
         setToStorage('syn_memorial_header', val);
         return;
       }
 
-      // מפתחות תוכן כלליים
-      if (k.includes('כותרת') && !k.includes('נפטר')) { setToStorage('syn_header', val); return; }
-      if (k.includes('לוח') || k.includes('מודעות')) { setToStorage('syn_board', val); return; }
-      if (k.includes('שבת')) { setToStorage('syn_shabbat_times', val); return; }
+      // גופנים
+      if (k.includes('גופן ראשי') || k.includes('main font')) { setToStorage('syn_main_font_family', val); return; }
+      if (k.includes('גופן שבת') || k.includes('shabbat font')) { setToStorage('syn_shabbat_font_family', val); return; }
+      if (k.includes('גופן פרנס') || k.includes('parnas font')) { setToStorage('syn_parnas_font_family', val); return; }
+      if (k.includes('גופן נפטר') || k.includes('memorial font')) { setToStorage('syn_memorial_font_family', val); return; }
+      if (k.includes('גופן הלכה') || k.includes('halacha font')) { setToStorage('syn_halacha_font_family', val); return; }
+      if (k.includes('כותרת נפטר') && k.includes('גופן')) { setToStorage('syn_memorial_title_font_family', val); return; }
+
+      // צבעי רקע
+      if (k.includes('רקע ראשי') || k.includes('main bg')) { setToStorage('syn_main_bg', val); return; }
+      if (k.includes('רקע שבת') || k.includes('shabbat bg')) { setToStorage('syn_shabbat_bg', val); return; }
+      if (k.includes('רקע פרנס') || k.includes('parnas bg')) { setToStorage('syn_parnas_bg', val); return; }
+      if (k.includes('רקע נפטר') || k.includes('memorial bg')) { setToStorage('syn_memorial_bg', val); return; }
+      if (k.includes('רקע הלכה') || k.includes('halacha bg')) { setToStorage('syn_halacha_bg', val); return; }
+
+      // גדלים ספציפיים
+      if (k.includes('שבת') && k.includes('גודל מלל')) { setToStorage('syn_shabbat_font_size', val); return; }
+      if (k.includes('שבת') && k.includes('גודל שעות')) { setToStorage('syn_shabbat_time_font_size', val); return; }
+      if (k.includes('פרנס') && k.includes('גודל כותרת')) { setToStorage('syn_parnas_title_font_size', val); return; }
+      if (k.includes('פרנס') && k.includes('גודל ברכה')) { setToStorage('syn_parnas_extra_font_size', val); return; }
+
+      // מפתחות תוכן כלליים - כותרת ראשית אינה נשמרת (קבועה)
+      if (k.includes('לוח') || k.includes('מודעות') || k.includes('board')) { setToStorage('syn_board', val); return; }
+      if (k.includes('שבת') && (k.includes('זמנים') || k.includes('times'))) { setToStorage('syn_shabbat_times', val); return; }
       if (k.includes('שם') && k.includes('פרנס')) { setToStorage('syn_parnas_name', val); return; }
-      if (k.includes('פרנס')) { setToStorage('syn_parnas_text', val); return; }
+      if (k.includes('פרנס') && !k.includes('גודל')) { setToStorage('syn_parnas_text', val); return; }
       if (k.includes('הלכה')) { setToStorage('syn_halacha_text', val); return; }
       if (k.includes('נפטר') || k.includes('נשמת') || k.includes('זיכרון')) { setToStorage('syn_memorial_text', val); return; }
       if (k.includes('תמונה') || k.includes('image') || k.includes('url')) { setToStorage('syn_image_url', val); return; }
+
+      // זמני מעבר
+      if (k.includes('זמן ראשי') || k.includes('main time')) { setToStorage('syn_main_time', val); return; }
+      if (k.includes('זמן שבת') || k.includes('shabbat time')) { setToStorage('syn_shabbat_time', val); return; }
+      if (k.includes('זמן פרנס') || k.includes('parnas time')) { setToStorage('syn_parnas_time', val); return; }
+      if (k.includes('זמן נפטר') || k.includes('memorial time')) { setToStorage('syn_memorial_time', val); return; }
+      if (k.includes('זמן הלכה') || k.includes('halacha time')) { setToStorage('syn_halacha_time', val); return; }
+      if (k.includes('זמן תמונה') || k.includes('image time')) { setToStorage('syn_image_time', val); return; }
     }
 
     async function syncFromSheet(manual) {
@@ -1656,8 +1752,7 @@
 
         applyDataToUI();
 
-        if (document.getElementById('input-header')) {
-          document.getElementById('input-header').value = getFromStorage('syn_header', '');
+        if (document.getElementById('input-board')) {
           document.getElementById('input-board').value = getFromStorage('syn_board', '');
           document.getElementById('input-shabbat-times').value = getFromStorage('syn_shabbat_times', '');
           document.getElementById('input-parnas-name').value = getFromStorage('syn_parnas_name', '');
@@ -1667,6 +1762,7 @@
           document.getElementById('input-memorial-main-name').value = getFromStorage('syn_memorial_main_name', '');
           document.getElementById('input-memorial-text').value = getFromStorage('syn_memorial_text', '');
           document.getElementById('input-image-url').value = getFromStorage('syn_image_url', '');
+          document.getElementById('input-memorial-name-size').value = getFromStorage('syn_memorial_name_size', '1.6vw');
         }
 
         const timeStr = new Date().toLocaleTimeString('he-IL');
