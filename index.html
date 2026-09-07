@@ -68,13 +68,20 @@
       inset: 0;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 1.2s ease-in-out, visibility 1.2s ease-in-out;
+      transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
       z-index: 1;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      will-change: opacity, visibility;
     }
     .screen.active { 
       opacity: 1;
       visibility: visible;
       z-index: 2;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
     }
 
     /* 1. מסך ראשי */
@@ -178,6 +185,7 @@
       align-items: center;
       gap: 15px;
       animation: scrollUpText var(--scroll-duration) linear infinite;
+      will-change: transform;
     }
 
     #screen-main .board-list-item {
@@ -581,7 +589,7 @@
     .parnas-pedestal .step2 { width: 65%; height: 1.4vh; border-radius: 0 0 8px 8px; margin-top: -2px; }
     .parnas-pedestal .step3 { width: 45%; height: 1.6vh; border-radius: 0 0 12px 12px; margin-top: -2px; }
 
-    /* 4. מסך נפטרים – 5 עמודות, מרכזית מודגשת */
+    /* 4. מסך נפטרים - סטטי לחלוטין, ללא אנימציות */
     #screen-memorial {
       background-color: var(--memorial-bg);
       padding: 1.5vh 1vw;
@@ -632,14 +640,9 @@
       width: 18vw;
       height: 100%;
       justify-content: flex-end;
-      animation: swayColumn 5s infinite ease-in-out alternate;
+      /* אנימציה מבוטלת */
+      animation: none !important;
     }
-
-    .wave-column:nth-child(1) { animation-delay: 0s; }
-    .wave-column:nth-child(2) { animation-delay: 1.2s; }
-    .wave-column:nth-child(3) { animation-delay: 2.5s; }
-    .wave-column:nth-child(4) { animation-delay: 0.7s; }
-    .wave-column:nth-child(5) { animation-delay: 1.8s; }
 
     .flame-container {
       position: relative;
@@ -687,8 +690,8 @@
       background: radial-gradient(ellipse at bottom, #ffffff 0%, #ffcc00 20%, #ff8800 50%, #ff3300 80%, rgba(204, 0, 0, 0) 100%);
       border-radius: 50% 50% 20% 20% / 80% 80% 20% 20%;
       box-shadow: 0 0 20px #ff3300, 0 0 40px #ff9900;
-      animation: realCandleBurn 1.2s infinite ease-in-out alternate;
-      transform-origin: center bottom;
+      /* אנימציה מבוטלת */
+      animation: none !important;
     }
 
     .real-flame::after {
@@ -701,14 +704,9 @@
       background: #ffffff;
       border-radius: 50%;
       box-shadow: 0 0 10px #ffffff;
-      animation: innerGlow 0.8s infinite alternate;
+      /* אנימציה מבוטלת */
+      animation: none !important;
     }
-
-    .wave-column:nth-child(1) .real-flame { animation-delay: 0.1s; }
-    .wave-column:nth-child(2) .real-flame { animation-delay: 0.4s; }
-    .wave-column:nth-child(3) .real-flame { animation-delay: 0.7s; }
-    .wave-column:nth-child(4) .real-flame { animation-delay: 0.2s; }
-    .wave-column:nth-child(5) .real-flame { animation-delay: 0.5s; }
 
     .wave-segment {
       width: 100%;
@@ -725,7 +723,6 @@
       box-sizing: border-box;
       position: relative;
       box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
-      transition: opacity 0.3s ease-in-out;
       flex-shrink: 0;
     }
 
@@ -760,7 +757,6 @@
       transform: skewX(0deg);
       line-height: 1.3;
       word-break: break-word;
-      transition: opacity 0.3s ease-in-out;
     }
 
     .memorial-blessing {
@@ -791,20 +787,20 @@
       z-index: 6;
     }
 
+    /* אנימציות מבוטלות - נשארות רק בשביל תקינות */
     @keyframes realCandleBurn {
-      0% { transform: translateX(-50%) scale(1) rotate(-2deg); opacity: 0.92; }
-      50% { transform: translateX(-52%) scale(0.96, 1.05) rotate(-3deg); opacity: 0.88; }
-      100% { transform: translateX(-49%) scale(0.98, 1.03) rotate(-1deg); opacity: 0.95; }
+      0% { transform: translateX(-50%) scale(1); }
+      100% { transform: translateX(-50%) scale(1); }
     }
 
     @keyframes innerGlow {
-      0% { opacity: 0.6; transform: scale(0.9); }
-      100% { opacity: 1; transform: scale(1.1); }
+      0% { opacity: 1; }
+      100% { opacity: 1; }
     }
 
     @keyframes swayColumn {
-      0% { transform: translateX(-8px) rotate(-0.5deg); }
-      100% { transform: translateX(8px) rotate(0.5deg); }
+      0% { transform: translateX(0); }
+      100% { transform: translateX(0); }
     }
 
     /* 5. מסך הלכה */
@@ -817,9 +813,16 @@
     .halacha-header { text-align: center; font-size: 4.8rem; color: #fef08a; font-weight: 900; border-bottom: 4px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 20px; }
     .halacha-body { flex: 1; background: #fef3c7; border: 5px solid var(--gold); border-radius: 20px; color: #451a03; padding: 40px; font-size: var(--content-size); line-height: 1.8; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; white-space: pre-wrap; }
 
-    /* 6. מסך תמונה */
+    /* 6. מסך תמונה - אופטימיזציה */
     #screen-image { background: #000; justify-content: center; align-items: center; padding: 0; }
-    #screen-image img { width: 100vw; height: 100vh; object-fit: contain; color: transparent; }
+    #screen-image img { 
+      width: 100vw; 
+      height: 100vh; 
+      object-fit: contain; 
+      color: transparent;
+      image-rendering: auto;
+      will-change: auto;
+    }
     #screen-image img.img-broken { display: none; }
 
     /* רכיבים משותפים */
@@ -829,10 +832,12 @@
       font-weight: 900;
       background: rgba(0, 0, 0, 0.88); color: #ffffff; padding: 10px 35px; border-radius: 30px; border: 4px solid var(--gold); z-index: 10; line-height: 1;
       box-shadow: 0 8px 20px rgba(0,0,0,0.8);
+      will-change: auto;
     }
     .scrollable-text {
       position: absolute; width: 90%; font-size: var(--content-size); font-weight: 700; color: #1a0f00; white-space: pre-wrap; line-height: 1.9; text-align: center;
       animation: scrollUpText var(--scroll-duration) linear infinite; padding: 10px 0;
+      will-change: transform;
     }
     @keyframes scrollUpText {
       0% { transform: translateY(30%); opacity: 0; }
@@ -856,6 +861,10 @@
     .btn-save { background: var(--gold); color: #000; padding: 12px; border: none; border-radius: 30px; font-size: 1.3rem; font-weight: 900; cursor: pointer; margin-top: 10px; }
     .btn-secondary { background: #eee; color: #000; padding: 10px; border: 2px solid #ccc; border-radius: 20px; font-size: 1rem; font-weight: 700; cursor: pointer; }
     .section-title { margin-top: 6px; }
+
+    .no-transition {
+      transition: none !important;
+    }
   </style>
 </head>
 <body>
@@ -924,7 +933,7 @@
     </div>
   </div>
 
-  <!-- 4. מסך נפטרים -->
+  <!-- 4. מסך נפטרים - סטטי -->
   <div id="screen-memorial" class="screen">
     <div class="memorial-container">
       <div class="sub-clock-badge sub-clock">00:00:00</div>
@@ -947,7 +956,7 @@
   <!-- 6. מסך תמונה -->
   <div id="screen-image" class="screen">
     <div class="sub-clock-badge sub-clock">00:00:00</div>
-    <img id="custom-image-display" src="" alt="תמונת לוח" />
+    <img id="custom-image-display" src="" alt="תמונת לוח" loading="lazy" />
   </div>
 
   <!-- כפתור עריכה -->
@@ -996,7 +1005,7 @@
       <div class="control-group"><label>👑 שם הפרנס (יוצג בגדול):</label><input type="text" id="input-parnas-name" placeholder="לדוגמה: משפחת כהן"></div>
       <div class="control-group"><label>פסקה נוספת (ברכה / הקדשה):</label><textarea id="input-parnas-text"></textarea></div>
 
-      <h3 class="section-title">🕯️ מסך נפטרים (5 עמודות, מרכזית מודגשת)</h3>
+      <h3 class="section-title">🕯️ מסך נפטרים (5 עמודות, מרכזית מודגשת - סטטי)</h3>
       <div class="control-group"><label>כותרת מסך נפטרים:</label><input type="text" id="input-memorial-header" value="לזכרון עולם בהיכל ה'"></div>
       <div class="control-group"><label>⭐ שם מרכזי (בפלאקית המרכזית – עמודה שלישית, מקטע אמצעי):</label><input type="text" id="input-memorial-main-name" value="מרן הרב עובדיה יוסף זצוק&quot;ל"></div>
       <div class="control-group"><label>שמות הנפטרים (שם בכל שורה – מתחלקים ל-5 עמודות, כל עמודה 3 מקטעים):</label><textarea id="input-memorial-text"></textarea></div>
@@ -1020,13 +1029,13 @@
       <div class="control-group"><label>זמני שבת:</label><textarea id="input-shabbat-times"></textarea></div>
       <div class="control-group"><label>🖼️ קישור לתמונה (URL):</label><input type="text" id="input-image-url" placeholder="https://example.com/image.jpg"></div>
 
-      <h3 class="section-title">⏱️ זמני מעבר בין מסכים (שניות)</h3>
+      <h3 class="section-title">⏱️ זמני מעבר בין מסכים (שניות) - מומלץ 20+</h3>
       <div class="control-row">
-        <div class="control-group"><label>ראשי:</label><input type="number" id="input-main-time" value="20" min="5"></div>
-        <div class="control-group"><label>שבת:</label><input type="number" id="input-shabbat-time" value="12" min="5"></div>
-        <div class="control-group"><label>פרנס:</label><input type="number" id="input-parnas-time" value="10" min="5"></div>
-        <div class="control-group"><label>נפטרים:</label><input type="number" id="input-memorial-time" value="15" min="5"></div>
-        <div class="control-group"><label>הלכה:</label><input type="number" id="input-halacha-time" value="15" min="5"></div>
+        <div class="control-group"><label>ראשי:</label><input type="number" id="input-main-time" value="30" min="5"></div>
+        <div class="control-group"><label>שבת:</label><input type="number" id="input-shabbat-time" value="20" min="5"></div>
+        <div class="control-group"><label>פרנס:</label><input type="number" id="input-parnas-time" value="15" min="5"></div>
+        <div class="control-group"><label>נפטרים:</label><input type="number" id="input-memorial-time" value="25" min="5"></div>
+        <div class="control-group"><label>הלכה:</label><input type="number" id="input-halacha-time" value="20" min="5"></div>
         <div class="control-group"><label>תמונה:</label><input type="number" id="input-image-time" value="15" min="5"></div>
       </div>
 
@@ -1236,6 +1245,23 @@
     /* ─── 5. רוטציית מסכים ─── */
     let screenSwitchTimeout = null;
     let currentActiveScreenId = 'screen-main';
+    let rotationAttempts = 0;
+    const MAX_ROTATION_ATTEMPTS = 20;
+    let isRotating = false;
+
+    function getInitialScreen() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const screenParam = urlParams.get('screen');
+        const validScreens = ['main', 'shabbat', 'parnas', 'memorial', 'halacha', 'image'];
+        if (screenParam && validScreens.includes(screenParam)) {
+          return 'screen-' + screenParam;
+        }
+      } catch (e) {}
+      return 'screen-main';
+    }
+
+    currentActiveScreenId = getInitialScreen();
 
     function showScreen(screenId) {
       if (currentActiveScreenId === screenId) return;
@@ -1243,33 +1269,47 @@
       const current = document.getElementById(currentActiveScreenId);
       const target = document.getElementById(screenId);
 
-      if (current) current.classList.remove('active');
-      if (target) {
-        target.classList.add('active');
-        currentActiveScreenId = screenId;
-
-        if (screenId === 'screen-memorial') {
-          startMemorialRotation();
-        } else {
-          stopMemorialRotation();
+      try {
+        if (current) {
+          current.classList.remove('active');
+          current.style.animation = 'none';
+          current.style.transition = 'none';
+        }
+        
+        if (target) {
+          target.style.transition = 'opacity 0.8s ease-in-out, visibility 0.8s ease-in-out';
+          target.style.animation = '';
+          target.classList.add('active');
+          currentActiveScreenId = screenId;
+        }
+      } catch (e) {
+        console.error('שגיאה במעבר מסך:', e);
+        if (target) {
+          target.classList.add('active');
+          currentActiveScreenId = screenId;
         }
       }
-
-      document.querySelectorAll('.scrollable-text, .board-list').forEach(el => {
-        el.style.animation = 'none';
-        void el.offsetHeight;
-        el.style.animation = '';
-      });
     }
 
     function startScreenRotation() {
-      if (screenSwitchTimeout) clearTimeout(screenSwitchTimeout);
+      if (isRotating) {
+        stopScreenRotation();
+      }
+      
+      if (screenSwitchTimeout) {
+        clearTimeout(screenSwitchTimeout);
+        screenSwitchTimeout = null;
+      }
+      
+      isRotating = true;
+      rotationAttempts = 0;
+
       const times = {
-        main: parseInt(getFromStorage('syn_main_time', '20')) * 1000,
-        shabbat: parseInt(getFromStorage('syn_shabbat_time', '12')) * 1000,
-        parnas: parseInt(getFromStorage('syn_parnas_time', '10')) * 1000,
-        memorial: parseInt(getFromStorage('syn_memorial_time', '15')) * 1000,
-        halacha: parseInt(getFromStorage('syn_halacha_time', '15')) * 1000,
+        main: parseInt(getFromStorage('syn_main_time', '30')) * 1000,
+        shabbat: parseInt(getFromStorage('syn_shabbat_time', '20')) * 1000,
+        parnas: parseInt(getFromStorage('syn_parnas_time', '15')) * 1000,
+        memorial: parseInt(getFromStorage('syn_memorial_time', '25')) * 1000,
+        halacha: parseInt(getFromStorage('syn_halacha_time', '20')) * 1000,
         image: parseInt(getFromStorage('syn_image_time', '15')) * 1000,
       };
 
@@ -1288,20 +1328,70 @@
       }
 
       let step = 0;
-      function nextStep() {
-        if (steps.length === 0) return;
-        const current = steps[step];
-        showScreen(current.id);
-        step = (step + 1) % steps.length;
-        screenSwitchTimeout = setTimeout(nextStep, current.delay);
+      
+      for (let i = 0; i < steps.length; i++) {
+        if (steps[i].id === currentActiveScreenId) {
+          step = (i + 1) % steps.length;
+          break;
+        }
       }
-      nextStep();
+
+      function nextStep() {
+        try {
+          if (!isRotating) {
+            return;
+          }
+          
+          if (steps.length === 0) {
+            isRotating = false;
+            return;
+          }
+          
+          rotationAttempts++;
+          if (rotationAttempts > MAX_ROTATION_ATTEMPTS) {
+            console.warn('יותר מדי ניסיונות רוטציה - מפסיק זמנית');
+            isRotating = false;
+            setTimeout(() => {
+              if (!isRotating) {
+                startScreenRotation();
+              }
+            }, 60000);
+            return;
+          }
+          
+          const current = steps[step];
+          showScreen(current.id);
+          step = (step + 1) % steps.length;
+          
+          if (step === 0) {
+            rotationAttempts = 0;
+          }
+          
+          const delay = Math.max(current.delay, 5000);
+          screenSwitchTimeout = setTimeout(nextStep, delay);
+        } catch (e) {
+          console.error('שגיאה ברוטציה:', e);
+          isRotating = false;
+          setTimeout(() => {
+            if (!isRotating) {
+              startScreenRotation();
+            }
+          }, 30000);
+        }
+      }
+
+      setTimeout(nextStep, 2000);
     }
 
-    /* ─── 6. מסך נפטרים – 5 עמודות, לוחית מרכזית ─── */
-    let memorialRotationInterval = null;
-    let memorialNameElements = [];
+    function stopScreenRotation() {
+      isRotating = false;
+      if (screenSwitchTimeout) {
+        clearTimeout(screenSwitchTimeout);
+        screenSwitchTimeout = null;
+      }
+    }
 
+    /* ─── 6. מסך נפטרים - סטטי, ללא אנימציות ─── */
     function buildMemorialBoard() {
       const container = document.getElementById('memorial-sculpture');
       if (!container) return;
@@ -1320,7 +1410,6 @@
       });
 
       container.innerHTML = '';
-      memorialNameElements = [];
 
       for (let colIdx = 0; colIdx < numColumns; colIdx++) {
         const colDiv = document.createElement('div');
@@ -1372,63 +1461,9 @@
           }
 
           colDiv.appendChild(seg);
-
-          if (!isMain && name) {
-            memorialNameElements.push(nameEl);
-          }
         });
 
         container.appendChild(colDiv);
-      }
-
-      startMemorialRotation();
-    }
-
-    function startMemorialRotation() {
-      stopMemorialRotation();
-      if (memorialNameElements.length === 0) return;
-
-      const rawText = getFromStorage('syn_memorial_text', defaultMemorialText);
-      const allNames = rawText.split(/\r?\n/).map(n => n.trim()).filter(n => n.length > 0);
-      if (allNames.length === 0) return;
-
-      const numColumns = 5;
-      const colNames = Array.from({ length: numColumns }, () => []);
-      allNames.forEach((name, idx) => {
-        colNames[idx % numColumns].push(name);
-      });
-
-      const orderedNames = [];
-      for (let colIdx = 0; colIdx < numColumns; colIdx++) {
-        const names = colNames[colIdx];
-        for (let i = 0; i < 3; i++) {
-          orderedNames.push(names[i] || '');
-        }
-      }
-      const validNames = orderedNames.filter(n => n !== '');
-
-      let currentIndex = 0;
-      function rotate() {
-        if (validNames.length === 0) return;
-        memorialNameElements.forEach((el, idx) => {
-          const nameIdx = (currentIndex + idx) % validNames.length;
-          el.textContent = validNames[nameIdx];
-          el.parentElement.style.opacity = '0.6';
-          setTimeout(() => {
-            el.parentElement.style.opacity = '1';
-          }, 150);
-        });
-        currentIndex = (currentIndex + 1) % validNames.length;
-      }
-
-      rotate();
-      memorialRotationInterval = setInterval(rotate, 5000);
-    }
-
-    function stopMemorialRotation() {
-      if (memorialRotationInterval) {
-        clearInterval(memorialRotationInterval);
-        memorialRotationInterval = null;
       }
     }
 
@@ -1485,204 +1520,229 @@
       });
     }
 
-    /* ─── 8. החלת כל ההגדרות על המסך ─── */
+    /* ─── 8. החלת הגדרות ─── */
     function applyDataToUI() {
-      document.getElementById('synagogue-name').textContent = defaultMainHeader;
-      renderBoard(getFromStorage('syn_board', defaultBoard));
-      renderShabbatTimes(getFromStorage('syn_shabbat_times', defaultShabbat));
+      try {
+        document.getElementById('synagogue-name').textContent = defaultMainHeader;
+        renderBoard(getFromStorage('syn_board', defaultBoard));
+        renderShabbatTimes(getFromStorage('syn_shabbat_times', defaultShabbat));
 
-      document.getElementById('parnas-name').textContent = getFromStorage('syn_parnas_name', defaultParnasName);
-      document.getElementById('parnas-extra').textContent = getFromStorage('syn_parnas_text', defaultParnasExtra);
+        document.getElementById('parnas-name').textContent = getFromStorage('syn_parnas_name', defaultParnasName);
+        document.getElementById('parnas-extra').textContent = getFromStorage('syn_parnas_text', defaultParnasExtra);
 
-      document.getElementById('halacha-content').textContent = getFromStorage('syn_halacha_text', defaultHalacha);
+        document.getElementById('halacha-content').textContent = getFromStorage('syn_halacha_text', defaultHalacha);
 
-      buildMemorialBoard();
+        buildMemorialBoard();
 
-      const imgUrl = getFromStorage('syn_image_url', '').trim();
-      if (imgUrl) {
-        document.getElementById('custom-image-display').src = imgUrl;
+        const imgUrl = getFromStorage('syn_image_url', '').trim();
+        if (imgUrl) {
+          document.getElementById('custom-image-display').src = imgUrl;
+        }
+
+        const dur = getFromStorage('syn_scroll_duration', '20');
+        document.documentElement.style.setProperty('--scroll-duration', `${dur}s`);
+
+        document.documentElement.style.setProperty('--clock-size', formatCssSize(getFromStorage('syn_clock_size', '11'), '11rem', 'rem'));
+        document.documentElement.style.setProperty('--sub-clock-size', formatCssSize(getFromStorage('syn_sub_clock_size', '6.5'), '6.5rem', 'rem'));
+        document.documentElement.style.setProperty('--title-size', formatCssSize(getFromStorage('syn_title_size', '2.2'), '2.2rem', 'rem'));
+        document.documentElement.style.setProperty('--content-size', formatCssSize(getFromStorage('syn_content_size', '2.6'), '2.6rem', 'rem'));
+
+        document.documentElement.style.setProperty('--main-font-family', sanitizeFont(getFromStorage('syn_main_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
+        document.documentElement.style.setProperty('--main-bg', getFromStorage('syn_main_bg', '#050b14'));
+
+        document.documentElement.style.setProperty('--shabbat-font-size', formatCssSize(getFromStorage('syn_shabbat_font_size', '2.5'), '2.5rem', 'rem'));
+        document.documentElement.style.setProperty('--shabbat-time-font-size', formatCssSize(getFromStorage('syn_shabbat_time_font_size', '3.5'), '3.5rem', 'rem'));
+        document.documentElement.style.setProperty('--shabbat-font-family', sanitizeFont(getFromStorage('syn_shabbat_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
+        document.documentElement.style.setProperty('--shabbat-bg', getFromStorage('syn_shabbat_bg', '#02120d'));
+
+        document.documentElement.style.setProperty('--parnas-font-family', sanitizeFont(getFromStorage('syn_parnas_font_family', "'Suez One', serif"), "'Suez One', serif"));
+        document.documentElement.style.setProperty('--parnas-bg', getFromStorage('syn_parnas_bg', '#1c0206'));
+        document.documentElement.style.setProperty('--parnas-title-font-size', formatCssSize(getFromStorage('syn_parnas_title_font_size', '2.2'), '2.2rem', 'rem'));
+        document.documentElement.style.setProperty('--parnas-name-font-size', formatCssSize(getFromStorage('syn_parnas_name_font_size', '6'), '6rem', 'rem'));
+        document.documentElement.style.setProperty('--parnas-extra-font-size', formatCssSize(getFromStorage('syn_parnas_extra_font_size', '1.7'), '1.7rem', 'rem'));
+
+        document.documentElement.style.setProperty('--memorial-font-family', sanitizeFont(getFromStorage('syn_memorial_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
+        document.documentElement.style.setProperty('--memorial-bg', getFromStorage('syn_memorial_bg', '#040406'));
+        document.documentElement.style.setProperty('--memorial-title-size', formatCssSize(getFromStorage('syn_memorial_title_size', '4vh'), '4vh', 'vh'));
+        document.documentElement.style.setProperty('--memorial-title-font-family', sanitizeFont(getFromStorage('syn_memorial_title_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
+        
+        const nameSize = getFromStorage('syn_memorial_name_size', '1.6vw');
+        const formattedNameSize = formatCssSize(nameSize, '1.6vw', 'vw');
+        document.documentElement.style.setProperty('--memorial-name-size', formattedNameSize);
+
+        document.documentElement.style.setProperty('--halacha-font-family', sanitizeFont(getFromStorage('syn_halacha_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
+        document.documentElement.style.setProperty('--halacha-bg', getFromStorage('syn_halacha_bg', '#1c0e04'));
+      } catch (e) {
+        console.error('שגיאה בהחלת נתונים:', e);
       }
-
-      const dur = getFromStorage('syn_scroll_duration', '20');
-      document.documentElement.style.setProperty('--scroll-duration', `${dur}s`);
-
-      document.documentElement.style.setProperty('--clock-size', formatCssSize(getFromStorage('syn_clock_size', '11'), '11rem', 'rem'));
-      document.documentElement.style.setProperty('--sub-clock-size', formatCssSize(getFromStorage('syn_sub_clock_size', '6.5'), '6.5rem', 'rem'));
-      document.documentElement.style.setProperty('--title-size', formatCssSize(getFromStorage('syn_title_size', '2.2'), '2.2rem', 'rem'));
-      document.documentElement.style.setProperty('--content-size', formatCssSize(getFromStorage('syn_content_size', '2.6'), '2.6rem', 'rem'));
-
-      document.documentElement.style.setProperty('--main-font-family', sanitizeFont(getFromStorage('syn_main_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
-      document.documentElement.style.setProperty('--main-bg', getFromStorage('syn_main_bg', '#050b14'));
-
-      document.documentElement.style.setProperty('--shabbat-font-size', formatCssSize(getFromStorage('syn_shabbat_font_size', '2.5'), '2.5rem', 'rem'));
-      document.documentElement.style.setProperty('--shabbat-time-font-size', formatCssSize(getFromStorage('syn_shabbat_time_font_size', '3.5'), '3.5rem', 'rem'));
-      document.documentElement.style.setProperty('--shabbat-font-family', sanitizeFont(getFromStorage('syn_shabbat_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
-      document.documentElement.style.setProperty('--shabbat-bg', getFromStorage('syn_shabbat_bg', '#02120d'));
-
-      document.documentElement.style.setProperty('--parnas-font-family', sanitizeFont(getFromStorage('syn_parnas_font_family', "'Suez One', serif"), "'Suez One', serif"));
-      document.documentElement.style.setProperty('--parnas-bg', getFromStorage('syn_parnas_bg', '#1c0206'));
-      document.documentElement.style.setProperty('--parnas-title-font-size', formatCssSize(getFromStorage('syn_parnas_title_font_size', '2.2'), '2.2rem', 'rem'));
-      document.documentElement.style.setProperty('--parnas-name-font-size', formatCssSize(getFromStorage('syn_parnas_name_font_size', '6'), '6rem', 'rem'));
-      document.documentElement.style.setProperty('--parnas-extra-font-size', formatCssSize(getFromStorage('syn_parnas_extra_font_size', '1.7'), '1.7rem', 'rem'));
-
-      document.documentElement.style.setProperty('--memorial-font-family', sanitizeFont(getFromStorage('syn_memorial_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
-      document.documentElement.style.setProperty('--memorial-bg', getFromStorage('syn_memorial_bg', '#040406'));
-      document.documentElement.style.setProperty('--memorial-title-size', formatCssSize(getFromStorage('syn_memorial_title_size', '4vh'), '4vh', 'vh'));
-      document.documentElement.style.setProperty('--memorial-title-font-family', sanitizeFont(getFromStorage('syn_memorial_title_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
-      
-      const nameSize = getFromStorage('syn_memorial_name_size', '1.6vw');
-      const formattedNameSize = formatCssSize(nameSize, '1.6vw', 'vw');
-      document.documentElement.style.setProperty('--memorial-name-size', formattedNameSize);
-
-      document.documentElement.style.setProperty('--halacha-font-family', sanitizeFont(getFromStorage('syn_halacha_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif"));
-      document.documentElement.style.setProperty('--halacha-bg', getFromStorage('syn_halacha_bg', '#1c0e04'));
     }
 
-    /* ─── 9. עדכון שדות המודאל אחרי סנכרון ─── */
+    /* ─── 9. עדכון שדות מודאל ─── */
     function updateModalFields() {
-      document.getElementById('input-clock-size').value = getFromStorage('syn_clock_size', '11');
-      document.getElementById('input-sub-clock-size').value = getFromStorage('syn_sub_clock_size', '6.5');
-      document.getElementById('input-title-size').value = getFromStorage('syn_title_size', '2.2');
-      document.getElementById('input-content-size').value = getFromStorage('syn_content_size', '2.6');
-      document.getElementById('input-scroll-duration').value = getFromStorage('syn_scroll_duration', '20');
+      try {
+        document.getElementById('input-clock-size').value = getFromStorage('syn_clock_size', '11');
+        document.getElementById('input-sub-clock-size').value = getFromStorage('syn_sub_clock_size', '6.5');
+        document.getElementById('input-title-size').value = getFromStorage('syn_title_size', '2.2');
+        document.getElementById('input-content-size').value = getFromStorage('syn_content_size', '2.6');
+        document.getElementById('input-scroll-duration').value = getFromStorage('syn_scroll_duration', '20');
 
-      document.getElementById('input-main-font-family').value = sanitizeFont(getFromStorage('syn_main_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif");
-      document.getElementById('input-main-bg').value = getFromStorage('syn_main_bg', '#050b14');
+        document.getElementById('input-main-font-family').value = sanitizeFont(getFromStorage('syn_main_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif");
+        document.getElementById('input-main-bg').value = getFromStorage('syn_main_bg', '#050b14');
 
-      document.getElementById('input-shabbat-font-size').value = getFromStorage('syn_shabbat_font_size', '2.5');
-      document.getElementById('input-shabbat-time-font-size').value = getFromStorage('syn_shabbat_time_font_size', '3.5');
-      document.getElementById('input-shabbat-font-family').value = sanitizeFont(getFromStorage('syn_shabbat_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif");
-      document.getElementById('input-shabbat-bg').value = getFromStorage('syn_shabbat_bg', '#02120d');
+        document.getElementById('input-shabbat-font-size').value = getFromStorage('syn_shabbat_font_size', '2.5');
+        document.getElementById('input-shabbat-time-font-size').value = getFromStorage('syn_shabbat_time_font_size', '3.5');
+        document.getElementById('input-shabbat-font-family').value = sanitizeFont(getFromStorage('syn_shabbat_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif");
+        document.getElementById('input-shabbat-bg').value = getFromStorage('syn_shabbat_bg', '#02120d');
 
-      document.getElementById('input-parnas-font-family').value = sanitizeFont(getFromStorage('syn_parnas_font_family', "'Suez One', serif"), "'Suez One', serif");
-      document.getElementById('input-parnas-bg').value = getFromStorage('syn_parnas_bg', '#1c0206');
-      document.getElementById('input-parnas-title-font-size').value = getFromStorage('syn_parnas_title_font_size', '2.2');
-      document.getElementById('input-parnas-name-font-size').value = getFromStorage('syn_parnas_name_font_size', '6');
-      document.getElementById('input-parnas-extra-font-size').value = getFromStorage('syn_parnas_extra_font_size', '1.7');
-      document.getElementById('input-parnas-name').value = getFromStorage('syn_parnas_name', '');
-      document.getElementById('input-parnas-text').value = getFromStorage('syn_parnas_text', '');
+        document.getElementById('input-parnas-font-family').value = sanitizeFont(getFromStorage('syn_parnas_font_family', "'Suez One', serif"), "'Suez One', serif");
+        document.getElementById('input-parnas-bg').value = getFromStorage('syn_parnas_bg', '#1c0206');
+        document.getElementById('input-parnas-title-font-size').value = getFromStorage('syn_parnas_title_font_size', '2.2');
+        document.getElementById('input-parnas-name-font-size').value = getFromStorage('syn_parnas_name_font_size', '6');
+        document.getElementById('input-parnas-extra-font-size').value = getFromStorage('syn_parnas_extra_font_size', '1.7');
+        document.getElementById('input-parnas-name').value = getFromStorage('syn_parnas_name', '');
+        document.getElementById('input-parnas-text').value = getFromStorage('syn_parnas_text', '');
 
-      document.getElementById('input-memorial-header').value = getFromStorage('syn_memorial_header', '');
-      document.getElementById('input-memorial-main-name').value = getFromStorage('syn_memorial_main_name', '');
-      document.getElementById('input-memorial-text').value = getFromStorage('syn_memorial_text', '');
-      document.getElementById('input-memorial-title-size').value = getFromStorage('syn_memorial_title_size', '4vh');
-      document.getElementById('input-memorial-name-size').value = getFromStorage('syn_memorial_name_size', '1.6vw');
-      document.getElementById('input-memorial-font-family').value = sanitizeFont(getFromStorage('syn_memorial_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif");
-      document.getElementById('input-memorial-title-font-family').value = sanitizeFont(getFromStorage('syn_memorial_title_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif");
-      document.getElementById('input-memorial-bg').value = getFromStorage('syn_memorial_bg', '#040406');
+        document.getElementById('input-memorial-header').value = getFromStorage('syn_memorial_header', '');
+        document.getElementById('input-memorial-main-name').value = getFromStorage('syn_memorial_main_name', '');
+        document.getElementById('input-memorial-text').value = getFromStorage('syn_memorial_text', '');
+        document.getElementById('input-memorial-title-size').value = getFromStorage('syn_memorial_title_size', '4vh');
+        document.getElementById('input-memorial-name-size').value = getFromStorage('syn_memorial_name_size', '1.6vw');
+        document.getElementById('input-memorial-font-family').value = sanitizeFont(getFromStorage('syn_memorial_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif");
+        document.getElementById('input-memorial-title-font-family').value = sanitizeFont(getFromStorage('syn_memorial_title_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif");
+        document.getElementById('input-memorial-bg').value = getFromStorage('syn_memorial_bg', '#040406');
 
-      document.getElementById('input-halacha-font-family').value = sanitizeFont(getFromStorage('syn_halacha_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif");
-      document.getElementById('input-halacha-bg').value = getFromStorage('syn_halacha_bg', '#1c0e04');
+        document.getElementById('input-halacha-font-family').value = sanitizeFont(getFromStorage('syn_halacha_font_family', "'Frank Ruhl Hofshi', serif"), "'Frank Ruhl Hofshi', serif");
+        document.getElementById('input-halacha-bg').value = getFromStorage('syn_halacha_bg', '#1c0e04');
 
-      document.getElementById('input-board').value = getFromStorage('syn_board', '');
-      document.getElementById('input-shabbat-times').value = getFromStorage('syn_shabbat_times', '');
-      document.getElementById('input-halacha-text').value = getFromStorage('syn_halacha_text', '');
-      document.getElementById('input-image-url').value = getFromStorage('syn_image_url', '');
+        document.getElementById('input-board').value = getFromStorage('syn_board', '');
+        document.getElementById('input-shabbat-times').value = getFromStorage('syn_shabbat_times', '');
+        document.getElementById('input-halacha-text').value = getFromStorage('syn_halacha_text', '');
+        document.getElementById('input-image-url').value = getFromStorage('syn_image_url', '');
 
-      document.getElementById('input-main-time').value = getFromStorage('syn_main_time', '20');
-      document.getElementById('input-shabbat-time').value = getFromStorage('syn_shabbat_time', '12');
-      document.getElementById('input-parnas-time').value = getFromStorage('syn_parnas_time', '10');
-      document.getElementById('input-memorial-time').value = getFromStorage('syn_memorial_time', '15');
-      document.getElementById('input-halacha-time').value = getFromStorage('syn_halacha_time', '15');
-      document.getElementById('input-image-time').value = getFromStorage('syn_image_time', '15');
+        document.getElementById('input-main-time').value = getFromStorage('syn_main_time', '30');
+        document.getElementById('input-shabbat-time').value = getFromStorage('syn_shabbat_time', '20');
+        document.getElementById('input-parnas-time').value = getFromStorage('syn_parnas_time', '15');
+        document.getElementById('input-memorial-time').value = getFromStorage('syn_memorial_time', '25');
+        document.getElementById('input-halacha-time').value = getFromStorage('syn_halacha_time', '20');
+        document.getElementById('input-image-time').value = getFromStorage('syn_image_time', '15');
 
-      document.getElementById('input-sheet-url').value = getFromStorage('syn_sheet_url', '');
+        document.getElementById('input-sheet-url').value = getFromStorage('syn_sheet_url', '');
+      } catch (e) {
+        console.error('שגיאה בעדכון שדות מודאל:', e);
+      }
     }
 
-    /* ─── 10. טעינת הגדרות למודאל ─── */
+    /* ─── 10. טעינת הגדרות ─── */
     function loadSettings() {
       applyDataToUI();
       updateModalFields();
+      
+      document.querySelectorAll('.screen').forEach(el => {
+        el.classList.remove('active');
+      });
+      const initialScreen = document.getElementById(currentActiveScreenId);
+      if (initialScreen) {
+        initialScreen.classList.add('active');
+      } else {
+        document.getElementById('screen-main').classList.add('active');
+        currentActiveScreenId = 'screen-main';
+      }
     }
 
-    function openModal() { document.getElementById('editModal').style.display = 'flex'; }
+    function openModal() { 
+      try {
+        document.getElementById('editModal').style.display = 'flex';
+      } catch (e) {
+        console.error('שגיאה בפתיחת מודאל:', e);
+      }
+    }
 
     function saveSettings() {
-      setToStorage('syn_clock_size', document.getElementById('input-clock-size').value);
-      setToStorage('syn_sub_clock_size', document.getElementById('input-sub-clock-size').value);
-      setToStorage('syn_title_size', document.getElementById('input-title-size').value);
-      setToStorage('syn_content_size', document.getElementById('input-content-size').value);
-      setToStorage('syn_scroll_duration', document.getElementById('input-scroll-duration').value);
+      try {
+        setToStorage('syn_clock_size', document.getElementById('input-clock-size').value);
+        setToStorage('syn_sub_clock_size', document.getElementById('input-sub-clock-size').value);
+        setToStorage('syn_title_size', document.getElementById('input-title-size').value);
+        setToStorage('syn_content_size', document.getElementById('input-content-size').value);
+        setToStorage('syn_scroll_duration', document.getElementById('input-scroll-duration').value);
 
-      setToStorage('syn_main_font_family', document.getElementById('input-main-font-family').value);
-      setToStorage('syn_main_bg', document.getElementById('input-main-bg').value);
+        setToStorage('syn_main_font_family', document.getElementById('input-main-font-family').value);
+        setToStorage('syn_main_bg', document.getElementById('input-main-bg').value);
 
-      setToStorage('syn_shabbat_font_size', document.getElementById('input-shabbat-font-size').value);
-      setToStorage('syn_shabbat_time_font_size', document.getElementById('input-shabbat-time-font-size').value);
-      setToStorage('syn_shabbat_font_family', document.getElementById('input-shabbat-font-family').value);
-      setToStorage('syn_shabbat_bg', document.getElementById('input-shabbat-bg').value);
+        setToStorage('syn_shabbat_font_size', document.getElementById('input-shabbat-font-size').value);
+        setToStorage('syn_shabbat_time_font_size', document.getElementById('input-shabbat-time-font-size').value);
+        setToStorage('syn_shabbat_font_family', document.getElementById('input-shabbat-font-family').value);
+        setToStorage('syn_shabbat_bg', document.getElementById('input-shabbat-bg').value);
 
-      setToStorage('syn_parnas_font_family', document.getElementById('input-parnas-font-family').value);
-      setToStorage('syn_parnas_bg', document.getElementById('input-parnas-bg').value);
-      setToStorage('syn_parnas_title_font_size', document.getElementById('input-parnas-title-font-size').value);
-      setToStorage('syn_parnas_name_font_size', document.getElementById('input-parnas-name-font-size').value);
-      setToStorage('syn_parnas_extra_font_size', document.getElementById('input-parnas-extra-font-size').value);
-      setToStorage('syn_parnas_name', document.getElementById('input-parnas-name').value);
-      setToStorage('syn_parnas_text', document.getElementById('input-parnas-text').value);
+        setToStorage('syn_parnas_font_family', document.getElementById('input-parnas-font-family').value);
+        setToStorage('syn_parnas_bg', document.getElementById('input-parnas-bg').value);
+        setToStorage('syn_parnas_title_font_size', document.getElementById('input-parnas-title-font-size').value);
+        setToStorage('syn_parnas_name_font_size', document.getElementById('input-parnas-name-font-size').value);
+        setToStorage('syn_parnas_extra_font_size', document.getElementById('input-parnas-extra-font-size').value);
+        setToStorage('syn_parnas_name', document.getElementById('input-parnas-name').value);
+        setToStorage('syn_parnas_text', document.getElementById('input-parnas-text').value);
 
-      setToStorage('syn_memorial_header', document.getElementById('input-memorial-header').value);
-      setToStorage('syn_memorial_main_name', document.getElementById('input-memorial-main-name').value);
-      setToStorage('syn_memorial_text', document.getElementById('input-memorial-text').value);
-      setToStorage('syn_memorial_title_size', document.getElementById('input-memorial-title-size').value);
-      setToStorage('syn_memorial_name_size', document.getElementById('input-memorial-name-size').value);
-      setToStorage('syn_memorial_font_family', document.getElementById('input-memorial-font-family').value);
-      setToStorage('syn_memorial_title_font_family', document.getElementById('input-memorial-title-font-family').value);
-      setToStorage('syn_memorial_bg', document.getElementById('input-memorial-bg').value);
+        setToStorage('syn_memorial_header', document.getElementById('input-memorial-header').value);
+        setToStorage('syn_memorial_main_name', document.getElementById('input-memorial-main-name').value);
+        setToStorage('syn_memorial_text', document.getElementById('input-memorial-text').value);
+        setToStorage('syn_memorial_title_size', document.getElementById('input-memorial-title-size').value);
+        setToStorage('syn_memorial_name_size', document.getElementById('input-memorial-name-size').value);
+        setToStorage('syn_memorial_font_family', document.getElementById('input-memorial-font-family').value);
+        setToStorage('syn_memorial_title_font_family', document.getElementById('input-memorial-title-font-family').value);
+        setToStorage('syn_memorial_bg', document.getElementById('input-memorial-bg').value);
 
-      setToStorage('syn_halacha_font_family', document.getElementById('input-halacha-font-family').value);
-      setToStorage('syn_halacha_bg', document.getElementById('input-halacha-bg').value);
+        setToStorage('syn_halacha_font_family', document.getElementById('input-halacha-font-family').value);
+        setToStorage('syn_halacha_bg', document.getElementById('input-halacha-bg').value);
 
-      setToStorage('syn_board', document.getElementById('input-board').value);
-      setToStorage('syn_shabbat_times', document.getElementById('input-shabbat-times').value);
-      setToStorage('syn_halacha_text', document.getElementById('input-halacha-text').value);
-      setToStorage('syn_image_url', document.getElementById('input-image-url').value.trim());
+        setToStorage('syn_board', document.getElementById('input-board').value);
+        setToStorage('syn_shabbat_times', document.getElementById('input-shabbat-times').value);
+        setToStorage('syn_halacha_text', document.getElementById('input-halacha-text').value);
+        setToStorage('syn_image_url', document.getElementById('input-image-url').value.trim());
 
-      setToStorage('syn_main_time', document.getElementById('input-main-time').value);
-      setToStorage('syn_shabbat_time', document.getElementById('input-shabbat-time').value);
-      setToStorage('syn_parnas_time', document.getElementById('input-parnas-time').value);
-      setToStorage('syn_memorial_time', document.getElementById('input-memorial-time').value);
-      setToStorage('syn_halacha_time', document.getElementById('input-halacha-time').value);
-      setToStorage('syn_image_time', document.getElementById('input-image-time').value);
+        setToStorage('syn_main_time', document.getElementById('input-main-time').value);
+        setToStorage('syn_shabbat_time', document.getElementById('input-shabbat-time').value);
+        setToStorage('syn_parnas_time', document.getElementById('input-parnas-time').value);
+        setToStorage('syn_memorial_time', document.getElementById('input-memorial-time').value);
+        setToStorage('syn_halacha_time', document.getElementById('input-halacha-time').value);
+        setToStorage('syn_image_time', document.getElementById('input-image-time').value);
 
-      setToStorage('syn_sheet_url', document.getElementById('input-sheet-url').value.trim());
+        setToStorage('syn_sheet_url', document.getElementById('input-sheet-url').value.trim());
 
-      document.getElementById('editModal').style.display = 'none';
-      loadSettings();
-      startScreenRotation();
-      syncFromSheet(false);
+        document.getElementById('editModal').style.display = 'none';
+        loadSettings();
+        startScreenRotation();
+        syncFromSheet(false);
+      } catch (e) {
+        console.error('שגיאה בשמירת הגדרות:', e);
+        alert('שגיאה בשמירת ההגדרות. אנא נסה שוב.');
+      }
     }
 
-    /* ─── 11. סנכרון עם Google Apps Script ─── */
+    /* ─── 11. סנכרון ─── */
     function updateStorageByKey(key, val) {
       const k = String(key).trim().toLowerCase();
 
-      // --- גדלים כלליים ---
       if (k.includes('גודל שעון ראשי') || k.includes('main clock')) { setToStorage('syn_clock_size', val); return; }
       if (k.includes('גודל שעון משני') || k.includes('sub clock')) { setToStorage('syn_sub_clock_size', val); return; }
       if (k.includes('גודל כותרת') && !k.includes('פרנס') && !k.includes('נפטר')) { setToStorage('syn_title_size', val); return; }
       if (k.includes('גודל תוכן') || k.includes('content size')) { setToStorage('syn_content_size', val); return; }
       if (k.includes('מהירות גלילה') || k.includes('scroll speed')) { setToStorage('syn_scroll_duration', val); return; }
 
-      // --- מסך פרנס ---
       if (k.includes('פרנס') && k.includes('גודל כותרת')) { setToStorage('syn_parnas_title_font_size', val); return; }
       if (k.includes('פרנס') && k.includes('גודל שם')) { setToStorage('syn_parnas_name_font_size', val); return; }
       if (k.includes('פרנס') && k.includes('גודל ברכה')) { setToStorage('syn_parnas_extra_font_size', val); return; }
       if (k.includes('פרנס') && k.includes('גופן')) { setToStorage('syn_parnas_font_family', val); return; }
       if (k.includes('פרנס') && k.includes('צבע רקע')) { setToStorage('syn_parnas_bg', val); return; }
 
-      // --- מסך שבת ---
       if (k.includes('שבת') && k.includes('גודל מלל')) { setToStorage('syn_shabbat_font_size', val); return; }
       if (k.includes('שבת') && k.includes('גודל שעות')) { setToStorage('syn_shabbat_time_font_size', val); return; }
       if (k.includes('שבת') && k.includes('גופן')) { setToStorage('syn_shabbat_font_family', val); return; }
       if (k.includes('שבת') && k.includes('צבע רקע')) { setToStorage('syn_shabbat_bg', val); return; }
 
-      // --- מסך נפטרים ---
       if (k.includes('נפטרים') && k.includes('גודל כותרת')) { setToStorage('syn_memorial_title_size', val); return; }
       if (k.includes('נפטרים') && (k.includes('גודל שמות') || k.includes('גודל שם'))) { setToStorage('syn_memorial_name_size', val); return; }
       if (k.includes('נפטרים') && k.includes('גופן')) { setToStorage('syn_memorial_font_family', val); return; }
       if (k.includes('נפטרים') && k.includes('צבע רקע')) { setToStorage('syn_memorial_bg', val); return; }
 
-      // --- זמני מעבר ---
       if (k.includes('זמן פרנס') || k.includes('parnas time')) { setToStorage('syn_parnas_time', val); return; }
       if (k.includes('זמן הלכה') || k.includes('halacha time')) { setToStorage('syn_halacha_time', val); return; }
       if (k.includes('זמן תמונה') || k.includes('image time')) { setToStorage('syn_image_time', val); return; }
@@ -1690,7 +1750,6 @@
       if (k.includes('זמן שבת') || k.includes('shabbat time')) { setToStorage('syn_shabbat_time', val); return; }
       if (k.includes('זמן נפטר') || k.includes('memorial time')) { setToStorage('syn_memorial_time', val); return; }
 
-      // --- מפתחות תוכן ---
       if (k.includes('קישור תמונה') || k.includes('image url') || k.includes('תמונה')) { setToStorage('syn_image_url', val); return; }
       if (k.includes('לוח') || k.includes('מודעות') || k.includes('board')) { setToStorage('syn_board', val); return; }
       if (k.includes('שבת') && (k.includes('זמנים') || k.includes('times'))) { setToStorage('syn_shabbat_times', val); return; }
@@ -1714,13 +1773,20 @@
       if (statusEl) statusEl.textContent = 'מסנכרן מול Apps Script...';
 
       try {
-        const response = await fetch(url);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        
+        const response = await fetch(url, { 
+          signal: controller.signal,
+          cache: 'no-store'
+        });
+        clearTimeout(timeoutId);
+        
         if (!response.ok) throw new Error('שגיאת תקשורת מול Apps Script');
 
         const data = await response.json();
         if (!data || typeof data !== 'object') throw new Error('התקבלו נתונים לא תקינים');
 
-        // בדיקה אם הנתונים מגיעים כאובייקט עם מאפיינים
         if (data.data && Array.isArray(data.data)) {
           data.data.forEach(row => {
             if (!Array.isArray(row) || row.length < 2) return;
@@ -1757,9 +1823,14 @@
         if (manual) alert('הנתונים סונכרנו בהצלחה!');
 
       } catch (err) {
-        console.error('Apps Script Sync Error:', err);
-        if (statusEl) statusEl.textContent = 'שגיאה בפענוח הנתונים';
-        if (manual) alert('שגיאה בסנכרון: ' + err.message);
+        if (err.name === 'AbortError') {
+          if (statusEl) statusEl.textContent = 'פסק זמן - בדוק את הקישור';
+          if (manual) alert('החיבור נכשל - בדוק את קישור ה-Web App');
+        } else {
+          console.error('Apps Script Sync Error:', err);
+          if (statusEl) statusEl.textContent = 'שגיאה בפענוח הנתונים';
+          if (manual) alert('שגיאה בסנכרון: ' + err.message);
+        }
       }
     }
 
@@ -1796,11 +1867,32 @@
       .forEach(populateFontSelect);
 
     (async function boot() {
-      await initStorage();
-      loadSettings();
-      startScreenRotation();
-      syncFromSheet(false);
-      setInterval(() => syncFromSheet(false), 120000);
+      try {
+        await initStorage();
+        loadSettings();
+        
+        setTimeout(() => {
+          startScreenRotation();
+        }, 2000);
+        
+        syncFromSheet(false);
+        setInterval(() => syncFromSheet(false), 300000);
+        
+        window.addEventListener('beforeunload', function() {
+          stopScreenRotation();
+          if (screenSwitchTimeout) {
+            clearTimeout(screenSwitchTimeout);
+            screenSwitchTimeout = null;
+          }
+        });
+      } catch (e) {
+        console.error('שגיאה בהפעלה:', e);
+        setTimeout(() => {
+          document.getElementById('screen-main').classList.add('active');
+          currentActiveScreenId = 'screen-main';
+          startScreenRotation();
+        }, 3000);
+      }
     })();
   </script>
 </body>
