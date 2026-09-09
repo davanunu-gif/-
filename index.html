@@ -68,7 +68,7 @@
       inset: 0;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+      transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
       z-index: 1;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
@@ -640,7 +640,6 @@
       width: 18vw;
       height: 100%;
       justify-content: flex-end;
-      /* אנימציה מבוטלת */
       animation: none !important;
     }
 
@@ -690,7 +689,6 @@
       background: radial-gradient(ellipse at bottom, #ffffff 0%, #ffcc00 20%, #ff8800 50%, #ff3300 80%, rgba(204, 0, 0, 0) 100%);
       border-radius: 50% 50% 20% 20% / 80% 80% 20% 20%;
       box-shadow: 0 0 20px #ff3300, 0 0 40px #ff9900;
-      /* אנימציה מבוטלת */
       animation: none !important;
     }
 
@@ -704,7 +702,6 @@
       background: #ffffff;
       border-radius: 50%;
       box-shadow: 0 0 10px #ffffff;
-      /* אנימציה מבוטלת */
       animation: none !important;
     }
 
@@ -787,7 +784,6 @@
       z-index: 6;
     }
 
-    /* אנימציות מבוטלות - נשארות רק בשביל תקינות */
     @keyframes realCandleBurn {
       0% { transform: translateX(-50%) scale(1); }
       100% { transform: translateX(-50%) scale(1); }
@@ -1029,15 +1025,16 @@
       <div class="control-group"><label>זמני שבת:</label><textarea id="input-shabbat-times"></textarea></div>
       <div class="control-group"><label>🖼️ קישור לתמונה (URL):</label><input type="text" id="input-image-url" placeholder="https://example.com/image.jpg"></div>
 
-      <h3 class="section-title">⏱️ זמני מעבר בין מסכים (שניות) - מומלץ 20+</h3>
+      <h3 class="section-title">⏱️ זמני מעבר בין מסכים (שניות) - 1 = דלג על המסך</h3>
       <div class="control-row">
-        <div class="control-group"><label>ראשי:</label><input type="number" id="input-main-time" value="30" min="5"></div>
-        <div class="control-group"><label>שבת:</label><input type="number" id="input-shabbat-time" value="20" min="5"></div>
-        <div class="control-group"><label>פרנס:</label><input type="number" id="input-parnas-time" value="15" min="5"></div>
-        <div class="control-group"><label>נפטרים:</label><input type="number" id="input-memorial-time" value="25" min="5"></div>
-        <div class="control-group"><label>הלכה:</label><input type="number" id="input-halacha-time" value="20" min="5"></div>
-        <div class="control-group"><label>תמונה:</label><input type="number" id="input-image-time" value="15" min="5"></div>
+        <div class="control-group"><label>ראשי:</label><input type="number" id="input-main-time" value="30" min="1"></div>
+        <div class="control-group"><label>שבת:</label><input type="number" id="input-shabbat-time" value="20" min="1"></div>
+        <div class="control-group"><label>פרנס:</label><input type="number" id="input-parnas-time" value="15" min="1"></div>
+        <div class="control-group"><label>נפטרים:</label><input type="number" id="input-memorial-time" value="25" min="1"></div>
+        <div class="control-group"><label>הלכה:</label><input type="number" id="input-halacha-time" value="20" min="1"></div>
+        <div class="control-group"><label>תמונה:</label><input type="number" id="input-image-time" value="15" min="1"></div>
       </div>
+      <p style="font-size:0.8rem;color:#888;margin-top:-5px;">💡 <strong>1</strong> = המסך לא יופיע &nbsp;|&nbsp; <strong>2+</strong> = המסך יופיע למשך X שניות</p>
 
       <h3 class="section-title">📊 סנכרון מ-Google Apps Script Web App</h3>
       <div class="control-row">
@@ -1248,6 +1245,7 @@
     let rotationAttempts = 0;
     const MAX_ROTATION_ATTEMPTS = 20;
     let isRotating = false;
+    let syncRestartTimeout = null;
 
     function getInitialScreen() {
       try {
@@ -1272,13 +1270,9 @@
       try {
         if (current) {
           current.classList.remove('active');
-          current.style.animation = 'none';
-          current.style.transition = 'none';
         }
         
         if (target) {
-          target.style.transition = 'opacity 0.8s ease-in-out, visibility 0.8s ease-in-out';
-          target.style.animation = '';
           target.classList.add('active');
           currentActiveScreenId = screenId;
         }
@@ -1289,6 +1283,17 @@
           currentActiveScreenId = screenId;
         }
       }
+    }
+
+    function getScreenTimes() {
+      return {
+        main: parseInt(getFromStorage('syn_main_time', '30')) || 1,
+        shabbat: parseInt(getFromStorage('syn_shabbat_time', '20')) || 1,
+        parnas: parseInt(getFromStorage('syn_parnas_time', '15')) || 1,
+        memorial: parseInt(getFromStorage('syn_memorial_time', '25')) || 1,
+        halacha: parseInt(getFromStorage('syn_halacha_time', '20')) || 1,
+        image: parseInt(getFromStorage('syn_image_time', '15')) || 1,
+      };
     }
 
     function startScreenRotation() {
@@ -1304,36 +1309,39 @@
       isRotating = true;
       rotationAttempts = 0;
 
-      const times = {
-        main: parseInt(getFromStorage('syn_main_time', '30')) * 1000,
-        shabbat: parseInt(getFromStorage('syn_shabbat_time', '20')) * 1000,
-        parnas: parseInt(getFromStorage('syn_parnas_time', '15')) * 1000,
-        memorial: parseInt(getFromStorage('syn_memorial_time', '25')) * 1000,
-        halacha: parseInt(getFromStorage('syn_halacha_time', '20')) * 1000,
-        image: parseInt(getFromStorage('syn_image_time', '15')) * 1000,
-      };
-
+      const times = getScreenTimes();
       const imageUrl = getFromStorage('syn_image_url', '').trim();
 
-      const steps = [
-        { id: 'screen-main', delay: times.main },
-        { id: 'screen-shabbat', delay: times.shabbat },
-        { id: 'screen-parnas', delay: times.parnas },
-        { id: 'screen-memorial', delay: times.memorial },
-        { id: 'screen-halacha', delay: times.halacha }
-      ];
+      // בניית רשימת מסכים - רק אלה עם זמן > 1 (כי 1 = דלג)
+      const steps = [];
+      
+      if (times.main > 1) steps.push({ id: 'screen-main', delay: times.main * 1000 });
+      if (times.shabbat > 1) steps.push({ id: 'screen-shabbat', delay: times.shabbat * 1000 });
+      if (times.parnas > 1) steps.push({ id: 'screen-parnas', delay: times.parnas * 1000 });
+      if (times.memorial > 1) steps.push({ id: 'screen-memorial', delay: times.memorial * 1000 });
+      if (times.halacha > 1) steps.push({ id: 'screen-halacha', delay: times.halacha * 1000 });
+      if (imageUrl && imageUrl !== '' && times.image > 1) {
+        steps.push({ id: 'screen-image', delay: times.image * 1000 });
+      }
 
-      if (imageUrl && imageUrl !== '') {
-        steps.push({ id: 'screen-image', delay: times.image });
+      // אם אין מסכים - נשאר על הראשי
+      if (steps.length === 0) {
+        steps.push({ id: 'screen-main', delay: 30000 });
       }
 
       let step = 0;
       
+      // מוצא את המסך הנוכחי ברשימה
+      let foundCurrent = false;
       for (let i = 0; i < steps.length; i++) {
         if (steps[i].id === currentActiveScreenId) {
           step = (i + 1) % steps.length;
+          foundCurrent = true;
           break;
         }
+      }
+      if (!foundCurrent) {
+        step = 0;
       }
 
       function nextStep() {
@@ -1367,7 +1375,7 @@
             rotationAttempts = 0;
           }
           
-          const delay = Math.max(current.delay, 5000);
+          const delay = Math.max(current.delay, 3000);
           screenSwitchTimeout = setTimeout(nextStep, delay);
         } catch (e) {
           console.error('שגיאה ברוטציה:', e);
@@ -1389,9 +1397,13 @@
         clearTimeout(screenSwitchTimeout);
         screenSwitchTimeout = null;
       }
+      if (syncRestartTimeout) {
+        clearTimeout(syncRestartTimeout);
+        syncRestartTimeout = null;
+      }
     }
 
-    /* ─── 6. מסך נפטרים - סטטי, ללא אנימציות ─── */
+    /* ─── 6. מסך נפטרים - סטטי ─── */
     function buildMemorialBoard() {
       const container = document.getElementById('memorial-sculpture');
       if (!container) return;
@@ -1743,12 +1755,37 @@
       if (k.includes('נפטרים') && k.includes('גופן')) { setToStorage('syn_memorial_font_family', val); return; }
       if (k.includes('נפטרים') && k.includes('צבע רקע')) { setToStorage('syn_memorial_bg', val); return; }
 
-      if (k.includes('זמן פרנס') || k.includes('parnas time')) { setToStorage('syn_parnas_time', val); return; }
-      if (k.includes('זמן הלכה') || k.includes('halacha time')) { setToStorage('syn_halacha_time', val); return; }
-      if (k.includes('זמן תמונה') || k.includes('image time')) { setToStorage('syn_image_time', val); return; }
-      if (k.includes('זמן ראשי') || k.includes('main time')) { setToStorage('syn_main_time', val); return; }
-      if (k.includes('זמן שבת') || k.includes('shabbat time')) { setToStorage('syn_shabbat_time', val); return; }
-      if (k.includes('זמן נפטר') || k.includes('memorial time')) { setToStorage('syn_memorial_time', val); return; }
+      // זמני מעבר - 1 = דלג על המסך
+      if (k.includes('זמן פרנס') || k.includes('parnas time')) { 
+        const num = parseInt(String(val).trim()) || 1;
+        setToStorage('syn_parnas_time', num); 
+        return; 
+      }
+      if (k.includes('זמן הלכה') || k.includes('halacha time')) { 
+        const num = parseInt(String(val).trim()) || 1;
+        setToStorage('syn_halacha_time', num); 
+        return; 
+      }
+      if (k.includes('זמן תמונה') || k.includes('image time')) { 
+        const num = parseInt(String(val).trim()) || 1;
+        setToStorage('syn_image_time', num); 
+        return; 
+      }
+      if (k.includes('זמן ראשי') || k.includes('main time')) { 
+        const num = parseInt(String(val).trim()) || 1;
+        setToStorage('syn_main_time', num); 
+        return; 
+      }
+      if (k.includes('זמן שבת') || k.includes('shabbat time')) { 
+        const num = parseInt(String(val).trim()) || 1;
+        setToStorage('syn_shabbat_time', num); 
+        return; 
+      }
+      if (k.includes('זמן נפטר') || k.includes('memorial time')) { 
+        const num = parseInt(String(val).trim()) || 1;
+        setToStorage('syn_memorial_time', num); 
+        return; 
+      }
 
       if (k.includes('קישור תמונה') || k.includes('image url') || k.includes('תמונה')) { setToStorage('syn_image_url', val); return; }
       if (k.includes('לוח') || k.includes('מודעות') || k.includes('board')) { setToStorage('syn_board', val); return; }
@@ -1815,8 +1852,38 @@
           });
         }
 
+        // שמירת המסך הנוכחי לפני עדכון
+        const currentScreen = currentActiveScreenId;
+        
+        // עדכון המסכים
         applyDataToUI();
         updateModalFields();
+        
+        // עצירת רוטציה ישנה
+        stopScreenRotation();
+        
+        // ניקוי כל הטיימרים
+        if (syncRestartTimeout) {
+          clearTimeout(syncRestartTimeout);
+          syncRestartTimeout = null;
+        }
+        
+        // החזרה למסך הנוכחי
+        document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+        const target = document.getElementById(currentScreen);
+        if (target) {
+          target.classList.add('active');
+          currentActiveScreenId = currentScreen;
+        } else {
+          document.getElementById('screen-main').classList.add('active');
+          currentActiveScreenId = 'screen-main';
+        }
+        
+        // הפעלה מחדש של הרוטציה אחרי 2 שניות
+        syncRestartTimeout = setTimeout(() => {
+          startScreenRotation();
+          syncRestartTimeout = null;
+        }, 2000);
 
         const timeStr = new Date().toLocaleTimeString('he-IL');
         if (statusEl) statusEl.textContent = `סונכרן בהצלחה ב-${timeStr}`;
@@ -1883,6 +1950,10 @@
           if (screenSwitchTimeout) {
             clearTimeout(screenSwitchTimeout);
             screenSwitchTimeout = null;
+          }
+          if (syncRestartTimeout) {
+            clearTimeout(syncRestartTimeout);
+            syncRestartTimeout = null;
           }
         });
       } catch (e) {
