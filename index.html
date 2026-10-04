@@ -128,6 +128,15 @@
       color: #ffffff;
       text-shadow: 0 0 25px rgba(223, 178, 53, 0.6), 4px 4px 15px rgba(0, 0, 0, 0.9);
       margin: auto 0;
+      padding: 15px 45px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 5px solid var(--gold);
+      border-radius: 30px;
+      box-shadow:
+        0 0 35px rgba(223, 178, 53, 0.45),
+        inset 0 0 25px rgba(223, 178, 53, 0.15),
+        0 12px 30px rgba(0, 0, 0, 0.7);
+      line-height: 1.1;
     }
 
     #screen-main .date-bar {
@@ -226,137 +235,201 @@
     /* 2. מסך שבת */
     #screen-shabbat {
       background-color: var(--shabbat-bg);
-      padding: 2vh 2vw;
+      background-image:
+        radial-gradient(circle at 50% 0%, rgba(223, 178, 53, 0.08) 0%, transparent 60%),
+        linear-gradient(180deg, rgba(13, 89, 66, 0.35) 0%, rgba(0, 0, 0, 0.4) 100%),
+        repeating-linear-gradient(45deg, rgba(223, 178, 53, 0.025) 0px, rgba(223, 178, 53, 0.025) 1px, transparent 1px, transparent 22px),
+        repeating-linear-gradient(-45deg, rgba(223, 178, 53, 0.025) 0px, rgba(223, 178, 53, 0.025) 1px, transparent 1px, transparent 22px);
+      padding: 1.2vh 1.2vw;
       font-family: var(--shabbat-font-family);
     }
 
-    .shabbat-vitrage-frame {
-      border: 10px double var(--gold);
-      border-radius: 40px;
+    .shabbat-frame {
+      border: 3px double var(--gold);
+      border-radius: 24px;
       height: 100%;
       width: 100%;
       min-height: 0;
       display: flex;
       flex-direction: column;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 1.5vh 2vw;
+      background: linear-gradient(180deg, rgba(2, 30, 22, 0.92) 0%, rgba(1, 15, 11, 0.96) 100%);
+      padding: 1.2vh 1.5vw 1vh;
       position: relative;
-      box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.9), 0 0 30px rgba(223, 178, 53, 0.2);
+      box-shadow:
+        inset 0 0 60px rgba(0, 0, 0, 0.75),
+        inset 0 0 120px rgba(13, 89, 66, 0.15),
+        0 0 40px rgba(223, 178, 53, 0.15);
       overflow: hidden;
     }
 
-    .shabbat-vitrage-header {
-      text-align: center;
-      margin-bottom: 1vh;
+    .shabbat-header {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.8vh;
+      gap: 0.6vh;
       flex-shrink: 0;
+      margin-bottom: 1vh;
+      padding-bottom: 0.8vh;
+      position: relative;
     }
 
-    .shabbat-vitrage-title {
-      font-size: min(3.2rem, 5.5vh);
+    .shabbat-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      box-shadow: 0 0 12px rgba(223, 178, 53, 0.6);
+    }
+
+    .shabbat-title {
+      font-size: min(2.6rem, 4.2vh);
       color: var(--gold-light);
       font-weight: 900;
-      text-shadow: 0 0 20px rgba(223, 178, 53, 0.5);
+      letter-spacing: 2px;
+      text-shadow:
+        0 0 18px rgba(223, 178, 53, 0.55),
+        0 0 40px rgba(223, 178, 53, 0.25),
+        2px 2px 6px rgba(0, 0, 0, 0.8);
+      text-align: center;
+      line-height: 1.2;
     }
 
-    .shabbat-parasha { 
-      font-size: min(3.8rem, 6vh); 
-      color: #ffffff; 
-      background: rgba(0, 0, 0, 0.5); 
-      display: inline-block; 
-      padding: 0.6vh 3vw; 
-      border-radius: 50px; 
-      border: 4px solid var(--gold); 
-      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    .shabbat-parasha {
+      font-size: min(3rem, 5vh);
+      color: #ffffff;
+      background: linear-gradient(180deg, rgba(13, 89, 66, 0.85) 0%, rgba(2, 30, 22, 0.9) 100%);
+      display: inline-block;
+      padding: 0.6vh 3vw;
+      border-radius: 50px;
+      border: 3px solid var(--gold);
+      box-shadow:
+        0 0 25px rgba(223, 178, 53, 0.35),
+        inset 0 0 20px rgba(0, 0, 0, 0.5),
+        0 8px 22px rgba(0, 0, 0, 0.7);
       max-width: 90%;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      font-weight: 900;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.35), 2px 2px 5px rgba(0, 0, 0, 0.8);
+      letter-spacing: 1px;
+      line-height: 1.3;
     }
 
-    .vitrage-grid {
+    .shabbat-grid {
       flex: 1;
       min-height: 0;
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      align-items: stretch;
-      gap: 1.5vw;
-      padding: 1vh 0;
-      flex-wrap: nowrap;
+      align-content: center;
+      gap: 1.5vh 1.2vw;
+      padding: 0.8vh 0.5vw;
       overflow: hidden;
     }
 
-    .vitrage-arch {
+    .shabbat-card {
       background: linear-gradient(180deg,
-        color-mix(in srgb, var(--shabbat-accent) 78%, white 12%) 0%,
-        color-mix(in srgb, var(--shabbat-accent) 55%, black 45%) 100%);
-      border: 4px solid var(--gold);
-      border-radius: clamp(30px, 8vw, 120px) clamp(30px, 8vw, 120px) 25px 25px;
-      padding: 2vh 1vw;
-      min-width: 0;
-      flex: 1 1 0;
-      max-width: 320px;
-      height: 100%;
-      max-height: 100%;
-      min-height: 0;
+        color-mix(in srgb, var(--shabbat-accent) 75%, white 8%) 0%,
+        color-mix(in srgb, var(--shabbat-accent) 50%, black 50%) 100%);
+      border: 2px solid var(--gold);
+      border-radius: clamp(24px, 5vw, 70px) clamp(24px, 5vw, 70px) 14px 14px;
+      padding: 1.2vh 0.8vw 1vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 1vh;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(223, 178, 53, 0.2);
+      gap: 0.5vh;
+      box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.65),
+        inset 0 0 25px rgba(223, 178, 53, 0.12),
+        inset 0 2px 0 rgba(255, 255, 255, 0.08);
       position: relative;
       overflow: hidden;
+      transition: box-shadow 0.4s ease;
     }
 
-    .vitrage-arch::before {
-      content: '۞';
-      font-size: min(2rem, 3.5vh);
-      color: var(--gold-light);
-      margin-top: 5px;
+    .shabbat-card::before {
+      content: '';
+      position: absolute;
+      top: 0.6vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 55%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(223, 178, 53, 0.5), transparent);
+    }
+
+    .shabbat-card-icon {
+      font-size: min(2rem, 3vh);
+      line-height: 1;
       flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+      opacity: 0.9;
     }
 
-    .vitrage-time-title {
-      font-size: var(--shabbat-font-size);
-      color: #e2f7ef;
+    /* ✅ תיקון: max במקום min – ההגדרה תמיד מנצחת */
+    .shabbat-card-title {
+      font-size: max(var(--shabbat-font-size, 2.5rem), 1.8vh);
+      color: #eafff4;
       font-weight: 900;
+      text-align: center;
+      line-height: 1.15;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 255, 255, 0.15);
+      flex-shrink: 0;
+      padding: 0 0.3vw;
+      word-break: break-word;
+    }
+
+    /* ✅ תיקון: max במקום min */
+    .shabbat-card-sub {
+      font-size: max(calc(var(--shabbat-font-size, 2.5rem) * 0.6), 1.2vh);
+      color: rgba(234, 255, 244, 0.75);
+      font-weight: 600;
       text-align: center;
       line-height: 1.2;
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      word-break: keep-all;
-      overflow-wrap: normal;
-      white-space: normal;
-      hyphens: none;
-      overflow: hidden;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+      flex-shrink: 0;
+      padding: 0 0.3vw;
     }
+    .shabbat-card-sub:empty { display: none; }
 
-    .vitrage-time-value {
-      font-size: var(--shabbat-time-font-size);
+    /* ✅ תיקון: max במקום min – ההגדרה מנצחת */
+    .shabbat-card-time {
+      font-family: 'Rubik', sans-serif;
+      font-size: max(var(--shabbat-time-card-size, var(--shabbat-time-font-size, 3.5rem)), 3vh);
       font-weight: 900;
       color: var(--gold-light);
-      text-shadow: 0 0 15px rgba(223, 178, 53, 0.6);
-      background: rgba(0, 0, 0, 0.4);
-      width: 100%;
+      text-shadow:
+        0 0 20px rgba(223, 178, 53, 0.75),
+        0 0 45px rgba(223, 178, 53, 0.35),
+        3px 3px 8px rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.35);
+      width: 88%;
       text-align: center;
-      padding: 1vh 5px;
-      border-radius: 15px;
-      border: 1px solid rgba(223, 178, 53, 0.3);
+      padding: 0.6vh 8px;
+      border-radius: 14px;
+      border: 1px solid rgba(223, 178, 53, 0.4);
+      line-height: 1.1;
       flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      word-break: keep-all;
-      overflow-wrap: normal;
-      white-space: normal;
-      overflow: hidden;
+      letter-spacing: 2px;
+    }
+
+    .shabbat-card.next-up {
+      border-color: var(--gold-light);
+      box-shadow:
+        0 0 30px rgba(223, 178, 53, 0.55),
+        0 0 60px rgba(223, 178, 53, 0.25),
+        inset 0 0 30px rgba(223, 178, 53, 0.2);
+      animation: nextUpPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes nextUpPulse {
+      0%, 100% { box-shadow: 0 0 30px rgba(223, 178, 53, 0.55), 0 0 60px rgba(223, 178, 53, 0.25), inset 0 0 30px rgba(223, 178, 53, 0.2); }
+      50% { box-shadow: 0 0 45px rgba(223, 178, 53, 0.75), 0 0 80px rgba(223, 178, 53, 0.4), inset 0 0 40px rgba(223, 178, 53, 0.3); }
     }
 
     /* 3. מסך פרנס השבוע */
@@ -589,7 +662,7 @@
     .parnas-pedestal .step2 { width: 65%; height: 1.4vh; border-radius: 0 0 8px 8px; margin-top: -2px; }
     .parnas-pedestal .step3 { width: 45%; height: 1.6vh; border-radius: 0 0 12px 12px; margin-top: -2px; }
 
-    /* 4. מסך נפטרים - סטטי לחלוטין, ללא אנימציות */
+    /* 4. מסך נפטרים */
     #screen-memorial {
       background-color: var(--memorial-bg);
       padding: 1.5vh 1vw;
@@ -784,21 +857,6 @@
       z-index: 6;
     }
 
-    @keyframes realCandleBurn {
-      0% { transform: translateX(-50%) scale(1); }
-      100% { transform: translateX(-50%) scale(1); }
-    }
-
-    @keyframes innerGlow {
-      0% { opacity: 1; }
-      100% { opacity: 1; }
-    }
-
-    @keyframes swayColumn {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(0); }
-    }
-
     /* 5. מסך הלכה */
     #screen-halacha {
       background-color: var(--halacha-bg);
@@ -809,7 +867,7 @@
     .halacha-header { text-align: center; font-size: 4.8rem; color: #fef08a; font-weight: 900; border-bottom: 4px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 20px; }
     .halacha-body { flex: 1; background: #fef3c7; border: 5px solid var(--gold); border-radius: 20px; color: #451a03; padding: 40px; font-size: var(--content-size); line-height: 1.8; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; white-space: pre-wrap; }
 
-    /* 6. מסך תמונה - אופטימיזציה */
+    /* 6. מסך תמונה */
     #screen-image { background: #000; justify-content: center; align-items: center; padding: 0; }
     #screen-image img { 
       width: 100vw; 
@@ -821,15 +879,29 @@
     }
     #screen-image img.img-broken { display: none; }
 
-    /* רכיבים משותפים */
     .sub-clock-badge {
-      position: absolute; top: 20px; left: 25px; font-family: 'Rubik', sans-serif; 
+      position: absolute;
+      top: 20px;
+      left: 25px;
+      font-family: 'Rubik', sans-serif;
       font-size: var(--sub-clock-size);
       font-weight: 900;
-      background: rgba(0, 0, 0, 0.88); color: #ffffff; padding: 10px 35px; border-radius: 30px; border: 4px solid var(--gold); z-index: 10; line-height: 1;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.8);
+      background: rgba(0, 0, 0, 0.9);
+      color: #ffffff;
+      padding: 12px 38px;
+      border-radius: 24px;
+      border: 5px solid #ffffff;
+      z-index: 10;
+      line-height: 1;
+      box-shadow:
+        0 0 25px rgba(255, 255, 255, 0.35),
+        0 0 50px rgba(255, 255, 255, 0.15),
+        0 8px 20px rgba(0, 0, 0, 0.9);
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 3px 3px 8px rgba(0, 0, 0, 0.9);
+      letter-spacing: 2px;
       will-change: auto;
     }
+
     .scrollable-text {
       position: absolute; width: 90%; font-size: var(--content-size); font-weight: 700; color: #1a0f00; white-space: pre-wrap; line-height: 1.9; text-align: center;
       animation: scrollUpText var(--scroll-duration) linear infinite; padding: 10px 0;
@@ -857,15 +929,10 @@
     .btn-save { background: var(--gold); color: #000; padding: 12px; border: none; border-radius: 30px; font-size: 1.3rem; font-weight: 900; cursor: pointer; margin-top: 10px; }
     .btn-secondary { background: #eee; color: #000; padding: 10px; border: 2px solid #ccc; border-radius: 20px; font-size: 1rem; font-weight: 700; cursor: pointer; }
     .section-title { margin-top: 6px; }
-
-    .no-transition {
-      transition: none !important;
-    }
   </style>
 </head>
 <body>
 
-  <!-- 1. מסך ראשי -->
   <div id="screen-main" class="screen active">
     <div class="top-section">
       <div class="synagogue-title" id="synagogue-name">בית הכנסת שביל התפילה | לעילוי נשמת שמואל בן רחל (ונונו)</div>
@@ -888,25 +955,23 @@
     </div>
   </div>
 
-  <!-- 2. מסך שבת -->
   <div id="screen-shabbat" class="screen">
-    <div class="shabbat-vitrage-frame">
-      <div class="sub-clock-badge sub-clock">00:00:00</div>
-      <div class="shabbat-vitrage-header">
-        <div class="shabbat-vitrage-title">🕯️ זמני שבת קודש 🕯️</div>
+    <div class="shabbat-frame">
+      <div class="sub-clock-badge sub-clock">00:00</div>
+      <div class="shabbat-header">
+        <div class="shabbat-title">🕯️ זמני שבת קודש 🕯️</div>
         <div class="shabbat-parasha" id="shabbat-parasha-title">פרשת השבוע</div>
       </div>
-      <div class="vitrage-grid" id="shabbat-cards-container"></div>
+      <div class="shabbat-grid" id="shabbat-cards-container"></div>
     </div>
   </div>
 
-  <!-- 3. מסך פרנס השבוע -->
   <div id="screen-parnas" class="screen">
     <div class="parnas-curtain-rod"></div>
     <div class="parnas-curtain parnas-curtain-left"><div class="parnas-curtain-tieback"></div></div>
     <div class="parnas-curtain parnas-curtain-right"><div class="parnas-curtain-tieback"></div></div>
     <div class="parnas-frame-wrapper">
-      <div class="sub-clock-badge sub-clock">00:00:00</div>
+      <div class="sub-clock-badge sub-clock">00:00</div>
       <div class="parnas-ornate-frame">
         <div class="parnas-arch-top"><div class="parnas-crown-icon">👑</div></div>
         <div class="parnas-columns">
@@ -929,36 +994,29 @@
     </div>
   </div>
 
-  <!-- 4. מסך נפטרים - סטטי -->
   <div id="screen-memorial" class="screen">
     <div class="memorial-container">
-      <div class="sub-clock-badge sub-clock">00:00:00</div>
+      <div class="sub-clock-badge sub-clock">00:00</div>
       <div class="memorial-header-title" id="memorial-header-title">לזכרון עולם בהיכל ה'</div>
-      <div class="memorial-sculpture" id="memorial-sculpture">
-        <!-- 5 עמודות יווצרו דינמית ע"י JavaScript -->
-      </div>
+      <div class="memorial-sculpture" id="memorial-sculpture"></div>
     </div>
   </div>
 
-  <!-- 5. מסך הלכה -->
   <div id="screen-halacha" class="screen">
     <div class="halacha-book-frame">
-      <div class="sub-clock-badge sub-clock">00:00:00</div>
+      <div class="sub-clock-badge sub-clock">00:00</div>
       <div class="halacha-header"><span>📖</span> הלכה יומית <span>📖</span></div>
       <div class="halacha-body" id="halacha-content">טוען הלכה...</div>
     </div>
   </div>
 
-  <!-- 6. מסך תמונה -->
   <div id="screen-image" class="screen">
-    <div class="sub-clock-badge sub-clock">00:00:00</div>
+    <div class="sub-clock-badge sub-clock">00:00</div>
     <img id="custom-image-display" src="" alt="תמונת לוח" loading="lazy" />
   </div>
 
-  <!-- כפתור עריכה -->
   <button class="edit-btn auto-hide" id="editBtn" onclick="openModal()">✏️ הגדרות</button>
 
-  <!-- מודאל הגדרות -->
   <div class="modal-overlay" id="editModal">
     <div class="modal-box">
       <h2>⚜️ הגדרות לוח בית כנסת</h2>
@@ -1053,7 +1111,6 @@
   </div>
 
   <script>
-    /* ─── 0. ברירות מחדל ─── */
     const defaultBoard = `ברוכים הבאים לבית הכנסת שביל התפילה\nמנחה: 25 דקות לפני השקיעה\nערבית: 15 דקות אחרי השקיעה`;
     const defaultShabbat = `כניסת שבת: 18:30\nמנחה וקבלת שבת: 18:45\nשחרית: 08:00\nמוצאי שבת: 19:40`;
     const defaultParnasName = `משפחת היקרה`;
@@ -1064,7 +1121,6 @@
     const defaultMemorialText = `אברהם בן משה\nשרה בת אברהם\nדוד בן יוסף\nרחל בת יעקב\nמשה בן עמרם\nלאה בת לבן\nיצחק בן אברהם\nרבקה בת בתואל\nשמעון בן יעקב\nמרים בת עמרם`;
     const defaultMainHeader = `בית הכנסת שביל התפילה | לעילוי נשמת שמואל בן רחל (ונונו)`;
 
-    /* ─── 1. שכבת אחסון ─── */
     const STORAGE_PREFIX = 'syn_';
     let storageCache = {};
     const hasCloudStorage = (typeof window.storage !== 'undefined' && window.storage !== null);
@@ -1107,7 +1163,6 @@
       }
     }
 
-    /* ─── 2. רשימת גופנים ─── */
     const FONT_OPTIONS = [
       { value: "'Frank Ruhl Hofshi', serif", label: "פרנק רוהל - קלאסי / תורני" },
       { value: "'Suez One', serif", label: "סואץ - עיטורי ומודגש (יודאיקה)" },
@@ -1159,16 +1214,16 @@
       return letters[num] || String(num);
     }
 
-    /* ─── 3. עדכון שעונים ותאריכים ─── */
     function updateClockAndDates() {
       const now = new Date();
       const h = String(now.getHours()).padStart(2, '0');
       const m = String(now.getMinutes()).padStart(2, '0');
       const s = String(now.getSeconds()).padStart(2, '0');
-      const timeStr = `${h}:${m}:${s}`;
+      const timeStrFull = `${h}:${m}:${s}`;
+      const timeStrShort = `${h}:${m}`;
 
-      document.getElementById('clock').textContent = timeStr;
-      document.querySelectorAll('.sub-clock').forEach(el => el.textContent = timeStr);
+      document.getElementById('clock').textContent = timeStrFull;
+      document.querySelectorAll('.sub-clock').forEach(el => el.textContent = timeStrShort);
 
       const days = ['יום ראשון', 'יום שני', 'יום שלישי', 'יום רביעי', 'יום חמישי', 'יום שישי', 'שבת קודש'];
       document.getElementById('day-name').textContent = days[now.getDay()];
@@ -1198,7 +1253,6 @@
     setInterval(updateClockAndDates, 1000);
     updateClockAndDates();
 
-    /* ─── 4. פרשת השבוע ─── */
     function updateParasha() {
       try {
         const hebcalObj = window.hebcal || window.Hebcal;
@@ -1239,7 +1293,6 @@
     updateParasha();
     setInterval(updateParasha, 3600000);
 
-    /* ─── 5. רוטציית מסכים ─── */
     let screenSwitchTimeout = null;
     let currentActiveScreenId = 'screen-main';
     let rotationAttempts = 0;
@@ -1312,7 +1365,6 @@
       const times = getScreenTimes();
       const imageUrl = getFromStorage('syn_image_url', '').trim();
 
-      // בניית רשימת מסכים - רק אלה עם זמן > 1 (כי 1 = דלג)
       const steps = [];
       
       if (times.main > 1) steps.push({ id: 'screen-main', delay: times.main * 1000 });
@@ -1324,14 +1376,12 @@
         steps.push({ id: 'screen-image', delay: times.image * 1000 });
       }
 
-      // אם אין מסכים - נשאר על הראשי
       if (steps.length === 0) {
         steps.push({ id: 'screen-main', delay: 30000 });
       }
 
       let step = 0;
       
-      // מוצא את המסך הנוכחי ברשימה
       let foundCurrent = false;
       for (let i = 0; i < steps.length; i++) {
         if (steps[i].id === currentActiveScreenId) {
@@ -1346,24 +1396,13 @@
 
       function nextStep() {
         try {
-          if (!isRotating) {
-            return;
-          }
-          
-          if (steps.length === 0) {
-            isRotating = false;
-            return;
-          }
+          if (!isRotating) return;
+          if (steps.length === 0) { isRotating = false; return; }
           
           rotationAttempts++;
           if (rotationAttempts > MAX_ROTATION_ATTEMPTS) {
-            console.warn('יותר מדי ניסיונות רוטציה - מפסיק זמנית');
             isRotating = false;
-            setTimeout(() => {
-              if (!isRotating) {
-                startScreenRotation();
-              }
-            }, 60000);
+            setTimeout(() => { if (!isRotating) startScreenRotation(); }, 60000);
             return;
           }
           
@@ -1371,20 +1410,13 @@
           showScreen(current.id);
           step = (step + 1) % steps.length;
           
-          if (step === 0) {
-            rotationAttempts = 0;
-          }
+          if (step === 0) rotationAttempts = 0;
           
           const delay = Math.max(current.delay, 3000);
           screenSwitchTimeout = setTimeout(nextStep, delay);
         } catch (e) {
-          console.error('שגיאה ברוטציה:', e);
           isRotating = false;
-          setTimeout(() => {
-            if (!isRotating) {
-              startScreenRotation();
-            }
-          }, 30000);
+          setTimeout(() => { if (!isRotating) startScreenRotation(); }, 30000);
         }
       }
 
@@ -1403,7 +1435,6 @@
       }
     }
 
-    /* ─── 6. מסך נפטרים - סטטי ─── */
     function buildMemorialBoard() {
       const container = document.getElementById('memorial-sculpture');
       if (!container) return;
@@ -1479,7 +1510,6 @@
       }
     }
 
-    /* ─── 7. פונקציות עדכון תוכן ─── */
     function renderBoard(text) {
       const grid = document.getElementById('boardGrid');
       grid.innerHTML = '';
@@ -1501,38 +1531,145 @@
       });
     }
 
-    function renderShabbatTimes(text) {
-      const container = document.getElementById('shabbat-cards-container');
-      container.innerHTML = '';
-      const lines = (text || '').split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-
-      lines.forEach(line => {
-        let title = "";
-        let val = line;
-        if (line.includes(':') || line.includes('-')) {
-          const parts = line.split(/[:\-](.+)/);
-          if (parts.length >= 2 && isNaN(parts[0])) {
-            title = parts[0].trim();
-            val = parts[1].trim();
-          }
-        }
-        const arch = document.createElement('div');
-        arch.className = 'vitrage-arch';
-        if (title) {
-          const titleEl = document.createElement('div');
-          titleEl.className = 'vitrage-time-title';
-          titleEl.textContent = title;
-          arch.appendChild(titleEl);
-        }
-        const valEl = document.createElement('div');
-        valEl.className = 'vitrage-time-value';
-        valEl.textContent = val;
-        arch.appendChild(valEl);
-        container.appendChild(arch);
-      });
+    function getShabbatIcon(title) {
+      if (!title) return '🕍';
+      if (title.includes('שיעור')) return '📖';
+      if (title.includes('סעודה')) return '🍷';
+      if (title.includes('ערבית') || title.includes('מוצ')) return '✨';
+      if (title.includes('שחרית')) return '🌅';
+      if (title.includes('מנחה')) return '🕍';
+      return '🕍';
     }
 
-    /* ─── 8. החלת הגדרות ─── */
+    function parseShabbatLine(line) {
+      const timeMatch = line.match(/(\d{1,2}[:.]\d{2})/);
+      if (!timeMatch) return { title: line, time: '', sub: '' };
+
+      const time = timeMatch[1].replace('.', ':');
+      let rest = line.replace(timeMatch[0], '').replace(/[-–:]\s*$/, '').replace(/^[-–:]\s*/, '').trim();
+
+      let sub = '';
+      const subMatch = rest.match(/(עם\s+הרב\s+.+|עם\s+.+)$/);
+      if (subMatch) {
+        sub = subMatch[0].trim();
+        rest = rest.replace(subMatch[0], '').replace(/[-–:]\s*$/, '').trim();
+      }
+
+      return { title: rest, time: time, sub: sub };
+    }
+
+    function getShabbatLayout(total) {
+      if (total <= 0) return { perRow: 1, rows: 1 };
+      if (total === 1) return { perRow: 1, rows: 1 };
+      if (total === 2) return { perRow: 2, rows: 1 };
+      if (total === 3) return { perRow: 3, rows: 1 };
+      if (total === 4) return { perRow: 2, rows: 2 };
+      if (total === 5) return { perRow: 3, rows: 2 };
+      if (total === 6) return { perRow: 3, rows: 2 };
+      if (total === 7) return { perRow: 4, rows: 2 };
+      if (total === 8) return { perRow: 4, rows: 2 };
+      if (total === 9) return { perRow: 3, rows: 3 };
+      if (total === 10) return { perRow: 5, rows: 2 };
+      if (total === 11) return { perRow: 4, rows: 3 };
+      if (total === 12) return { perRow: 4, rows: 3 };
+      return { perRow: 4, rows: Math.ceil(total / 4) };
+    }
+
+    /* ✅ תיקון: מכבד את ההגדרה, מקטין רק אם צריך */
+    function adjustShabbatTimeFont(perRow, rows) {
+      // בסיס: הערך המדויק מההגדרות
+      let baseSize = parseFloat(getFromStorage('syn_shabbat_time_font_size', '3.5')) || 3.5;
+
+      // הקטנה אוטומטית רק אם מספר הכרטיסים גדול מאוד
+      if (perRow >= 5) baseSize = Math.max(baseSize * 0.85, 2.5);
+      if (rows >= 3) baseSize = Math.max(baseSize * 0.85, 2.5);
+      if (rows >= 4) baseSize = Math.max(baseSize * 0.8, 2.0);
+
+      document.documentElement.style.setProperty('--shabbat-time-card-size', baseSize + 'rem');
+    }
+
+    function highlightNextPrayer(cards) {
+      const now = new Date();
+      const nowMin = now.getHours() * 60 + now.getMinutes();
+
+      let nextIdx = -1;
+      let minDiff = Infinity;
+
+      cards.forEach((card, idx) => {
+        if (!card.time) return;
+        const [h, m] = card.time.split(':').map(Number);
+        if (isNaN(h) || isNaN(m)) return;
+        const cardMin = h * 60 + m;
+        const diff = cardMin - nowMin;
+        if (diff >= 0 && diff < minDiff) {
+          minDiff = diff;
+          nextIdx = idx;
+        }
+      });
+
+      document.querySelectorAll('.shabbat-card.next-up').forEach(el => el.classList.remove('next-up'));
+      if (nextIdx >= 0) {
+        const cardEls = document.querySelectorAll('#shabbat-cards-container .shabbat-card');
+        if (cardEls[nextIdx]) cardEls[nextIdx].classList.add('next-up');
+      }
+    }
+
+    function renderShabbatTimes(text) {
+      const container = document.getElementById('shabbat-cards-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const lines = (text || '').split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+      const cards = lines.map(parseShabbatLine);
+      const total = cards.length;
+
+      if (total === 0) return;
+
+      const { perRow, rows } = getShabbatLayout(total);
+
+      const gapX = 1.2;
+      const gapY = 1.5;
+      const cardWidth = `calc((100% - ${(perRow - 1) * gapX}vw) / ${perRow})`;
+      const cardHeight = `calc((100% - ${(rows - 1) * gapY}vh) / ${rows})`;
+
+      cards.forEach(card => {
+        const cardEl = document.createElement('div');
+        cardEl.className = 'shabbat-card';
+        cardEl.style.flex = `0 0 ${cardWidth}`;
+        cardEl.style.maxWidth = cardWidth;
+        cardEl.style.height = cardHeight;
+
+        const iconEl = document.createElement('div');
+        iconEl.className = 'shabbat-card-icon';
+        iconEl.textContent = getShabbatIcon(card.title);
+        cardEl.appendChild(iconEl);
+
+        const titleEl = document.createElement('div');
+        titleEl.className = 'shabbat-card-title';
+        titleEl.textContent = card.title;
+        cardEl.appendChild(titleEl);
+
+        if (card.sub) {
+          const subEl = document.createElement('div');
+          subEl.className = 'shabbat-card-sub';
+          subEl.textContent = card.sub;
+          cardEl.appendChild(subEl);
+        }
+
+        if (card.time) {
+          const timeEl = document.createElement('div');
+          timeEl.className = 'shabbat-card-time';
+          timeEl.textContent = card.time;
+          cardEl.appendChild(timeEl);
+        }
+
+        container.appendChild(cardEl);
+      });
+
+      adjustShabbatTimeFont(perRow, rows);
+      highlightNextPrayer(cards);
+    }
+
     function applyDataToUI() {
       try {
         document.getElementById('synagogue-name').textContent = defaultMainHeader;
@@ -1589,7 +1726,6 @@
       }
     }
 
-    /* ─── 9. עדכון שדות מודאל ─── */
     function updateModalFields() {
       try {
         document.getElementById('input-clock-size').value = getFromStorage('syn_clock_size', '11');
@@ -1644,7 +1780,6 @@
       }
     }
 
-    /* ─── 10. טעינת הגדרות ─── */
     function loadSettings() {
       applyDataToUI();
       updateModalFields();
@@ -1729,7 +1864,6 @@
       }
     }
 
-    /* ─── 11. סנכרון ─── */
     function updateStorageByKey(key, val) {
       const k = String(key).trim().toLowerCase();
 
@@ -1755,7 +1889,6 @@
       if (k.includes('נפטרים') && k.includes('גופן')) { setToStorage('syn_memorial_font_family', val); return; }
       if (k.includes('נפטרים') && k.includes('צבע רקע')) { setToStorage('syn_memorial_bg', val); return; }
 
-      // זמני מעבר - 1 = דלג על המסך
       if (k.includes('זמן פרנס') || k.includes('parnas time')) { 
         const num = parseInt(String(val).trim()) || 1;
         setToStorage('syn_parnas_time', num); 
@@ -1852,23 +1985,18 @@
           });
         }
 
-        // שמירת המסך הנוכחי לפני עדכון
         const currentScreen = currentActiveScreenId;
         
-        // עדכון המסכים
         applyDataToUI();
         updateModalFields();
         
-        // עצירת רוטציה ישנה
         stopScreenRotation();
         
-        // ניקוי כל הטיימרים
         if (syncRestartTimeout) {
           clearTimeout(syncRestartTimeout);
           syncRestartTimeout = null;
         }
         
-        // החזרה למסך הנוכחי
         document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
         const target = document.getElementById(currentScreen);
         if (target) {
@@ -1879,7 +2007,6 @@
           currentActiveScreenId = 'screen-main';
         }
         
-        // הפעלה מחדש של הרוטציה אחרי 2 שניות
         syncRestartTimeout = setTimeout(() => {
           startScreenRotation();
           syncRestartTimeout = null;
@@ -1901,7 +2028,6 @@
       }
     }
 
-    /* ─── 12. מנגנון העלמת כפתורים ─── */
     let hideTimeout;
     function showControlsTemporarily() {
       const editBtn = document.getElementById('editBtn');
@@ -1917,7 +2043,6 @@
     window.addEventListener('touchstart', showControlsTemporarily);
     window.addEventListener('keydown', showControlsTemporarily);
 
-    /* ─── 13. הסתרת "תמונה שבורה" ─── */
     const customImageEl = document.getElementById('custom-image-display');
     if (customImageEl) {
       customImageEl.addEventListener('error', function () {
@@ -1928,7 +2053,6 @@
       });
     }
 
-    /* ─── 14. אתחול ─── */
     ['input-main-font-family', 'input-shabbat-font-family', 'input-parnas-font-family', 
      'input-memorial-font-family', 'input-memorial-title-font-family', 'input-halacha-font-family']
       .forEach(populateFontSelect);
